@@ -29,7 +29,14 @@ public final class Constants {
   }
 
   public static class FunnelIndexerConstants {
+    
+  }
 
+  public static class CoralIndexerConstants {
+    public static final double m_fullSpeed = 0.5;
+    public static final double m_halfSpeed = 0.3;
+    public static final double m_reverseSpeed = -0.5;
+    public static final double m_stopSpeed = 0.0;
   }
 
   public static class AlgaeCoralIndexerConstants {
