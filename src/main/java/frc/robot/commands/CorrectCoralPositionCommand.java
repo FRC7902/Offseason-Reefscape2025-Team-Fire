@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.commands.*;
+
 
 /*
  * You should consider using the more terse Command factories API instead
@@ -32,15 +32,15 @@ public class CorrectCoralPositionCommand extends Command {
   @Override
   public void execute() {
     if (!RobotContainer.m_indexSubsystem.isShallowBeamBroken()) {
-      RobotContainer.m_indexSubsystem.setPower(-Constants.CoralIndexerConstants.m_fullSpeed);
+      RobotContainer.m_indexSubsystem.setPower(Constants.FunnelIndexerConstants.m_fullSpeed);
     } else if(RobotContainer.m_indexSubsystem.isShallowBeamBroken()){
-        RobotContainer.m_indexSubsystem.setPower(-Constants.CoralIndexerConstants.m_halfSpeed);
+        RobotContainer.m_indexSubsystem.setPower(Constants.FunnelIndexerConstants.m_halfSpeed);
     }  else if(RobotContainer.m_indexSubsystem.isShallowBeamBroken() && RobotContainer.m_indexSubsystem.isDeepBeamBroken()) {
-        RobotContainer.m_indexSubsystem.setPower(-Constants.CoralIndexerConstants.m_stopSpeed);
+        RobotContainer.m_indexSubsystem.setPower(Constants.FunnelIndexerConstants.m_stopSpeed);
     }   else if(RobotContainer.m_indexSubsystem.isDeepBeamBroken()) {
-        RobotContainer.m_indexSubsystem.setPower(-Constants.CoralIndexerConstants.m_reverseSpeed);
+        RobotContainer.m_indexSubsystem.setPower(Constants.FunnelIndexerConstants.m_reverseSpeed);
     } else {
-        RobotContainer.m_indexSubsystem.setPower(Constants.CoralIndexerConstants.m_stopSpeed);
+        RobotContainer.m_indexSubsystem.setPower(Constants.FunnelIndexerConstants.m_stopSpeed);
     }
 
   }
