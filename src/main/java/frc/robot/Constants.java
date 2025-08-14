@@ -33,6 +33,11 @@ public final class Constants {
     public static final int ALGAE_CORAL_INDEXER_MOTOR_ID = 1; // Example ID, change as needed
     public static final int ALGAE_BEAM_BREAK_ID = 0; // Example ID, change as needed
     public static final int CORAL_BEAM_BREAK_ID = 1; // Example ID, change as needed
+
+    public static final double INTAKE_CORAL_VOLTAGE = 12;
+    public static final double OUTTAKE_CORAL_VOLTAGE = -12;
+    public static final double INTAKE_ALGAE_VOLTAGE = 12;
+    public static final double OUTTAKE_ALGAE_VOLTAGE = -12; 
   }
 
   public static class ElevatorArmConstants {

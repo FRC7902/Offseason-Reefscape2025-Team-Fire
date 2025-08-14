@@ -34,8 +34,8 @@ public class AlgaeCoralIndexerSubsystem extends SubsystemBase {
     m_motor.set(speed);
   }
 
-  public void setMotorVoltage(double power) {
-    m_motor.setVoltage(power);
+  public void setMotorVoltage(double voltage) {
+    m_motor.setVoltage(voltage);
   }
 
   public boolean hasAlgae() {
