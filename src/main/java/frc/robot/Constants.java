@@ -30,7 +30,9 @@ public final class Constants {
   }
 
   public static class AlgaeCoralIndexerConstants {
-
+    public static final int ALGAE_CORAL_INDEXER_MOTOR_ID = 1; // Example ID, change as needed
+    public static final int ALGAE_BEAM_BREAK_ID = 0; // Example ID, change as needed
+    public static final int CORAL_BEAM_BREAK_ID = 1; // Example ID, change as needed
   }
 
   public static class ElevatorArmConstants {
