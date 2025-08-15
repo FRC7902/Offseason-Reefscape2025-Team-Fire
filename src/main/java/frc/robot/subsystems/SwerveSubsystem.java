@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.Meter;
 import java.io.File;
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -142,6 +143,16 @@ public class SwerveSubsystem extends SubsystemBase {
   // drive according to chassis oriented field velocity
   public void driveFieldOriented(ChassisSpeeds velocity){
     swerveDrive.driveFieldOriented(velocity);
+  }
+  /**
+     * Drive the robot given a chassis field oriented velocity.
+     *
+     * @param velocity Velocity according to the field.
+     */
+  public Command driveFieldOriented(Supplier<ChassisSpeeds> velocity) {
+    return run(() -> {
+      swerveDrive.driveFieldOriented(velocity.get());
+    });
   }
   // drive according to chassis oriented robot velocity
   public void drive(ChassisSpeeds velocity){
