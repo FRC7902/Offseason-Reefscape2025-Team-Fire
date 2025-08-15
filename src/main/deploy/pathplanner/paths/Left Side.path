@@ -1,0 +1,214 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.529213995682565,
+        "y": 5.074706067537006
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.850826865748355,
+        "y": 5.189302143297698
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.822412751850328,
+        "y": 5.37061125102796
+      },
+      "prevControl": {
+        "x": 6.161089445415296,
+        "y": 4.9568025287828945
+      },
+      "nextControl": {
+        "x": 5.443251574810565,
+        "y": 5.8338855334836
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.5005734092310854,
+        "y": 6.930343146073191
+      },
+      "prevControl": {
+        "x": 2.241599262175833,
+        "y": 6.768493667016174
+      },
+      "nextControl": {
+        "x": 0.7595475562863412,
+        "y": 7.092192625130207
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.85761076274671,
+        "y": 5.8285069515830585
+      },
+      "prevControl": {
+        "x": 4.178120900286336,
+        "y": 6.259332752661988
+      },
+      "nextControl": {
+        "x": 5.537100625207083,
+        "y": 5.397681150504129
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.5005734092310854,
+        "y": 6.930343146073191
+      },
+      "prevControl": {
+        "x": 2.1519679583744895,
+        "y": 6.862162370608814
+      },
+      "nextControl": {
+        "x": 0.849178860087682,
+        "y": 6.998523921537567
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.9896272358141442,
+        "y": 5.709889301500822
+      },
+      "prevControl": {
+        "x": 3.346077550014551,
+        "y": 6.102056827222882
+      },
+      "nextControl": {
+        "x": 4.633176921613737,
+        "y": 5.317721775778762
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.5005734092310854,
+        "y": 6.930343146073191
+      },
+      "prevControl": {
+        "x": 2.102400150289705,
+        "y": 6.830541347616923
+      },
+      "nextControl": {
+        "x": 0.8987466681724647,
+        "y": 7.030144944529458
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.2912263569078943,
+        "y": 5.37061125102796
+      },
+      "prevControl": {
+        "x": 2.844832774529121,
+        "y": 5.77577988539469
+      },
+      "nextControl": {
+        "x": 3.7376199392866676,
+        "y": 4.965442616661231
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.2912263569078943,
+        "y": 5.37061125102796
+      },
+      "prevControl": {
+        "x": 2.340593839946546,
+        "y": 5.826778050472863
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": -118.70763273540554
+    },
+    {
+      "waypointRelativePos": 3,
+      "rotationDegrees": -118.88980787511413
+    },
+    {
+      "waypointRelativePos": 5,
+      "rotationDegrees": -57.58394910390602
+    },
+    {
+      "waypointRelativePos": 7,
+      "rotationDegrees": -60.215647870054966
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Score L4 coral",
+      "waypointRelativePos": 0.9744024910233386,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "Score L4 coral",
+      "waypointRelativePos": 3.0134229129263916,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "Obtain coral",
+      "waypointRelativePos": 3.9951750448833008,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "Score L4 coral",
+      "waypointRelativePos": 5.02749102333931,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "score L4 coral",
+      "waypointRelativePos": 7.055711400359065,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -60.41898695321904
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 173.85830655722214
+  },
+  "useDefaultConstraints": true
+}
