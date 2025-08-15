@@ -22,7 +22,7 @@ public final class Constants {
   }
 
   public static class SwerveConstants {
-
+    public static final int MAX_SPEED = 1;
   }
 
   public static class FunnelIndexerConstants {
