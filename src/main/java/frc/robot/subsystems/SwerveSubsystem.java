@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
@@ -46,7 +47,14 @@ public class SwerveSubsystem extends SubsystemBase {
     catch (Exception e){
       throw new RuntimeException(e);
     }
-    // Insert Sim Code (later)
+    if (Robot.isSimulation()) {
+      swerveDrive.setHeadingCorrection(false);
+      swerveDrive.setCosineCompensator(false);
+    } else {
+        swerveDrive.setCosineCompensator(true);
+        swerveDrive.setHeadingCorrection(false); // Heading correction should only be
+        // used while controlling the robot via angle.
+    }
     swerveDrive.setAngularVelocityCompensation(true, false, 0.1);
     // Start with 0.1 for angular velocity coeffecient, adjust as needed
     swerveDrive.setModuleEncoderAutoSynchronize(false, 1);
