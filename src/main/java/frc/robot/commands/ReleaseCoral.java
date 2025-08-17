@@ -15,9 +15,9 @@ import frc.robot.RobotContainer;
  * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#
  * defining-commands
  */
-public class CorrectCoralPositionCommand extends Command {
+public class ReleaseCoral extends Command {
   /** Creates a new CorrectCoralPositionCommand. */
-  public CorrectCoralPositionCommand() {
+  public ReleaseCoral() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.m_indexSubsystem);
   }
@@ -31,17 +31,7 @@ public class CorrectCoralPositionCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!RobotContainer.m_indexSubsystem.isShallowBeamBroken()) {
-      RobotContainer.m_indexSubsystem.setPower(Constants.FunnelIndexerConstants.m_fullSpeed);
-    } else if(RobotContainer.m_indexSubsystem.isShallowBeamBroken()){
-        RobotContainer.m_indexSubsystem.setPower(Constants.FunnelIndexerConstants.m_halfSpeed);
-    }  else if(RobotContainer.m_indexSubsystem.isShallowBeamBroken() && RobotContainer.m_indexSubsystem.isDeepBeamBroken()) {
-        RobotContainer.m_indexSubsystem.setPower(Constants.FunnelIndexerConstants.m_stopSpeed);
-    }   else if(RobotContainer.m_indexSubsystem.isDeepBeamBroken()) {
-        RobotContainer.m_indexSubsystem.setPower(Constants.FunnelIndexerConstants.m_reverseSpeed);
-    } else {
-        RobotContainer.m_indexSubsystem.setPower(Constants.FunnelIndexerConstants.m_stopSpeed);
-    }
+      RobotContainer.m_indexSubsystem.setPower(Constants.FunnelIndexerConstants.m_reversehalfSpeed);
 //check do the truth table
   }
 
@@ -55,6 +45,6 @@ public class CorrectCoralPositionCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.m_indexSubsystem.isShallowBeamBroken();
+    return FunnelIndexerSubsystem.hasCoral(); // Assuming hasCoral() checks if the coral is ready to be released
   }
 }
