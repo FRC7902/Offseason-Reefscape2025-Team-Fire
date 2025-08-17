@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.IntakeAlgaeCoralCommand;
 import frc.robot.commands.OuttakeAlgaeCoralCommand;
@@ -15,6 +16,10 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.ElevatorArmCommands.MoveElevatorArmCommand;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
@@ -30,6 +35,7 @@ import swervelib.SwerveInputStream;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  public final static ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
 
   private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
   // TODO: Initialize your DriveSubsystem here...
@@ -115,6 +121,10 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    m_driverController.a().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
+    m_driverController.b().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
+    m_driverController.x().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
+    m_driverController.y().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
 
     m_driverController.leftBumper().whileTrue(new IntakeAlgaeCoralCommand(m_endEffectorSubsystem));
     m_driverController.rightBumper().whileTrue(new OuttakeAlgaeCoralCommand(m_endEffectorSubsystem));
