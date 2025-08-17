@@ -103,6 +103,12 @@ SwerveInputStream driveDirectAngleKeyboard = driveAngularVelocityKeyboard.copy()
     Command driveFieldOrientedAngularVelocityKeyboard = m_swerveSubsystem.driveFieldOriented(driveAngularVelocityKeyboard);
     // Default to field-centric swerve drive
     m_swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
+    // Operator control
+    m_operatorController.back().whileTrue(m_swerveSubsystem.centerModulesCommand());
+
+    //left trigger bindings
+    m_driverController.leftTrigger(0.05).whileTrue(new StrafeLeftCommand());
+    m_driverController.rightTrigger(0.05).whileTrue(new StrafeRightCommand());
   }
 
   public void setMotorBrake(boolean brake) {
