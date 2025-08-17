@@ -30,7 +30,14 @@ public final class Constants {
   }
 
   public static class AlgaeCoralIndexerConstants {
+    public static final int motor_ID = 1; // Replace with actual motor ID
+    public static final int algaebeam_ID = 2; // Replace with actual beam break ID
+    public static final int coralbeam_ID = 3; // Replace with actual beam break ID
 
+    public static final double take_algae = 12;
+    public static final double outtake_algae = -12;
+    public static final double take_coral = 12;
+    public static final double outtake_coral = -12; 
   }
 
   public static class ElevatorArmConstants {
