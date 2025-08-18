@@ -13,17 +13,19 @@ public class MoveElevatorArmCommand extends Command {
   /** Creates a new MoveElevatorCommand. */
   private final boolean isEnum;
   private double positionMeters;
+  private double angleDegrees;
   private ElevatorPosition positionEnum;
 
   public MoveElevatorArmCommand(ElevatorPosition position) {
     isEnum = true;
     positionEnum = position;
-    addRequirements(RobotContainer.m_elevatorSubsystem);
+    addRequirements(RobotContainer.m_elevatorSubsystem, RobotContainer.m_armSubsystem);
   }
-  public MoveElevatorArmCommand(double position) {
+  public MoveElevatorArmCommand(double position, double angleDegrees) {
     isEnum = false;
     positionMeters = position;
-    addRequirements(RobotContainer.m_elevatorSubsystem);
+    this.angleDegrees = angleDegrees;
+    addRequirements(RobotContainer.m_elevatorSubsystem, RobotContainer.m_armSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -35,8 +37,10 @@ public class MoveElevatorArmCommand extends Command {
   public void execute() {
     if (isEnum) {
       RobotContainer.m_elevatorSubsystem.setElevatorPositionEnum(positionEnum);
+      RobotContainer.m_armSubsystem.setArmPositionEnum(positionEnum);
     } else {
       RobotContainer.m_elevatorSubsystem.setElevatorPositionMeters(positionMeters);
+      RobotContainer.m_armSubsystem.setArmPositionDegrees(angleDegrees);
     }
   }
 

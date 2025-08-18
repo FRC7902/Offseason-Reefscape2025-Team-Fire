@@ -19,6 +19,7 @@ import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 import frc.robot.commands.ElevatorArmCommands.MoveElevatorArmCommand;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 
@@ -36,6 +37,7 @@ public class RobotContainer {
     private final FunnelSubsystem m_funnelIndexerSubsystem = new FunnelSubsystem();
     private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
     public final static ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
+    public final static ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController m_driverController = new CommandXboxController(
