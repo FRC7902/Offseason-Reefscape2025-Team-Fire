@@ -15,7 +15,7 @@
     },
     "angle": {
         "type": "krakenx60",
-        "id": 36,
+        "id": 15,
         "canbus": null
     },
     "encoder": {
