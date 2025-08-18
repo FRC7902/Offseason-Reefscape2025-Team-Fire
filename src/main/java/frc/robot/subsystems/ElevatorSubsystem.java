@@ -306,6 +306,15 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_elevatorCarriageRoot2d.setPosition(Units.inchesToMeters(25), Units.inchesToMeters(0.5)+getElevatorPositionMeters());
     }
 
+    /**
+     * Gets the Mechanism2d instance for the elevator subsystem.
+     * 
+     * @return The Mechanism2d instance.
+     */
+    public Mechanism2d getMechanism2d() {
+        return m_mech2d;
+    }
+
     @Override
     public void periodic() {
         if (m_leaderMotor.getClosedLoopReference().getValueAsDouble() == 0
