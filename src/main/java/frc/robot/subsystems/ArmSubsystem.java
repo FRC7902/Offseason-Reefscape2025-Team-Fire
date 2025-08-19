@@ -9,6 +9,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 
@@ -49,6 +50,15 @@ public class ArmSubsystem extends SubsystemBase {
     )
   );
 
+  /** Arm simulation ligament */
+  private final MechanismLigament2d m_coralIndexerLigament = m_armLigament.append(
+    new MechanismLigament2d(
+      "CoralIndexer", 
+      Units.inchesToMeters(13),
+      (-180) + 62.552
+    )
+  );
+
   public ArmSubsystem() {
 
     // Configure motor
@@ -56,10 +66,18 @@ public class ArmSubsystem extends SubsystemBase {
     configs.kP = ArmConstants.kArmP;
     configs.kI = ArmConstants.kArmI;
     configs.kD = ArmConstants.kArmD;
+    configs.kS = ArmConstants.kArmS;
+    configs.kV = ArmConstants.kArmV;
+    configs.kG = ArmConstants.kArmG;
+    configs.kA = ArmConstants.kArmA;
+    configs.GravityType = GravityTypeValue.Arm_Cosine;
 
     CurrentLimitsConfigs currentLimits = m_armMotorConfig.CurrentLimits;
     currentLimits.StatorCurrentLimit = ArmConstants.kStatorCurrentLimit;
     currentLimits.SupplyCurrentLimit = ArmConstants.kSupplyCurrentLimit;
+
+    m_armMotorConfig.MotionMagic.MotionMagicAcceleration = 20;
+    m_armMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 20;
 
     m_armMotorConfig.Feedback.SensorToMechanismRatio = ArmConstants.kArmGearing;
 
