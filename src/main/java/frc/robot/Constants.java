@@ -45,18 +45,18 @@ public final class Constants {
         // Physical Constants
         public static final double kArmGearing = 67.5;
         public static final double kArmMass = Units.lbsToKilograms(8);
-        public static final double kArmLength = Units.inchesToMeters(30); 
+        public static final double kArmLength = Units.inchesToMeters(13.386);   
 
         // Motion Constraints
         public static final double kArmMinAngle = 0;
-        public static final double kArmMaxAngle = 310;
+        public static final double kArmMaxAngle = 310;  
 
         // Current limits
         public static final double kStatorCurrentLimit = 30.0;
         public static final double kSupplyCurrentLimit = 30.0;
 
         // PID Constants
-        public static final double kArmP = 0.8;
+        public static final double kArmP = 30;
         public static final double kArmI = 0.0;
         public static final double kArmD = 0.1;
 
