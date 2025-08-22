@@ -8,24 +8,56 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.850826865748355,
-        "y": 5.189302143297698
+        "x": 5.7770920260125695,
+        "y": 5.114406751920391
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.822412751850328,
-        "y": 5.37061125102796
+        "x": 5.262012700768156,
+        "y": 5.074706067537006
       },
       "prevControl": {
-        "x": 6.161089445415296,
-        "y": 4.9568025287828945
+        "x": 5.114511956034976,
+        "y": 4.872855800499387
       },
       "nextControl": {
-        "x": 5.443251574810565,
-        "y": 5.8338855334836
+        "x": 6.324342266060383,
+        "y": 6.528471652409727
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.5005734092310854,
+        "y": 6.903
+      },
+      "prevControl": {
+        "x": 0.41293473103747114,
+        "y": 7.610140572526779
+      },
+      "nextControl": {
+        "x": 2.8177891497894336,
+        "y": 6.046597307088498
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.031109789629888,
+        "y": 5.246345801326815
+      },
+      "prevControl": {
+        "x": 5.652948983122715,
+        "y": 6.4023102992534415
+      },
+      "nextControl": {
+        "x": 4.912673910658442,
+        "y": 5.02618008516678
       },
       "isLocked": false,
       "linkedName": null
@@ -36,60 +68,28 @@
         "y": 6.930343146073191
       },
       "prevControl": {
-        "x": 2.241599262175833,
-        "y": 6.768493667016174
+        "x": 6.294009689244742,
+        "y": 5.914964647346877
       },
       "nextControl": {
-        "x": 0.7595475562863412,
-        "y": 7.092192625130207
+        "x": 0.8598377410024339,
+        "y": 7.066068163134345
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.85761076274671,
-        "y": 5.8285069515830585
+        "x": 3.952426675977654,
+        "y": 5.246345801326815
       },
       "prevControl": {
-        "x": 4.178120900286336,
-        "y": 6.259332752661988
+        "x": 3.18443357074311,
+        "y": 5.764319919719258
       },
       "nextControl": {
-        "x": 5.537100625207083,
-        "y": 5.397681150504129
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.5005734092310854,
-        "y": 6.930343146073191
-      },
-      "prevControl": {
-        "x": 2.1519679583744895,
-        "y": 6.862162370608814
-      },
-      "nextControl": {
-        "x": 0.849178860087682,
-        "y": 6.998523921537567
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.9896272358141442,
-        "y": 5.709889301500822
-      },
-      "prevControl": {
-        "x": 3.346077550014551,
-        "y": 6.102056827222882
-      },
-      "nextControl": {
-        "x": 4.633176921613737,
-        "y": 5.317721775778762
+        "x": 4.601819570530726,
+        "y": 4.808361775488827
       },
       "isLocked": false,
       "linkedName": null
@@ -104,7 +104,11 @@
         "y": 6.830541347616923
       },
       "nextControl": {
+<<<<<<< HEAD
         "x": 0.8987466681724648,
+=======
+        "x": 0.898746668172465,
+>>>>>>> 7f57f9a (Perpendicular paths for entering and exiting)
         "y": 7.030144944529458
       },
       "isLocked": false,
@@ -112,28 +116,12 @@
     },
     {
       "anchor": {
-        "x": 3.2912263569078943,
-        "y": 5.37061125102796
+        "x": 3.706817060928771,
+        "y": 5.074706067537006
       },
       "prevControl": {
-        "x": 2.844832774529121,
-        "y": 5.77577988539469
-      },
-      "nextControl": {
-        "x": 3.7376199392866676,
-        "y": 4.965442616661231
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.2912263569078943,
-        "y": 5.37061125102796
-      },
-      "prevControl": {
-        "x": 2.340593839946546,
-        "y": 5.826778050472863
+        "x": 3.195873996159218,
+        "y": 6.0621848812849155
       },
       "nextControl": null,
       "isLocked": false,
@@ -143,19 +131,27 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1,
-      "rotationDegrees": -118.70763273540554
+      "rotationDegrees": -120.60720156368653
     },
     {
-      "waypointRelativePos": 3,
-      "rotationDegrees": -118.88980787511413
+      "waypointRelativePos": 2,
+      "rotationDegrees": 130.58938172425766
     },
     {
-      "waypointRelativePos": 5,
+      "waypointRelativePos": 3.0,
+      "rotationDegrees": -123.19731776975634
+    },
+    {
+      "waypointRelativePos": 4.0,
+      "rotationDegrees": 131.64058938392148
+    },
+    {
+      "waypointRelativePos": 5.0,
       "rotationDegrees": -57.58394910390602
     },
     {
-      "waypointRelativePos": 7,
-      "rotationDegrees": -60.215647870054966
+      "waypointRelativePos": 6.0,
+      "rotationDegrees": 133.94755703745187
     }
   ],
   "constraintZones": [],
@@ -169,13 +165,13 @@
     },
     {
       "name": "Score L4 coral",
-      "waypointRelativePos": 3.0134229129263916,
+      "waypointRelativePos": 3.1112453959484365,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
       "name": "Obtain coral",
-      "waypointRelativePos": 3.9951750448833008,
+      "waypointRelativePos": 4.0,
       "endWaypointRelativePos": null,
       "command": null
     },
@@ -187,7 +183,7 @@
     },
     {
       "name": "score L4 coral",
-      "waypointRelativePos": 7.055711400359065,
+      "waypointRelativePos": 7.0,
       "endWaypointRelativePos": null,
       "command": null
     }
