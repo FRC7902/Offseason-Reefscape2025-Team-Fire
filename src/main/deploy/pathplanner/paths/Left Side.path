@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.7770920260125695,
-        "y": 5.114406751920391
+        "x": 4.9100475733240225,
+        "y": 5.805200549930166
       },
       "isLocked": false,
       "linkedName": null
@@ -68,11 +68,11 @@
         "y": 6.930343146073191
       },
       "prevControl": {
-        "x": 6.294009689244742,
+        "x": 6.294009689244743,
         "y": 5.914964647346877
       },
       "nextControl": {
-        "x": 0.8598377410024339,
+        "x": 0.859837741002434,
         "y": 7.066068163134345
       },
       "isLocked": false,
@@ -131,7 +131,7 @@
     },
     {
       "waypointRelativePos": 2,
-      "rotationDegrees": 130.58938172425766
+      "rotationDegrees": -44.94195837142394
     },
     {
       "waypointRelativePos": 3.0,
@@ -139,7 +139,7 @@
     },
     {
       "waypointRelativePos": 4.0,
-      "rotationDegrees": 131.64058938392148
+      "rotationDegrees": -49.43375529419798
     },
     {
       "waypointRelativePos": 5.0,
@@ -147,7 +147,7 @@
     },
     {
       "waypointRelativePos": 6.0,
-      "rotationDegrees": 133.94755703745187
+      "rotationDegrees": -52.139610448130846
     }
   ],
   "constraintZones": [],
@@ -178,7 +178,7 @@
       "command": null
     },
     {
-      "name": "score L4 coral",
+      "name": "Score L4 coral",
       "waypointRelativePos": 7.0,
       "endWaypointRelativePos": null,
       "command": null
