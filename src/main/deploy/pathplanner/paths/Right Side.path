@@ -84,13 +84,8 @@
         "y": 2.794615703561452
       },
       "prevControl": {
-<<<<<<< HEAD
-        "x": 4.454031030004801,
-        "y": 1.9759603439127373
-=======
         "x": 4.160495244278486,
         "y": 2.6253471448382144
->>>>>>> 7f57f9a (Perpendicular paths for entering and exiting)
       },
       "nextControl": {
         "x": 3.792537882467324,
@@ -109,13 +104,8 @@
         "y": 0.8811356494413406
       },
       "nextControl": {
-<<<<<<< HEAD
-        "x": 0.8563273421706808,
-        "y": 1.5300701675714519
-=======
         "x": 1.2459724561357632,
         "y": 1.3842446122730139
->>>>>>> 7f57f9a (Perpendicular paths for entering and exiting)
       },
       "isLocked": false,
       "linkedName": null
