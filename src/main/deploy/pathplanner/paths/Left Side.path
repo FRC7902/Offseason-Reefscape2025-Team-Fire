@@ -104,11 +104,7 @@
         "y": 6.830541347616923
       },
       "nextControl": {
-<<<<<<< HEAD
-        "x": 0.8987466681724648,
-=======
         "x": 0.898746668172465,
->>>>>>> 7f57f9a (Perpendicular paths for entering and exiting)
         "y": 7.030144944529458
       },
       "isLocked": false,
