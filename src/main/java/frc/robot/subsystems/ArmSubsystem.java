@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 
@@ -60,6 +61,12 @@ public class ArmSubsystem extends SubsystemBase {
   );
 
   public ArmSubsystem() {
+    if (ArmConstants.kTuningMode) {
+      SmartDashboard.putNumber("Arm P", ArmConstants.kArmP);
+      SmartDashboard.putNumber("Arm I", ArmConstants.kArmI);
+      SmartDashboard.putNumber("Arm D", ArmConstants.kArmD);
+      SmartDashboard.putNumber("Arm G", ArmConstants.kArmG);
+    }
 
     // Configure motor
     Slot0Configs configs = m_armMotorConfig.Slot0;
@@ -100,6 +107,20 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (ArmConstants.kTuningMode) {
+      ArmConstants.kArmP = SmartDashboard.getNumber("Arm P", ArmConstants.kArmP);
+      ArmConstants.kArmI = SmartDashboard.getNumber("Arm I", ArmConstants.kArmI);
+      ArmConstants.kArmD = SmartDashboard.getNumber("Arm D", ArmConstants.kArmD);
+      ArmConstants.kArmG = SmartDashboard.getNumber("Arm G", ArmConstants.kArmG);
+
+      m_armMotorConfig.Slot0.kP = ElevatorConstants.kElevatorP;
+      m_armMotorConfig.Slot0.kI = ElevatorConstants.kElevatorI;
+      m_armMotorConfig.Slot0.kD = ElevatorConstants.kElevatorD;
+      m_armMotorConfig.Slot0.kG = ElevatorConstants.kElevatorG;
+        
+      m_armMotor.getConfigurator().apply(m_armMotorConfig);
+    }
+
     SmartDashboard.putNumber("Arm Position (deg)", getArmPositionDegrees());
     SmartDashboard.putNumber("Arm position setpoint (rotations)", m_armMotor.getClosedLoopReference().getValueAsDouble());
     updateTelemetry();
@@ -141,7 +162,7 @@ public class ArmSubsystem extends SubsystemBase {
     } else if (position > ArmConstants.kArmMaxAngle) {
       position = ArmConstants.kArmMaxAngle;
     }
-
+    
     double targetPositionRot = (position / 360.0); // Convert degrees to rotations
 
     // Set the motion magic request
