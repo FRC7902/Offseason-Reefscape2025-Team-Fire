@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.09954641672486,
-        "y": 3.925231865398044
+        "x": 7.5292653097072595,
+        "y": 5.2036481249969055
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.32353482891061,
-        "y": 3.968203015886871
+        "x": 6.566033669053191,
+        "y": 4.53105289451737
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.7764026492667595,
-        "y": 3.925231865398044
+        "x": 5.840294623916879,
+        "y": 3.8684097817454024
       },
       "prevControl": {
-        "x": 6.587950764213544,
-        "y": 3.9285137649246806
+        "x": 6.456634459513449,
+        "y": 4.313711485226346
       },
       "nextControl": {
-        "x": 5.302877422311451,
-        "y": 3.923316929993016
+        "x": 5.637650940427732,
+        "y": 3.7220009789296196
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.544807197101956,
-        "y": 5.779463818086592
+        "x": 7.5292653097072595,
+        "y": 4.06503201794301
       },
       "prevControl": {
-        "x": 8.329969011871508,
-        "y": 5.769582751396648
+        "x": 5.82034099833943,
+        "y": 3.960942250852716
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,21 +47,21 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1,
-      "rotationDegrees": -176.59938242896683
+      "rotationDegrees": -179.8412570200151
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "score algae",
-      "waypointRelativePos": 0.5268905386740331,
+      "name": "Score L4 coral",
+      "waypointRelativePos": 1.05,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
-      "name": "Score L4 coral",
-      "waypointRelativePos": 1.0929155156537749,
+      "name": "score algae",
+      "waypointRelativePos": 2.0,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -76,13 +76,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -2.262009469266363
+    "rotation": 0.157606279838574
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -1.235938001611569
+    "rotation": 179.89669415481467
   },
   "useDefaultConstraints": true
 }
