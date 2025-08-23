@@ -72,7 +72,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         ElevatorConstants.kElevatorMaxHeightMeters,
         true,
         ElevatorConstants.kElevatorHeightMeters,
-        0.005, 0
+        0, 0
     );
 
     /** Mechanism2d instance for the elevator */
@@ -138,6 +138,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     public ElevatorSubsystem() {
         if (RobotBase.isSimulation()) {
             SmartDashboard.putData("ElevatorSimulation", m_mech2d);
+        }
+
+        if (ElevatorConstants.kTuningMode) {
+            SmartDashboard.putNumber("Elevator P", ElevatorConstants.kElevatorP);
+            SmartDashboard.putNumber("Elevator I", ElevatorConstants.kElevatorI);
+            SmartDashboard.putNumber("Elevator D", ElevatorConstants.kElevatorD);
+            SmartDashboard.putNumber("Elevator G", ElevatorConstants.kElevatorG);
         }
 
         // Set motor configuration
@@ -324,6 +331,20 @@ public class ElevatorSubsystem extends SubsystemBase {
             m_leaderMotor.setControl(m_motionMagicRequest);
         }
 
+        if (ElevatorConstants.kTuningMode) {
+            ElevatorConstants.kElevatorP = SmartDashboard.getNumber("Elevator P", ElevatorConstants.kElevatorP);
+            ElevatorConstants.kElevatorI = SmartDashboard.getNumber("Elevator I", ElevatorConstants.kElevatorI);
+            ElevatorConstants.kElevatorD = SmartDashboard.getNumber("Elevator D", ElevatorConstants.kElevatorD);
+            ElevatorConstants.kElevatorG = SmartDashboard.getNumber("Elevator G", ElevatorConstants.kElevatorG);
+
+            m_motorConfig.Slot0.kP = ElevatorConstants.kElevatorP;
+            m_motorConfig.Slot0.kI = ElevatorConstants.kElevatorI;
+            m_motorConfig.Slot0.kD = ElevatorConstants.kElevatorD;
+            m_motorConfig.Slot0.kG = ElevatorConstants.kElevatorG;
+
+            m_leaderMotor.getConfigurator().apply(m_motorConfig);
+        }
+        
         SmartDashboard.putNumber("Elevator Position (m)", getElevatorPositionMeters());
         SmartDashboard.putNumber("Elevator Setpoint (m)", m_elevatorSetPointMeters);
         SmartDashboard.putString("Elevator Position Enum", getElevatorPositionEnum().toString());

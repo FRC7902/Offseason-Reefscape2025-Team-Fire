@@ -62,6 +62,9 @@ public final class Constants {
     }
 
     public static class ArmConstants {
+        //PID tuning mode
+        public static final boolean kTuningMode = false;
+
         // CAN IDs
         public static final int kArmMotorCANID = 50;
 
@@ -74,27 +77,27 @@ public final class Constants {
         public static final double kArmLength = Units.inchesToMeters(13.386);   
 
         // Motion Constraints
-        public static final double kArmMinAngle = 0;
-        public static final double kArmMaxAngle = 310;  
+        public static final double kArmMinAngle = -94; // Minimum angle for the arm
+        public static final double kArmMaxAngle = 75;  
 
         // Current limits
         public static final double kStatorCurrentLimit = 30.0;
         public static final double kSupplyCurrentLimit = 30.0;
 
         // PID Constants
-        public static final double kArmP = 30;
-        public static final double kArmI = 0.0;
-        public static final double kArmD = 0.1;
+        public static double kArmP = 50;
+        public static double kArmI = 0;
+        public static double kArmD = 5;
 
         // Feedforward Constants
-        public static final double kArmS = 0.0; 
-        public static final double kArmG = 0.5; 
-        public static final double kArmV = 0.3; 
-        public static final double kArmA = 0.1; 
+        public static double kArmS = 0.0; 
+        public static double kArmG = 0.5; 
+        public static double kArmV = 0.3; 
+        public static double kArmA = 0.1; 
 
         // Arm Setpoints
-        public static final double kArmZeroAngle = 266.0;
-        public static final double kArmProcessorAngle = 310.0;
+        public static final double kArmZeroAngle = -94;
+        public static final double kArmProcessorAngle = -50;
 
         public static final double kArmCoralLevel1Angle = 40.0; 
         public static final double kArmCoralLevel2Angle = 75.0;
@@ -108,6 +111,9 @@ public final class Constants {
     }
 
     public static class ElevatorConstants {
+        //PID tuning mode
+        public static final boolean kTuningMode = false;
+
         // CAN IDs
         public static final int kElevatorLeaderCANID = 55;
         public static final int kElevatorFollowerCANID = 56;
@@ -131,15 +137,15 @@ public final class Constants {
         public static final double kElevatorMaxAcceleration = 160.0;
 
         // PID Constants
-        public static final double kElevatorP = 10;
-        public static final double kElevatorI = 0.0;
-        public static final double kElevatorD = 0.01;
+        public static double kElevatorP = 95;
+        public static double kElevatorI = 8;
+        public static double kElevatorD = 8.5;
 
         // Elevator Gains
-        public static final double kElevatorS = 0.0;
-        public static final double kElevatorG = 0.4;
-        public static final double kElevatorV = 6.85 * kElevatorMetersPerMotorRotation;
-        public static final double kElevatorA = 0.04 * kElevatorMetersPerMotorRotation;
+        public static double kElevatorS = 0.0;
+        public static double kElevatorG = 2;
+        public static double kElevatorV = 6.85 * kElevatorMetersPerMotorRotation;
+        public static double kElevatorA = 0.04 * kElevatorMetersPerMotorRotation;
 
         // ===== Elevator Setpoints =====
         public static final double kElevatorProcessorHeight = Units.inchesToMeters(22.5);
