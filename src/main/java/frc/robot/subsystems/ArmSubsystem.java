@@ -8,9 +8,12 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.sim.CANcoderSimState;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -37,6 +40,12 @@ public class ArmSubsystem extends SubsystemBase {
 
   /** Arm motor motion magic request object */
   private final MotionMagicVoltage m_motionMagicRequest = new MotionMagicVoltage(0).withSlot(0);
+
+  /** WCP Through-Bore encoder object */
+  private final CANcoder m_armEncoder = new CANcoder(ArmConstants.kArmEncoderPort);
+
+  /** Arm encoder sim state */
+  private final CANcoderSimState m_armEncoderSim = m_armEncoder.getSimState();
 
   /** Arm simulation object */
   private final SingleJointedArmSim m_armSim;
@@ -88,6 +97,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     m_armMotorConfig.Feedback.SensorToMechanismRatio = ArmConstants.kArmGearing;
 
+    m_armMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    m_armMotorConfig.Feedback.FeedbackRemoteSensorID = m_armEncoder.getDeviceID();
+
     m_armMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     m_armMotor.getConfigurator().apply(m_armMotorConfig);
@@ -121,7 +133,7 @@ public class ArmSubsystem extends SubsystemBase {
       m_armMotor.getConfigurator().apply(m_armMotorConfig);
     }
 
-    SmartDashboard.putNumber("Arm Position (deg)", getArmPositionDegrees());
+    SmartDashboard.putNumber("Arm Position (deg)", getArmPositionDegrees()/360);
     SmartDashboard.putNumber("Arm position setpoint (rotations)", m_armMotor.getClosedLoopReference().getValueAsDouble());
     updateTelemetry();
   }
@@ -135,10 +147,12 @@ public class ArmSubsystem extends SubsystemBase {
     m_armSim.update(0.02);  
 
     // Convert mechanism angle to rotor rotations
+
     double rotorPosition = (m_armSim.getAngleRads() / (2.0 * Math.PI)) * ArmConstants.kArmGearing;
     double rotorVelocity = (m_armSim.getVelocityRadPerSec() / (2.0 * Math.PI)) * ArmConstants.kArmGearing;
 
     m_armMotorSim.setRawRotorPosition(rotorPosition);
+    m_armEncoderSim.setRawPosition(rotorPosition/ArmConstants.kArmGearing); // Divide to account for gearing
     m_armMotorSim.setRotorVelocity(rotorVelocity);
   }
 
@@ -146,7 +160,7 @@ public class ArmSubsystem extends SubsystemBase {
    * Updates the telemetry for the arm subsystem.
    */
   public void updateTelemetry() {
-    m_armLigament.setAngle(getArmPositionDegrees());
+    m_armLigament.setAngle(m_armSim.getAngleRads() * (180 / Math.PI)); // Convert radians to degrees
   }
 
   /**
@@ -163,7 +177,7 @@ public class ArmSubsystem extends SubsystemBase {
       position = ArmConstants.kArmMaxAngle;
     }
     
-    double targetPositionRot = (position / 360.0); // Convert degrees to rotations
+    double targetPositionRot = (position / 360.0) ; // Convert degrees to rotations
 
     // Set the motion magic request
     m_motionMagicRequest.Position = targetPositionRot;
@@ -177,7 +191,7 @@ public class ArmSubsystem extends SubsystemBase {
    * @return The current arm position in degrees.
    */
   public double getArmPositionDegrees() {
-    double positionDeg = (m_armMotor.getPosition().getValueAsDouble() * 360);
+    double positionDeg = (m_armEncoder.getPosition().getValueAsDouble() * 360);
     return positionDeg;
   }
 

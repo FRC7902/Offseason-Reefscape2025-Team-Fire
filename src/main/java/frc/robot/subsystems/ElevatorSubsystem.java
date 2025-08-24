@@ -177,11 +177,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         // Set current limits
         m_motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        m_motorConfig.CurrentLimits.StatorCurrentLimit = 125;
+        m_motorConfig.CurrentLimits.StatorCurrentLimit = ElevatorConstants.kElevatorStatorCurrentLimit;
 
         // Set current limits
         m_motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        m_motorConfig.CurrentLimits.SupplyCurrentLimit = 60;
+        m_motorConfig.CurrentLimits.SupplyCurrentLimit = ElevatorConstants.kElevatorSupplyCurrentLimit; 
 
         // Set follower
         m_followerMotor.setControl(new Follower(m_leaderMotor.getDeviceID(), true));

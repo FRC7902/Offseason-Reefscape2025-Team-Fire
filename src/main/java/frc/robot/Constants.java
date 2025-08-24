@@ -55,8 +55,8 @@ public final class Constants {
         public static final double kArmMaxAngle = 75;  
 
         // Current limits
-        public static final double kStatorCurrentLimit = 30.0;
-        public static final double kSupplyCurrentLimit = 30.0;
+        public static final double kStatorCurrentLimit = 50.0;
+        public static final double kSupplyCurrentLimit = 50.0;
 
         // PID Constants
         public static double kArmP = 50;
@@ -91,6 +91,10 @@ public final class Constants {
         // CAN IDs
         public static final int kElevatorLeaderCANID = 55;
         public static final int kElevatorFollowerCANID = 56;
+
+        // Current Limits
+        public static final double kElevatorStatorCurrentLimit = 50.0; 
+        public static final double kElevatorSupplyCurrentLimit = 50.0; 
 
         // Physical Constants 
         public static final double kElevatorGearing = 4.875; 
