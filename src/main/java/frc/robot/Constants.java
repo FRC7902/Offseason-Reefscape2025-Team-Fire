@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -19,10 +21,11 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final double DEADBAND = 0.15;
   }
 
   public static class SwerveConstants {
-
+    public static final double MAX_SPEED = Units.feetToMeters(15);
   }
 
   public static class FunnelIndexerConstants {
