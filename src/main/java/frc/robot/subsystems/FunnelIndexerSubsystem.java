@@ -1,11 +1,11 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.FunnelIndexerConstants;
 
 public class FunnelIndexerSubsystem extends SubsystemBase {
     private final SparkMax m_indexerLeftMotor;
@@ -14,22 +14,19 @@ public class FunnelIndexerSubsystem extends SubsystemBase {
     private final DigitalInput m_shallowBeamBreak;
     private final DigitalInput m_deepBeamBreak;
 
-   // ...existing code...
     public FunnelIndexerSubsystem() {
-        m_indexerLeftMotor = new SparkMax(Constants.FunnelIndexerConstants.kLeftMotorCANID, MotorType.kBrushless);   // NEO 550
-        m_indexerRightMotor = new SparkMax(Constants.FunnelIndexerConstants.kRightMotorCANID, MotorType.kBrushless);  // NEO 550
-        m_indexerkickerMotor = new SparkMax(Constants.FunnelIndexerConstants.kKickerMotorCANID, MotorType.kBrushless); // NEO 550
+        m_indexerLeftMotor = new SparkMax(FunnelIndexerConstants.LEFT_MOTOR_CAN_ID, MotorType.kBrushless); // NEO 550
+        m_indexerRightMotor = new SparkMax(FunnelIndexerConstants.RIGHT_MOTOR_CAN_ID, MotorType.kBrushless); // NEO 550
+        m_indexerkickerMotor = new SparkMax(FunnelIndexerConstants.KICKER_MOTOR_CAN_ID, MotorType.kBrushless); // NEO 550
 
         m_shallowBeamBreak = new DigitalInput(0);
         m_deepBeamBreak = new DigitalInput(1);
 
         // Kicker motor spins all the time
-        m_indexerkickerMotor.set(Constants.FunnelIndexerConstants.m_fullSpeed);
+        m_indexerkickerMotor.set(FunnelIndexerConstants.FULL_SPEED);
     }
-// ...existing code...
 
-    // Optionally, control kicker motor if needed
-    public void setKickerPower(double speed) {
+    public void setKickerSpeed(double speed) {
         m_indexerkickerMotor.set(speed);
     }
 
@@ -41,12 +38,15 @@ public class FunnelIndexerSubsystem extends SubsystemBase {
         return !m_deepBeamBreak.get();
     }
 
-    public boolean CanShoot() {
-        return isShallowBeamBroken() && isDeepBeamBroken();
-    }    
-    public void setPower(double speed) {
+    public void setIndexerSpeed(double speed) {
         m_indexerLeftMotor.set(speed);
         m_indexerRightMotor.set(-speed); // Invert right motor to ensure both motors spin in the same direction
+    }
+
+    public void stop() {
+        setIndexerSpeed(0);
+        m_indexerLeftMotor.stopMotor();
+        m_indexerRightMotor.stopMotor();
     }
 
     @Override
