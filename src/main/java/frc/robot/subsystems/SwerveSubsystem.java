@@ -38,6 +38,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /* Swerve drive object */
     private final SwerveDrive swerveDrive;
+    private SwerveDrive newDrive;
 
     /** Creates a new SwerveSubsystem. */
     public SwerveSubsystem(CommandXboxController m_driverController, File directory) {
