@@ -15,7 +15,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class PhotonSim extends SubsystemBase {
