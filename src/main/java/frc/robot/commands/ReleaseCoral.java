@@ -33,7 +33,7 @@ public class ReleaseCoral extends Command {
 
   @Override
   public boolean isFinished() {
-    return funnelIndexerSubsystem.hasCoral();
+    return funnelIndexerSubsystem.CanShoot();
   }
 }
 // ...existing code...

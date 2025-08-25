@@ -29,6 +29,10 @@ public final class Constants {
   }
 
   public static class FunnelIndexerConstants {
+    public static final int kLeftMotorCANID = 1;
+    public static final int kRightMotorCANID = 2;
+    public static final int kKickerMotorCANID = 3;
+
     public static final double m_fullSpeed = 0.5;
     public static final double m_halfSpeed = 0.3;
     public static final double m_reverseSpeed = -0.5;
