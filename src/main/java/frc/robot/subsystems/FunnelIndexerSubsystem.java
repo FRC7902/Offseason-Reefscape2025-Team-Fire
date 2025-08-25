@@ -45,10 +45,10 @@ public class FunnelIndexerSubsystem extends SubsystemBase {
         return !m_deepBeamBreak.get();
     }
 
-    /*public boolean hasCoral() {
+    public boolean hasCoral() {
         // Assumes that if the deep beam break is broken, there is coral ready to be indexed
         return isDeepBeamBroken();
-    }*/
+    }
 
     @Override
     public void periodic() {

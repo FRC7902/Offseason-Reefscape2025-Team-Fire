@@ -33,7 +33,6 @@ public final class Constants {
     public static final double m_halfSpeed = 0.3;
     public static final double m_reverseSpeed = -0.5;
     public static final double m_stopSpeed = 0.0;
-    public static final double m_reversehalfSpeed = -0.3;
   }
 
   public static class CoralIndexerConstants {

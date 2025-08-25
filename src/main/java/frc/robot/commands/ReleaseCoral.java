@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.FunnelIndexerSubsystem;
 
 
 /*
@@ -15,36 +16,24 @@ import frc.robot.RobotContainer;
  * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#
  * defining-commands
  */
+// ...existing code...
 public class ReleaseCoral extends Command {
-  /** Creates a new CorrectCoralPositionCommand. */
-  public ReleaseCoral() {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.m_indexSubsystem);
+  private final FunnelIndexerSubsystem funnelIndexerSubsystem;
+
+  /** Creates a new ReleaseCoral command. */
+  public ReleaseCoral(FunnelIndexerSubsystem funnelIndexerSubsystem) {
+    this.funnelIndexerSubsystem = funnelIndexerSubsystem;
+    addRequirements(funnelIndexerSubsystem);
   }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    //RobotContainer.m_operatorController.setRumble(GenericHID.RumbleType.kBothRumble, 1);
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      RobotContainer.m_indexSubsystem.setPower(Constants.FunnelIndexerConstants.m_reversehalfSpeed);
-//check do the truth table
+    funnelIndexerSubsystem.setPower(Constants.FunnelIndexerConstants.m_halfSpeed);
   }
 
-  // Called once the command ends or is interrupted.
-  //@Override
-  //public void end(boolean interrupted) {
-    //RobotContainer.m_operatorController.setRumble(GenericHID.RumbleType.kBothRumble, 0);
-    //RobotContainer.m_indexSubsystem.stop();
-  //}
-
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return FunnelIndexerSubsystem.hasCoral(); // Assuming hasCoral() checks if the coral is ready to be released
+    return funnelIndexerSubsystem.hasCoral();
   }
 }
+// ...existing code...
