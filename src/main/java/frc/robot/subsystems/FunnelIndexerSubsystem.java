@@ -44,6 +44,10 @@ public class FunnelIndexerSubsystem extends SubsystemBase {
     public boolean CanShoot() {
         return isShallowBeamBroken() && isDeepBeamBroken();
     }    
+    public void setPower(double speed) {
+        m_leftMotor.set(speed);
+        m_rightMotor.set(-speed); // Invert right motor to ensure both motors spin in the same direction
+    }
 
     @Override
     public void periodic() {
