@@ -95,9 +95,9 @@ public class ArmSubsystem extends SubsystemBase {
     m_armMotorConfig.MotionMagic.MotionMagicAcceleration = 20;
     m_armMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 20;
 
-    m_armMotorConfig.Feedback.SensorToMechanismRatio = ArmConstants.kArmGearing;
+    m_armMotorConfig.Feedback.SensorToMechanismRatio = 1;
 
-    m_armMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    m_armMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
     m_armMotorConfig.Feedback.FeedbackRemoteSensorID = m_armEncoder.getDeviceID();
 
     m_armMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
