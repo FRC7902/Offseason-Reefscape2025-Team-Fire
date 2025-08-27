@@ -1,5 +1,6 @@
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
   "robotWidth": 0.864,
   "robotLength": 0.864,
   "holonomicMode": true,
@@ -40,6 +41,10 @@
 =======
   "robotWidth": 0.9,
   "robotLength": 0.9,
+=======
+  "robotWidth": 0.8636,
+  "robotLength": 0.8636,
+>>>>>>> 2d36baf (bumper width and optimizations)
   "holonomicMode": true,
   "pathFolders": [
     "Example Paths"
