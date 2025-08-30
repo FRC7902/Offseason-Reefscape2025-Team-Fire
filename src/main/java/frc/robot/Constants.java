@@ -20,7 +20,7 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
+    public static final int DRIVER_CONTROLLER_PORT = 0;
     public static final double DEADBAND = 0.15;
   }
 
@@ -29,7 +29,18 @@ public final class Constants {
   }
 
   public static class FunnelIndexerConstants {
+    public static final int LEFT_MOTOR_CAN_ID = 1;
+    public static final int RIGHT_MOTOR_CAN_ID = 2;
+    public static final int KICKER_MOTOR_CAN_ID = 3;
 
+    public static final double FULL_SPEED = 0.5;
+    public static final double HALF_SPEED = 0.3;
+    public static final double REVERSE_SPEED = -0.5;
+    public static final double STOP_SPEED = 0.0;
+  }
+
+  public static class CoralIndexerConstants {
+   
   }
 
   public static class AlgaeCoralIndexerConstants {
