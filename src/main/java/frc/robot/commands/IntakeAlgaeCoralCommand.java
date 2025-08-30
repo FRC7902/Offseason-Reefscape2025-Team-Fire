@@ -6,25 +6,25 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AlgaeCoralIndexerConstants;
-import frc.robot.subsystems.AlgaeCoralIndexerSubsystem;
+import frc.robot.subsystems.EndEffectorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class IntakeAlgaeCoralCommand extends Command {
 
-  private AlgaeCoralIndexerSubsystem m_algaeCoralIndexerSubsystem;
+  private EndEffectorSubsystem m_endEffectorSubsystem;
 
   /** Creates a new IntakeAlgaeCoralCommand. */
-  public IntakeAlgaeCoralCommand(AlgaeCoralIndexerSubsystem algaeCoralIndexerSubsystem) {
+  public IntakeAlgaeCoralCommand(EndEffectorSubsystem endEffectorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(algaeCoralIndexerSubsystem);
-    m_algaeCoralIndexerSubsystem = algaeCoralIndexerSubsystem;
+    addRequirements(endEffectorSubsystem);
+    m_endEffectorSubsystem = endEffectorSubsystem;
   
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_algaeCoralIndexerSubsystem.setSpeed(AlgaeCoralIndexerConstants.kIntakeSpeed);
+    m_endEffectorSubsystem.setSpeed(AlgaeCoralIndexerConstants.kIntakeSpeed);
 
   }
 
@@ -35,12 +35,12 @@ public class IntakeAlgaeCoralCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_algaeCoralIndexerSubsystem.stop();
+    m_endEffectorSubsystem.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_algaeCoralIndexerSubsystem.isCoralDetected() || m_algaeCoralIndexerSubsystem.isAlgaeDetected();
+    return m_endEffectorSubsystem.isCoralDetected() || m_endEffectorSubsystem.isAlgaeDetected();
   }
 }
