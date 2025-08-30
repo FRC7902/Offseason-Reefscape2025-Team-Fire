@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeCoralIndexerConstants;
 
-public class AlgaeCoralIndexerSubsystem extends SubsystemBase {
+public class EndEffectorSubsystem extends SubsystemBase {
 
   private final TalonFX m_motor;
   private final TalonFXConfiguration m_motorConfig;
@@ -21,7 +21,7 @@ public class AlgaeCoralIndexerSubsystem extends SubsystemBase {
 
 
   /** Creates a new AlgaeCoralIndexerSubsystem. */
-  public AlgaeCoralIndexerSubsystem() {
+  public EndEffectorSubsystem() {
     m_motor = new TalonFX(AlgaeCoralIndexerConstants.kMotorCANId);
     m_motorConfig = new TalonFXConfiguration();
     m_coralBeamBreak = new DigitalInput(AlgaeCoralIndexerConstants.kCoralBeamBreakPortId);
