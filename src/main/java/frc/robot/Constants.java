@@ -30,6 +30,13 @@ public final class Constants {
   }
 
   public static class AlgaeCoralIndexerConstants {
+    public static final int kMotorCANId = -1;
+    public static final int kCoralBeamBreakPortId = -1;
+    public static final int kAlgaeProximitySensorPortId = -1;
+    public static final int kMotorStatorCurrentLimit = 40;
+    public static final int kIntakeSpeed = 1;
+    public static final int kOuttakeSpeed = -1;
+
 
   }
 
