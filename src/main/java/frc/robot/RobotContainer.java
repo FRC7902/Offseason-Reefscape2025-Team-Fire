@@ -10,9 +10,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.IntakeAlgaeCoralCommand;
+import frc.robot.commands.OuttakeAlgaeCoralCommand;
+import frc.robot.subsystems.AlgaeCoralIndexerSubsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.FunnelCommands;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -30,6 +33,8 @@ import swervelib.SwerveInputStream;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final FunnelSubsystem m_funnelIndexerSubsystem = new FunnelSubsystem();
+
+    private final AlgaeCoralIndexerSubsystem m_algaeCoralIndexerSubsystem = new AlgaeCoralIndexerSubsystem();
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController m_driverController = new CommandXboxController(
@@ -114,6 +119,10 @@ public class RobotContainer {
         // FunnelSubsystem
         m_funnelIndexerSubsystem.setDefaultCommand(FunnelCommands.IntakeCoral(m_funnelIndexerSubsystem));
         m_driverController.rightBumper().whileTrue(FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem));
+
+        // EndEffectorSubsystem
+        m_driverController.leftBumper().whileTrue(new IntakeAlgaeCoralCommand(m_algaeCoralIndexerSubsystem));
+        m_driverController.rightBumper().whileTrue(new OuttakeAlgaeCoralCommand(m_algaeCoralIndexerSubsystem));
 
         m_swerveSubsystem.setDefaultCommand(
                 Robot.isSimulation() ? driveFieldOrientedAngularVelocity : driveRobotOrientedAngularVelocity);

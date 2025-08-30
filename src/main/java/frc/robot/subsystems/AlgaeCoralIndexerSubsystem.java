@@ -4,13 +4,53 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.AlgaeCoralIndexerConstants;
 
 public class AlgaeCoralIndexerSubsystem extends SubsystemBase {
+
+  private final TalonFX m_motor;
+  private final TalonFXConfiguration m_motorConfig;
+
+  private final DigitalInput m_coralBeamBreak;
+  private final DigitalInput m_algaeProximitySensor;
+
+
   /** Creates a new AlgaeCoralIndexerSubsystem. */
-  public AlgaeCoralIndexerSubsystem() {}
-  // blah blah blah
-  // coding
+  public AlgaeCoralIndexerSubsystem() {
+    m_motor = new TalonFX(AlgaeCoralIndexerConstants.kMotorCANId);
+    m_motorConfig = new TalonFXConfiguration();
+    m_coralBeamBreak = new DigitalInput(AlgaeCoralIndexerConstants.kCoralBeamBreakPortId);
+    m_algaeProximitySensor = new DigitalInput(AlgaeCoralIndexerConstants.kAlgaeProximitySensorPortId);
+    
+
+    m_motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    m_motorConfig.CurrentLimits.StatorCurrentLimit = AlgaeCoralIndexerConstants.kMotorStatorCurrentLimit;
+
+    m_motor.getConfigurator().apply(m_motorConfig);
+
+  }
+
+  public boolean isCoralDetected() {
+    return m_coralBeamBreak.get();
+  }
+
+  public boolean isAlgaeDetected() {
+    return m_algaeProximitySensor.get();
+  }
+
+  public void stop() {
+    m_motor.stopMotor();
+  }
+
+  public void setSpeed(double speed) {
+    m_motor.set(speed);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
