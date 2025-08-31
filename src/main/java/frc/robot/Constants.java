@@ -40,6 +40,8 @@ public final class Constants {
 
     public static final int SHALLOW_BEAM_BREAK_DIO = 0;
     public static final int DEEP_BEAM_BREAK_DIO = 1;
+
+    public static final int MOTOR_CURRENT_LIMIT = 30;
   }
 
   public static class CoralIndexerConstants {
