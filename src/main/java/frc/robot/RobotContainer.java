@@ -111,8 +111,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_driverController.leftBumper().whileTrue(FunnelIndexerCommands.IntakeCoral(m_funnelIndexerSubsystem));
+    //m_driverController.leftBumper().whileTrue(FunnelIndexerCommands.IntakeCoral(m_funnelIndexerSubsystem));
     m_driverController.rightBumper().whileTrue(FunnelIndexerCommands.OuttakeCoral(m_funnelIndexerSubsystem));
+    m_funnelIndexerSubsystem.setDefaultCommand(FunnelIndexerCommands.IntakeCoral(m_funnelIndexerSubsystem));
     // m_driveSubsystem.setDefaultCommand(new ArcadeDriveCommand(m_driveSubsystem,
     // m_driverController));
     m_swerveSubsystem.setDefaultCommand(

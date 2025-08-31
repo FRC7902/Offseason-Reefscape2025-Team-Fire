@@ -37,6 +37,9 @@ public final class Constants {
     public static final double HALF_SPEED = 0.3;
     public static final double REVERSE_SPEED = -0.5;
     public static final double STOP_SPEED = 0.0;
+
+    public static final int SHALLOW_BEAM_BREAK_DIO = 0;
+    public static final int DEEP_BEAM_BREAK_DIO = 1;
   }
 
   public static class CoralIndexerConstants {

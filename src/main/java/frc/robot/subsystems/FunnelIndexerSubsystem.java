@@ -18,10 +18,10 @@ public class FunnelIndexerSubsystem extends SubsystemBase {
         m_indexerLeftMotor = new SparkMax(FunnelIndexerConstants.LEFT_MOTOR_CAN_ID, MotorType.kBrushless); // NEO 550
         m_indexerRightMotor = new SparkMax(FunnelIndexerConstants.RIGHT_MOTOR_CAN_ID, MotorType.kBrushless); // NEO 550
         m_indexerkickerMotor = new SparkMax(FunnelIndexerConstants.KICKER_MOTOR_CAN_ID, MotorType.kBrushless); // NEO 550
-
-        m_shallowBeamBreak = new DigitalInput(0);
-        m_deepBeamBreak = new DigitalInput(1);
-
+      // ...existing code...
+        m_shallowBeamBreak = new DigitalInput(FunnelIndexerConstants.SHALLOW_BEAM_BREAK_DIO);
+        m_deepBeamBreak = new DigitalInput(FunnelIndexerConstants.DEEP_BEAM_BREAK_DIO);
+// ...existing code...
         // Kicker motor spins all the time
         m_indexerkickerMotor.set(FunnelIndexerConstants.FULL_SPEED);
     }
