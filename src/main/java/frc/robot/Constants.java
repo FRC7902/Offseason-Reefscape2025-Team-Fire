@@ -57,6 +57,7 @@ public final class Constants {
   public static class LimelightConstants {
     public static final String leftCamName = "left";
     public static double kStdDevs = 0.800000;
+  }
   public static class FunnelIndexerConstants {
 
   }
