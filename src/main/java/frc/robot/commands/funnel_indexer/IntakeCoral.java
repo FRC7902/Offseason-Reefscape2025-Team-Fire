@@ -21,21 +21,23 @@ public class IntakeCoral extends Command {
   }
 
   // Called every time the scheduler runs while the command is scheduled.
+  // ...existing code...
   @Override
   public void execute() {
-    if (!this.m_funnelIndexerSubsystem.isShallowBeamBroken()) {
-      this.m_funnelIndexerSubsystem.setIndexerSpeed(FunnelIndexerConstants.FULL_SPEED);
-    } else if (this.m_funnelIndexerSubsystem.isShallowBeamBroken()) {
-      this.m_funnelIndexerSubsystem.setIndexerSpeed(FunnelIndexerConstants.HALF_SPEED);
-    } else if (this.m_funnelIndexerSubsystem.isShallowBeamBroken()
-        && this.m_funnelIndexerSubsystem.isDeepBeamBroken()) {
-      this.m_funnelIndexerSubsystem.setIndexerSpeed(FunnelIndexerConstants.STOP_SPEED);
-    } else if (this.m_funnelIndexerSubsystem.isDeepBeamBroken()) {
-      this.m_funnelIndexerSubsystem.setIndexerSpeed(FunnelIndexerConstants.REVERSE_SPEED);
+    if (!m_funnelIndexerSubsystem.isShallowBeamBroken()) {
+      m_funnelIndexerSubsystem.setIndexerSpeed(FunnelIndexerConstants.FULL_SPEED);
+    } else if (m_funnelIndexerSubsystem.isShallowBeamBroken()) {
+      m_funnelIndexerSubsystem.setIndexerSpeed(FunnelIndexerConstants.HALF_SPEED);
+    } else if (m_funnelIndexerSubsystem.isShallowBeamBroken()
+        && m_funnelIndexerSubsystem.isDeepBeamBroken()) {
+      m_funnelIndexerSubsystem.setIndexerSpeed(FunnelIndexerConstants.STOP_SPEED);
+    } else if (m_funnelIndexerSubsystem.isDeepBeamBroken()) {
+      m_funnelIndexerSubsystem.setIndexerSpeed(FunnelIndexerConstants.REVERSE_SPEED);
     } else {
-      this.m_funnelIndexerSubsystem.setIndexerSpeed(FunnelIndexerConstants.STOP_SPEED);
+      m_funnelIndexerSubsystem.setIndexerSpeed(FunnelIndexerConstants.STOP_SPEED);
     }
   }
+// ...existing code...
 
   // Called once the command ends or is interrupted.
   @Override
