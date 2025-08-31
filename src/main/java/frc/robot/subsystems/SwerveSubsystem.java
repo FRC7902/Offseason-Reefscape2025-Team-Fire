@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Meter;
+// Removed incorrect import as edu.wpi.first.units.Units does not exist
 
 import java.io.File;
 import java.util.Arrays;
@@ -12,10 +12,17 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+<<<<<<< HEAD
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+=======
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.util.DriveFeedforwards;
+>>>>>>> 6d3fd64 (sample+roboContainer)
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -61,8 +68,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         try {
             swerveDrive = new SwerveParser(directory).createSwerveDrive(SwerveConstants.MAX_SPEED,
-                    new Pose2d(new Translation2d(Meter.of(1),
-                            Meter.of(4)), Rotation2d.fromDegrees(0)));
+                    new Pose2d(new Translation2d(1.0, 4.0), Rotation2d.fromDegrees(0)));
         } catch (Exception error) {
             throw new RuntimeException(error);
         }
@@ -90,8 +96,46 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.setChassisDiscretization(false, true, 0.03);
         swerveDrive.swerveController.addSlewRateLimiters(null, null, null);
         swerveDrive.swerveController.setMaximumChassisAngularVelocity(20);
+<<<<<<< HEAD
 
         setupPathPlanner();
+=======
+        RobotConfig config = null;
+        try {
+            config = RobotConfig.fromGUISettings();
+        } catch (Exception e) {
+            // Handle exception as needed
+            e.printStackTrace();
+        }
+        if (config == null) {
+            throw new IllegalStateException("Failed to initialize RobotConfig");
+        }
+
+        // Configure AutoBuilder last
+        AutoBuilder.configure(
+                this::getPose, // Robot pose supplier
+                this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+                this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                (ChassisSpeeds speeds, DriveFeedforwards feedforwards) -> this.driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+                new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                        new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+                ),
+                config, // The robot configuration
+                () -> {
+                // Boolean supplier that controls when the path will be mirrored for the red alliance
+                // This will flip the path being followed to the red side of the field.
+                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+                var alliance = DriverStation.getAlliance();
+                if (alliance.isPresent()) {
+                    return alliance.get() == DriverStation.Alliance.Red;
+                }
+                return false;
+                },
+                this // Reference to this subsystem to set requirements
+        );
+>>>>>>> 6d3fd64 (sample+roboContainer)
     }
 
     private void scaleSwerveInput() {
@@ -365,6 +409,15 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     /**
+     * Resets the robot's pose to the given pose.
+     *
+     * @param pose The pose to reset to.
+     */
+    public void resetPose(Pose2d pose) {
+        resetOdometry(pose);
+    }
+
+    /**
      * Gets the current pose (position and rotation) of the robot, as reported by
      * odometry.
      *
@@ -509,6 +562,15 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     /**
+     * Gets the current robot-relative speeds of the robot.
+     *
+     * @return A {@link ChassisSpeeds} object representing robot-relative speeds.
+     */
+    public ChassisSpeeds getRobotRelativeSpeeds() {
+        return swerveDrive.getRobotVelocity();
+    }
+
+    /**
      * Get the {@link SwerveController} in the swerve drive.
      *
      * @return {@link SwerveController} from the {@link SwerveDrive}.
@@ -550,6 +612,15 @@ public class SwerveSubsystem extends SubsystemBase {
         }).until(() -> (Math.abs(new Rotation2d(Math.toRadians(angleDegrees))
                 .minus(swerveDrive.getOdometryHeading().unaryMinus()).getDegrees()) < toleranceDegrees)
                 && swerveDrive.getRobotVelocity().omegaRadiansPerSecond < 0.1);
+    }
+
+    /**
+     * Drives the robot in robot-relative mode using the given chassis speeds.
+     *
+     * @param speeds The chassis speeds to drive the robot with.
+     */
+    public void driveRobotRelative(ChassisSpeeds speeds) {
+        swerveDrive.drive(speeds);
     }
 
     public void strafe(double strafePower, double speedMultiplier) {

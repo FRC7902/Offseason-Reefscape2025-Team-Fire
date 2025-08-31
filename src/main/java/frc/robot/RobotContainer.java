@@ -10,6 +10,9 @@ import java.util.Map;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.events.EventTrigger;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -21,6 +24,7 @@ import frc.robot.commands.EndEffectorCommands;
 import frc.robot.commands.auto.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+<<<<<<< HEAD
 import frc.robot.commands.FunnelCommands;
 import frc.robot.commands.end_effector.IntakeCommand;
 import frc.robot.commands.end_effector.OuttakeCommand;
@@ -29,6 +33,11 @@ import frc.robot.commands.funnel_indexer.OuttakeCoralCommand;
 import frc.robot.commands.SwereCommands;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
+=======
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.OperatorConstants;
+>>>>>>> 6d3fd64 (sample+roboContainer)
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 import frc.robot.commands.MoveElevatorArmCommand;
@@ -61,8 +70,24 @@ public class RobotContainer {
 
     private final SendableChooser<Command> autoChooser;
 
+<<<<<<< HEAD
     public final static SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem(
             new File(Filesystem.getDeployDirectory(), "swerve"));
+=======
+  private final SendableChooser<Command> autoChooser;
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
+
+  public RobotContainer() {
+    // Configure the trigger bindings
+    configureBindings();
+    m_swerveSubsystem.setDefaultCommand(
+        !RobotBase.isSimulation() ? driveFieldOrientedAngularVelocity : driveFieldOrientedDirectAngleSim);
+    autoChooser = AutoBuilder.buildAutoChooser("Left Side");
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+  }
+>>>>>>> 6d3fd64 (sample+roboContainer)
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -99,6 +124,7 @@ public class RobotContainer {
                 new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
                         ElevatorPosition.CORAL_L3)));
 
+<<<<<<< HEAD
         new EventTrigger("ElevatorL4WithWait").onTrue(
                 new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
                         ElevatorPosition.CORAL_L4)));
@@ -317,4 +343,16 @@ public class RobotContainer {
         return autoChooser.getSelected();
 
     }
+=======
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+    return autoChooser.getSelected();
+  }
+  
+
+>>>>>>> 6d3fd64 (sample+roboContainer)
 }
