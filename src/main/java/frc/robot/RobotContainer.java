@@ -14,6 +14,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
+<<<<<<< HEAD
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
@@ -21,6 +22,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.EndEffectorCommands;
 import frc.robot.commands.auto.*;
+=======
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+>>>>>>> bb88a27 (less tweaky but rotates at end)
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 <<<<<<< HEAD
@@ -55,11 +61,15 @@ import swervelib.SwerveModule;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+<<<<<<< HEAD
     // The robot's subsystems and commands are defined here...
     public final static FunnelSubsystem m_funnelIndexerSubsystem = new FunnelSubsystem();
     public final static EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
     public final static ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
     public final static ArmSubsystem m_armSubsystem = new ArmSubsystem();
+=======
+  // The robot's subsystems and commands are defined here...
+>>>>>>> bb88a27 (less tweaky but rotates at end)
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final static CommandPS5Controller m_driverController = new CommandPS5Controller(
@@ -79,13 +89,17 @@ public class RobotContainer {
    */
 
   public RobotContainer() {
+    
+
     // Configure the trigger bindings
     configureBindings();
     m_swerveSubsystem.setDefaultCommand(
         !RobotBase.isSimulation() ? driveFieldOrientedAngularVelocity : driveFieldOrientedDirectAngleSim);
-    autoChooser = AutoBuilder.buildAutoChooser("Left Side");
+    autoChooser=AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
+    m_swerveSubsystem.setMotorBrake(true);
   }
+<<<<<<< HEAD
 >>>>>>> 6d3fd64 (sample+roboContainer)
 
     /**
@@ -95,6 +109,15 @@ public class RobotContainer {
         // Configure the trigger bindings
         configureBindings();
         autoChooser = AutoBuilder.buildAutoChooser("DEFAULT");
+=======
+  public SwerveInputStream driveAngularVelocity = SwerveInputStream.of(m_swerveSubsystem.getSwerveDrive(),
+      () -> -m_driverController.getLeftY(),
+      () -> -m_driverController.getLeftX())
+      .withControllerRotationAxis(() -> m_driverController.getRawAxis(2))
+      .deadband(OperatorConstants.DEADBAND)
+      .scaleTranslation(0.8)
+      .allianceRelativeControl(true);
+>>>>>>> bb88a27 (less tweaky but rotates at end)
 
         new EventTrigger("ZeroPosition").onTrue(new MoveElevatorArmCommand(
                 ElevatorPosition.ZERO));
