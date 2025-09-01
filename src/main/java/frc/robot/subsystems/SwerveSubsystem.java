@@ -43,10 +43,8 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class SwerveSubsystem extends SubsystemBase {
-
     /* Swerve drive object */
     private final SwerveDrive swerveDrive;
-
     /** Creates a new SwerveSubsystem. */
     public SwerveSubsystem(CommandXboxController m_driverController, File directory) {
 
@@ -54,7 +52,6 @@ public class SwerveSubsystem extends SubsystemBase {
         // objects being created.
         // High Telemetry only feeds readable data related to swerve drive
         SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
-
         try {
             swerveDrive = new SwerveParser(directory).createSwerveDrive(SwerveConstants.MAX_SPEED,
                     new Pose2d(new Translation2d(1.0, 4.0), Rotation2d.fromDegrees(0)));
@@ -166,8 +163,8 @@ public class SwerveSubsystem extends SubsystemBase {
                         }
                     }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
                     new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                            new PIDConstants(1.0, 0.0, 0.0), // Translation PID constants
-                            new PIDConstants(1.0, 0.0, 0.0) // Rotation PID constants
+                            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                            new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
                     ),
                     config, // The robot configuration
                     () -> {
@@ -185,7 +182,7 @@ public class SwerveSubsystem extends SubsystemBase {
             );
         } catch (Exception e) {
             // Handle exception as needed
-            e.printStackTrace();
+            DriverStation.reportError("Failed to load PathPlanner config: " + e.getMessage(), true);
         }
         if (config == null) {
             throw new IllegalStateException("Failed to initialize RobotConfig");

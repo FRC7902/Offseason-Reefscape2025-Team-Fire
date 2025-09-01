@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -31,7 +32,6 @@ import swervelib.SwerveInputStream;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  // TODO: Initialize your DriveSubsystem here...
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final static CommandXboxController m_driverController = new CommandXboxController(
@@ -47,19 +47,22 @@ public class RobotContainer {
    */
 
   public RobotContainer() {
+    
+
     // Configure the trigger bindings
     configureBindings();
     m_swerveSubsystem.setDefaultCommand(
         !RobotBase.isSimulation() ? driveFieldOrientedAngularVelocity : driveFieldOrientedDirectAngleSim);
-    autoChooser = AutoBuilder.buildAutoChooser("Left Side");
+    autoChooser=AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
+    m_swerveSubsystem.setMotorBrake(true);
   }
-
-  public SwerveInputStream driveAngularVelocity = SwerveInputStream
-      .of(m_swerveSubsystem.getSwerveDrive(), () -> m_driverController.getLeftY() * -1,
-          () -> m_driverController.getLeftX() * -1)
-      .withControllerRotationAxis(() -> m_driverController.getRightX() * -1)
-      .deadband(OperatorConstants.DEADBAND).scaleTranslation(0.8)
+  public SwerveInputStream driveAngularVelocity = SwerveInputStream.of(m_swerveSubsystem.getSwerveDrive(),
+      () -> -m_driverController.getLeftY(),
+      () -> -m_driverController.getLeftX())
+      .withControllerRotationAxis(() -> m_driverController.getRawAxis(2))
+      .deadband(OperatorConstants.DEADBAND)
+      .scaleTranslation(0.8)
       .allianceRelativeControl(true);
 
   public SwerveInputStream driveRobotOriented = driveAngularVelocity.copy().robotRelative(true)
