@@ -210,6 +210,12 @@
       "waypointRelativePos": 7.950146754143645,
       "endWaypointRelativePos": null,
       "command": null
+    },
+    {
+      "name": "Brake",
+      "waypointRelativePos": 8.0,
+      "endWaypointRelativePos": null,
+      "command": null
     }
   ],
   "globalConstraints": {
@@ -222,7 +228,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 52.68920036242199
+    "rotation": 51.91
   },
   "reversed": false,
   "folder": null,

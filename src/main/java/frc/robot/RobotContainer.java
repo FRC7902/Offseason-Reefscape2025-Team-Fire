@@ -7,6 +7,7 @@ package frc.robot;
 import java.io.File;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -18,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.BrakeCommand;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 
@@ -46,9 +48,9 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
 
-  public RobotContainer() {
+  public RobotContainer() { 
     
-
+    NamedCommands.registerCommand("Brake", new BrakeCommand(m_swerveSubsystem));
     // Configure the trigger bindings
     configureBindings();
     m_swerveSubsystem.setDefaultCommand(
