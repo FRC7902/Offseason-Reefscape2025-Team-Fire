@@ -15,7 +15,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.util.DriveFeedforwards;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -90,6 +89,10 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Gyro angle rotation (rad)", swerveDrive.getGyro().getRotation3d().getAngle());
 
         SmartDashboard.putString("Robo Pose2D", swerveDrive.getPose().toString());
+        SmartDashboard.putNumber("Gyro Angle", swerveDrive.getYaw().getDegrees());
+        SmartDashboard.putNumber("Robot X", getPose().getX());
+        SmartDashboard.putNumber("Robot Y", getPose().getY());
+        SmartDashboard.putNumber("Robot Rotation", getPose().getRotation().getDegrees());
     }
 
     @Override
@@ -532,13 +535,13 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.drive(speeds);
     }
     public void brake() {
-        // Enable brake mode
-        setMotorBrake(true);
-        // Set chassis speeds to zero
-        swerveDrive.drive(new ChassisSpeeds(0, 0, 0));
-        
-        
-    }
+    // Stop all movement
+    swerveDrive.drive(new ChassisSpeeds(0, 0, 0));
+    // Lock modules in position
+    swerveDrive.lockPose();
+    // Enable brake mode
+    setMotorBrake(true);
+}
     public void strafe(double strafePower, double speedMultiplier) {
         swerveDrive.drive(
                 new Translation2d(0, strafePower * Math.abs(speedMultiplier) * swerveDrive.getMaximumChassisVelocity()),
