@@ -131,8 +131,8 @@ public class RobotContainer {
 
     // m_driveSubsystem.setDefaultCommand(new ArcadeDriveCommand(m_driveSubsystem,
     // m_driverController));
-    m_swerveSubsystem.setDefaultCommand(
-        Robot.isSimulation() ? driveFieldOrientedAngularVelocity : driveRobotOrientedAngularVelocity);
+    //m_swerveSubsystem.setDefaultCommand(
+    //    Robot.isSimulation() ? driveFieldOrientedAngularVelocity : driveRobotOrientedAngularVelocity);
 
   }
 

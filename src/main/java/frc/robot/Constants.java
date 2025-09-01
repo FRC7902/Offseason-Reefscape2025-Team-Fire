@@ -65,54 +65,50 @@ public final class Constants {
 
   }
 
-    public static class AlgaeCoralIndexerConstants {
+  public static class ArmConstants {
+      // CAN IDs
+      public static final int kArmMotorCANID = 50;
 
-    }
+      // Encoder Ports
+      public static final int kArmEncoderPort = 5;
 
-    public static class ArmConstants {
-        // CAN IDs
-        public static final int kArmMotorCANID = 50;
+      // Physical Constants
+      public static final double kArmGearing = 67.5;
+      public static final double kArmMass = Units.lbsToKilograms(8);
+      public static final double kArmLength = Units.inchesToMeters(13.386);   
 
-        // Encoder Ports
-        public static final int kArmEncoderPort = 5;
+      // Motion Constraints
+      public static final double kArmMinAngle = 0;
+      public static final double kArmMaxAngle = 310;  
 
-        // Physical Constants
-        public static final double kArmGearing = 67.5;
-        public static final double kArmMass = Units.lbsToKilograms(8);
-        public static final double kArmLength = Units.inchesToMeters(13.386);   
+      // Current limits
+      public static final double kStatorCurrentLimit = 30.0;
+      public static final double kSupplyCurrentLimit = 30.0;
 
-        // Motion Constraints
-        public static final double kArmMinAngle = 0;
-        public static final double kArmMaxAngle = 310;  
+      // PID Constants
+      public static final double kArmP = 30;
+      public static final double kArmI = 0.0;
+      public static final double kArmD = 0.1;
 
-        // Current limits
-        public static final double kStatorCurrentLimit = 30.0;
-        public static final double kSupplyCurrentLimit = 30.0;
+      // Feedforward Constants
+      public static final double kArmS = 0.0; 
+      public static final double kArmG = 0.5; 
+      public static final double kArmV = 0.3; 
+      public static final double kArmA = 0.1; 
 
-        // PID Constants
-        public static final double kArmP = 30;
-        public static final double kArmI = 0.0;
-        public static final double kArmD = 0.1;
+      // Arm Setpoints
+      public static final double kArmZeroAngle = 266.0;
+      public static final double kArmProcessorAngle = 310.0;
 
-        // Feedforward Constants
-        public static final double kArmS = 0.0; 
-        public static final double kArmG = 0.5; 
-        public static final double kArmV = 0.3; 
-        public static final double kArmA = 0.1; 
+      public static final double kArmCoralLevel1Angle = 40.0; 
+      public static final double kArmCoralLevel2Angle = 75.0;
+      public static final double kArmCoralLevel3Angle = 75.0;
+      public static final double kArmCoralLevel4Angle = 55.0;
 
-        // Arm Setpoints
-        public static final double kArmZeroAngle = 266.0;
-        public static final double kArmProcessorAngle = 310.0;
+      public static final double kArmAlgaeLowAngle = 0.0;
+      public static final double kArmAlgaeHighAngle = 0.0;
 
-        public static final double kArmCoralLevel1Angle = 40.0; 
-        public static final double kArmCoralLevel2Angle = 75.0;
-        public static final double kArmCoralLevel3Angle = 75.0;
-        public static final double kArmCoralLevel4Angle = 55.0;
-
-        public static final double kArmAlgaeLowAngle = 0.0;
-        public static final double kArmAlgaeHighAngle = 0.0;
-
-        public static final double kArmBargeAngle = 50.0;
+      public static final double kArmBargeAngle = 50.0;
     }
   public static class AlgaeCoralIndexerConstants {
     public static final int kMotorCANId = -1;
