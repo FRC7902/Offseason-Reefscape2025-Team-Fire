@@ -100,6 +100,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         swerveDrive.setChassisDiscretization(false, true, 0.03);
         swerveDrive.swerveController.addSlewRateLimiters(null, null, null);
+<<<<<<< HEAD
         swerveDrive.swerveController.setMaximumChassisAngularVelocity(20);
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -143,6 +144,9 @@ public class SwerveSubsystem extends SubsystemBase {
         );
 >>>>>>> 6d3fd64 (sample+roboContainer)
 =======
+=======
+        swerveDrive.swerveController.setMaximumChassisAngularVelocity(5);
+>>>>>>> 2ae46bd (rebase)
         setupPathPlanner();
         RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::zeroGyroWithAlliance));
 >>>>>>> 9a17594 (Tweaky ahh bot)
@@ -304,8 +308,8 @@ public class SwerveSubsystem extends SubsystemBase {
                         }
                     }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
                     new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                            new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+                            new PIDConstants(1.0, 0.0, 0.0), // Translation PID constants
+                            new PIDConstants(1.0, 0.0, 0.0) // Rotation PID constants
                     ),
                     config, // The robot configuration
                     () -> {

@@ -1,6 +1,7 @@
 {
   "robotWidth": 0.864,
   "robotLength": 0.864,
+<<<<<<< HEAD
   "holonomicMode": true,
   "pathFolders": [
     "With vision",
@@ -38,6 +39,8 @@
   ],
   "robotWidth": 0.8636,
   "robotLength": 0.8636,
+=======
+>>>>>>> 2ae46bd (rebase)
   "holonomicMode": true,
   "pathFolders": [
     "Example Paths"
