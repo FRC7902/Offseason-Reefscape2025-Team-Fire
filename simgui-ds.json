@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "Keyboard 0 Settings": {
     "window": {
       "visible": true
@@ -9,6 +10,8 @@
       "enabled": false
     }
   },
+=======
+>>>>>>> 9a17594 (Tweaky ahh bot)
   "keyboardJoysticks": [
     {
       "axisConfig": [
@@ -28,16 +31,24 @@
         }
       ],
       "axisCount": 3,
+<<<<<<< HEAD
       "buttonCount": 8,
+=======
+      "buttonCount": 4,
+>>>>>>> 9a17594 (Tweaky ahh bot)
       "buttonKeys": [
         90,
         88,
         67,
+<<<<<<< HEAD
         86,
         66,
         78,
         77,
         44
+=======
+        86
+>>>>>>> 9a17594 (Tweaky ahh bot)
       ],
       "povConfig": [
         {
@@ -67,8 +78,13 @@
       "axisCount": 2,
       "buttonCount": 4,
       "buttonKeys": [
+<<<<<<< HEAD
         -1,
         -1,
+=======
+        77,
+        44,
+>>>>>>> 9a17594 (Tweaky ahh bot)
         46,
         47
       ],
@@ -105,7 +121,12 @@
   ],
   "robotJoysticks": [
     {
+<<<<<<< HEAD
       "guid": "Keyboard0"
+=======
+      "guid": "18000000cb06000058ce000000010000",
+      "useGamepad": true
+>>>>>>> 9a17594 (Tweaky ahh bot)
     }
   ]
 }
