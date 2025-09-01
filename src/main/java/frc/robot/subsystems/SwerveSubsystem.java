@@ -134,6 +134,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private void scaleSwerveInput() {
         double scale = Math.min(1.0 - RobotContainer.m_elevatorSubsystem.getElevatorPositionScale(), 1.0); // Prevents applied scale > 1.0
 
+<<<<<<< HEAD
         // TODO: Maybe remove this if end effector can hold onto algae without this
         if (RobotContainer.m_endEffectorSubsystem.hasAlgae())
             scale -= 0.15; // Further reduce speed if carrying algae
@@ -154,6 +155,13 @@ public class SwerveSubsystem extends SubsystemBase {
         //                 SwerveConstants.MIN_ROTATION_SPEED_SCALE
         //         )
         // );
+=======
+        SmartDashboard.putString("Robo Pose2D", swerveDrive.getPose().toString());
+        SmartDashboard.putNumber("Gyro Angle", swerveDrive.getYaw().getDegrees());
+        SmartDashboard.putNumber("Robot X", getPose().getX());
+        SmartDashboard.putNumber("Robot Y", getPose().getY());
+        SmartDashboard.putNumber("Robot Rotation", getPose().getRotation().getDegrees());
+>>>>>>> 2eb269d (168,what do the numbers mean)
     }
 
 
@@ -604,13 +612,13 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.drive(speeds);
     }
     public void brake() {
-        // Enable brake mode
-        setMotorBrake(true);
-        // Set chassis speeds to zero
-        swerveDrive.drive(new ChassisSpeeds(0, 0, 0));
-        
-        
-    }
+    // Stop all movement
+    swerveDrive.drive(new ChassisSpeeds(0, 0, 0));
+    // Lock modules in position
+    swerveDrive.lockPose();
+    // Enable brake mode
+    setMotorBrake(true);
+}
     public void strafe(double strafePower, double speedMultiplier) {
         swerveDrive.drive(
                 new Translation2d(0, strafePower * Math.abs(speedMultiplier) * swerveDrive.getMaximumChassisVelocity()),
