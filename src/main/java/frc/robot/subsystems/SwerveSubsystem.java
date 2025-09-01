@@ -604,10 +604,12 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.drive(speeds);
     }
     public void brake() {
-        // Set chassis speeds to zero
-        swerveDrive.drive(new ChassisSpeeds(0, 0, 0));
         // Enable brake mode
         setMotorBrake(true);
+        // Set chassis speeds to zero
+        swerveDrive.drive(new ChassisSpeeds(0, 0, 0));
+        
+        
     }
     public void strafe(double strafePower, double speedMultiplier) {
         swerveDrive.drive(
