@@ -603,7 +603,12 @@ public class SwerveSubsystem extends SubsystemBase {
     public void driveRobotRelative(ChassisSpeeds speeds) {
         swerveDrive.drive(speeds);
     }
-
+    public void brake() {
+        // Set chassis speeds to zero
+        swerveDrive.drive(new ChassisSpeeds(0, 0, 0));
+        // Enable brake mode
+        setMotorBrake(true);
+    }
     public void strafe(double strafePower, double speedMultiplier) {
         swerveDrive.drive(
                 new Translation2d(0, strafePower * Math.abs(speedMultiplier) * swerveDrive.getMaximumChassisVelocity()),

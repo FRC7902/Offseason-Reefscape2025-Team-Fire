@@ -130,6 +130,12 @@
       "waypointRelativePos": 5.0,
       "endWaypointRelativePos": null,
       "command": null
+    },
+    {
+      "name": "Brake",
+      "waypointRelativePos": 5.0,
+      "endWaypointRelativePos": null,
+      "command": null
     }
   ],
   "globalConstraints": {
