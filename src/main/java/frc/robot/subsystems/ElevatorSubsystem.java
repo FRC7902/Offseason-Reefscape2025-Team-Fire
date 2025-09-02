@@ -118,7 +118,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     );
 
     /** Target setpoint for the elevator in meters */
-    private double m_elevatorSetPointMeters;
+    private double m_elevatorSetPointMeters = ElevatorConstants.kElevatorMinHeightMeters;
 
     /** SysId routine object to determine S, V, and A constants */
     private final SysIdRoutine m_sysIdRoutine = new SysIdRoutine(
@@ -148,7 +148,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
 
         // Set motor configuration
-        m_motorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        m_motorConfig.MotorOutput.Inverted = RobotBase.isSimulation() ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive;
         m_motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         // Set slot 0 values
@@ -169,12 +169,12 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_motorConfig.MotionMagic.MotionMagicAcceleration = 160;
 
         // Set safety limits
-        m_motorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        /*m _motorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
         m_motorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold =
                 ElevatorConstants.kElevatorMaxHeightMeters / ElevatorConstants.kElevatorMetersPerMotorRotation;
         m_motorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
         m_motorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
-
+ */
         // Set current limits
         m_motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         m_motorConfig.CurrentLimits.StatorCurrentLimit = ElevatorConstants.kElevatorStatorCurrentLimit;
@@ -217,9 +217,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             default -> ElevatorConstants.kElevatorMinHeightMeters;
         };
 
-        double positionRotations = m_elevatorSetPointMeters / ElevatorConstants.kElevatorMetersPerMotorRotation;
-        m_motionMagicRequest = m_motionMagicRequest.withPosition(positionRotations).withSlot(0);
-        m_leaderMotor.setControl(m_motionMagicRequest);
+        setElevatorPositionMeters(m_elevatorSetPointMeters);
     }
 
     /**
@@ -236,7 +234,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         m_elevatorSetPointMeters = positionMeters;
 
-        double positionRotations = m_elevatorSetPointMeters / ElevatorConstants.kElevatorMetersPerMotorRotation;
+        double positionRotations = (m_elevatorSetPointMeters - ElevatorConstants.kElevatorMinHeightMeters) / ElevatorConstants.kElevatorMetersPerMotorRotation;
         m_motionMagicRequest = m_motionMagicRequest.withPosition(positionRotations).withSlot(0);
         m_leaderMotor.setControl(m_motionMagicRequest);
     }
@@ -248,7 +246,7 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     public double getElevatorPositionMeters() {
         double positionRotations = m_leaderMotor.getPosition().getValueAsDouble();
-        return positionRotations * ElevatorConstants.kElevatorMetersPerMotorRotation;
+        return positionRotations * ElevatorConstants.kElevatorMetersPerMotorRotation+ElevatorConstants.kElevatorMinHeightMeters;
     }
 
     /**
@@ -324,10 +322,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (m_leaderMotor.getClosedLoopReference().getValueAsDouble() == 0
-                && m_leaderMotor.getPosition().getValueAsDouble() < 0.5) {
+        if (m_leaderMotor.getClosedLoopReference().getValueAsDouble()*ElevatorConstants.kElevatorMetersPerMotorRotation > ElevatorConstants.kElevatorMinHeightMeters &&
+            m_leaderMotor.getClosedLoopReference().getValueAsDouble()*ElevatorConstants.kElevatorMetersPerMotorRotation < ElevatorConstants.kElevatorZeroThreshold &&
+            m_leaderMotor.getPosition().getValueAsDouble()*ElevatorConstants.kElevatorMetersPerMotorRotation > ElevatorConstants.kElevatorMinHeightMeters &&
+            m_leaderMotor.getPosition().getValueAsDouble()*ElevatorConstants.kElevatorMetersPerMotorRotation < ElevatorConstants.kElevatorZeroThreshold)
             m_leaderMotor.setVoltage(0);
-        } else {
+        else {
             m_leaderMotor.setControl(m_motionMagicRequest);
         }
 
@@ -348,6 +348,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Elevator Position (m)", getElevatorPositionMeters());
         SmartDashboard.putNumber("Elevator Setpoint (m)", m_elevatorSetPointMeters);
         SmartDashboard.putString("Elevator Position Enum", getElevatorPositionEnum().toString());
+        SmartDashboard.putNumber("Elevator Stator Current", m_leaderMotor.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Leader Motor Pos", m_leaderMotor.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Follower Motor Pos", m_followerMotor.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Closed loop error metres", m_leaderMotor.getClosedLoopError().getValueAsDouble() * ElevatorConstants.kElevatorMetersPerMotorRotation);
 
         updateTelemetry();
     }

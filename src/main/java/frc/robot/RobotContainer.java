@@ -48,8 +48,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    m_swerveSubsystem.setDefaultCommand(
-        !RobotBase.isSimulation() ? driveFieldOrientedAngularVelocity : driveFieldOrientedDirectAngleSim);
+    /* m_swerveSubsystem.setDefaultCommand(
+        !RobotBase.isSimulation() ? driveFieldOrientedAngularVelocity : driveFieldOrientedDirectAngleSim); */
   }
 
   public SwerveInputStream driveAngularVelocity = SwerveInputStream
@@ -115,8 +115,8 @@ public class RobotContainer {
   private void configureBindings() {
     m_driverController.a().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
     m_driverController.b().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
-    m_driverController.x().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
-    m_driverController.y().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
+    m_driverController.x().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
+    m_driverController.y().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
 
     m_driverController.rightBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH));
     m_driverController.leftBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));
@@ -127,8 +127,6 @@ public class RobotContainer {
     m_driverController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
     // m_driveSubsystem.setDefaultCommand(new ArcadeDriveCommand(m_driveSubsystem,
     // m_driverController));
-    m_swerveSubsystem.setDefaultCommand(
-        Robot.isSimulation() ? driveFieldOrientedAngularVelocity : driveRobotOrientedAngularVelocity);
   }
 
   /**
