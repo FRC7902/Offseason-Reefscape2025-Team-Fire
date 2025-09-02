@@ -115,15 +115,15 @@ public final class Constants {
         public static final boolean kTuningMode = false;
 
         // CAN IDs
-        public static final int kElevatorLeaderCANID = 55;
-        public static final int kElevatorFollowerCANID = 56;
+        public static final int kElevatorLeaderCANID = 19;
+        public static final int kElevatorFollowerCANID = 18;
 
         // Current Limits
-        public static final double kElevatorStatorCurrentLimit = 50.0; 
+        public static final double kElevatorStatorCurrentLimit = 80.0; 
         public static final double kElevatorSupplyCurrentLimit = 50.0; 
 
-        // Physical Constants 
-        public static final double kElevatorGearing = 4.875;
+        // Physical Constants
+        public static final double kElevatorGearing = 8.125;
         public static final double kElevatorCarriageMass = Units.lbsToKilograms(24);
         public static final double kElevatorDrumRadius = Units.inchesToMeters(1);
         public static final double kElevatorMetersPerMotorRotation =
@@ -132,24 +132,25 @@ public final class Constants {
         // Elevator Dimensions
         public static final double kElevatorHeightMeters = Units.inchesToMeters(42);
         public static final double kElevatorMinHeightMeters = Units.inchesToMeters(22.5);
-        public static final double kElevatorMaxHeightMeters = Units.inchesToMeters(73.5);
+        public static final double kElevatorZeroThreshold = kElevatorMinHeightMeters + 0.01;
+        public static final double kElevatorMaxHeightMeters = Units.inchesToMeters(70);
         public static final double kElevatorCarriageHeightMeters = Units.inchesToMeters(18.5);
 
         // Motion Constraints
         public static final double kElevatorMaxVelocity =
-                1.5 / ElevatorConstants.kElevatorMetersPerMotorRotation;
-        public static final double kElevatorMaxAcceleration = 160.0;
+                1.5 / kElevatorMetersPerMotorRotation;
+        public static final double kElevatorMaxAcceleration = 1600.0;
 
         // PID Constants
-        public static double kElevatorP = 95;
-        public static double kElevatorI = 8;
-        public static double kElevatorD = 8.5;
+        public static double kElevatorP = 20;
+        public static double kElevatorI = 0;
+        public static double kElevatorD = 0;
 
         // Elevator Gains
         public static double kElevatorS = 0.0;
-        public static double kElevatorG = 2;
-        public static double kElevatorV = 6.85 * kElevatorMetersPerMotorRotation;
-        public static double kElevatorA = 0.04 * kElevatorMetersPerMotorRotation;
+        public static double kElevatorG = 0.23;
+        public static double kElevatorV = 6.17 * kElevatorMetersPerMotorRotation;
+        public static double kElevatorA = 0.02;
 
         // ===== Elevator Setpoints =====
         public static final double kElevatorProcessorHeight = Units.inchesToMeters(22.5);

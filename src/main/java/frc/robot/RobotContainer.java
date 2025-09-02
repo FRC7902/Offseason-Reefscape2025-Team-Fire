@@ -47,6 +47,14 @@ public class RobotContainer {
             m_driverController,
             new File(Filesystem.getDeployDirectory(), "swerve"));
 
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
+        // Configure the trigger bindings
+        configureBindings();
+    }
+
     public SwerveInputStream driveAngularVelocity = SwerveInputStream
             .of(m_swerveSubsystem.getSwerveDrive(), () -> m_driverController.getLeftY() * -1,
                     () -> m_driverController.getLeftX() * -1)
@@ -119,16 +127,16 @@ public class RobotContainer {
         // Elevator Setpoints
         m_driverController.a().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
         m_driverController.b().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
-        m_driverController.x().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
-        m_driverController.y().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
+        m_driverController.x().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
+        m_driverController.y().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
 
 //        m_driverController.rightBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH));
 //        m_driverController.leftBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));
 
-        m_driverController.rightStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ZERO));
-        m_driverController.leftStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
-
-        m_driverController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
+        m_driverController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ZERO));
+//        m_driverController.leftStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
+//
+//        m_driverController.rightStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
 
         m_swerveSubsystem.setDefaultCommand(
                 Robot.isSimulation() ? driveFieldOrientedAngularVelocity : driveRobotOrientedAngularVelocity);
