@@ -1,0 +1,4 @@
+ 1. Algae intake button automatically chooses the correct algae height 
+ based on which April tag (so it knows which side of the reef it's looking at)
+ 2. Operator preemptively selects the setpoint, 
+ Drive presses intake or outtake button to trigger the height

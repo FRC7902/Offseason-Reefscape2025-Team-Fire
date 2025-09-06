@@ -5,9 +5,12 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.HashMap;
 
 public class PhotonSubsystem extends SubsystemBase {
-
+    public static HashMap<Integer,Boolean> reefIDHeights = new HashMap<>();
+    // High = true
+    // Low = false
     private CameraProperties m_camProperties;
     private PhotonCamera m_camera;
     private Transform3d camToRobotTsf;

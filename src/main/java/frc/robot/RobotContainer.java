@@ -5,8 +5,6 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.IntakeAlgaeCoralCommand;
-import frc.robot.commands.OuttakeAlgaeCoralCommand;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import java.io.File;
 
@@ -18,12 +16,15 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ElevatorArmCommands.MoveElevatorArmCommand;
+import frc.robot.commands.EndEffectorCommands.IntakeAlgaeCoralCommand;
+import frc.robot.commands.EndEffectorCommands.OuttakeAlgaeCoralCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
+import frc.robot.subsystems.vision.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -38,15 +39,15 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public final static ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
   public final static ArmSubsystem m_armSubsystem = new ArmSubsystem();
-
-  private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
-  // TODO: Initialize your DriveSubsystem here...
+  public final static EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
+  public final static PhotonSubsystem m_photonSubsystem = new PhotonSubsystem(null);
+  // TODO: Camera Properties
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final static CommandXboxController m_driverController = new CommandXboxController(
       OperatorConstants.kDriverControllerPort);
 
-  IntakeAlgaeCoralCommand command = new IntakeAlgaeCoralCommand(m_endEffectorSubsystem);
+  IntakeAlgaeCoralCommand command = new IntakeAlgaeCoralCommand();
   public final SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem(
       m_driverController,
       new File(Filesystem.getDeployDirectory(), "swerve"));
@@ -128,8 +129,8 @@ public class RobotContainer {
     m_driverController.x().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
     m_driverController.y().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
 
-    m_driverController.leftBumper().whileTrue(new IntakeAlgaeCoralCommand(m_endEffectorSubsystem));
-    m_driverController.rightBumper().whileTrue(new OuttakeAlgaeCoralCommand(m_endEffectorSubsystem));
+    m_driverController.leftBumper().whileTrue(new IntakeAlgaeCoralCommand());
+    m_driverController.rightBumper().whileTrue(new OuttakeAlgaeCoralCommand());
 
     // m_driveSubsystem.setDefaultCommand(new ArcadeDriveCommand(m_driveSubsystem,
     // m_driverController));
