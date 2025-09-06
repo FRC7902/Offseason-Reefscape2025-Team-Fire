@@ -31,6 +31,7 @@ public class IntakeAlgaeCoralCommand extends Command {
   @Override
   public void initialize() {
     RobotContainer.m_endEffectorSubsystem.setSpeed(AlgaeCoralIndexerConstants.kIntakeSpeed);
+    // All elv logic
     Boolean height = false;
     if (!RobotBase.isSimulation()){
       int currentTag = RobotContainer.m_photonSubsystem.getTagID();
