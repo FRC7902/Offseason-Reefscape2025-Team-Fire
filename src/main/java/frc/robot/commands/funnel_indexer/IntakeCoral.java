@@ -2,13 +2,14 @@ package frc.robot.commands.funnel_indexer;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FunnelIndexerConstants;
-import frc.robot.subsystems.FunnelIndexerSubsystem;
+import frc.robot.subsystems.FunnelSubsystem;
 
 import java.util.Map;
 
 public class IntakeCoral extends Command {
-    private final FunnelIndexerSubsystem m_funnelIndexerSubsystem;
+    private final FunnelSubsystem m_funnelIndexerSubsystem;
 
+    // Enum representing the state of the beam breaks
     enum BeamBreakState {
         NONE_BROKEN,
         SHALLOW_BROKEN,
@@ -16,6 +17,7 @@ public class IntakeCoral extends Command {
         DEEP_BROKEN
     }
 
+    // Map of beam break states to indexer speeds when we do not have coral
     private static final Map<BeamBreakState, Double> SPEED_MAP = Map.of(
             BeamBreakState.NONE_BROKEN, FunnelIndexerConstants.FULL_SPEED,
             BeamBreakState.SHALLOW_BROKEN, FunnelIndexerConstants.HALF_SPEED,
@@ -23,6 +25,7 @@ public class IntakeCoral extends Command {
             BeamBreakState.DEEP_BROKEN, FunnelIndexerConstants.REVERSE_SPEED
     );
 
+    // Map of beam break states to indexer speeds when we do have coral
     private static final Map<BeamBreakState, Double> HAS_CORAL_SPEED_MAP = Map.of(
             BeamBreakState.NONE_BROKEN, FunnelIndexerConstants.STOP_SPEED,
             BeamBreakState.SHALLOW_BROKEN, FunnelIndexerConstants.STOP_SPEED,
@@ -33,7 +36,7 @@ public class IntakeCoral extends Command {
     /**
      * Creates a new CorrectCoralPositionCommand.
      */
-    public IntakeCoral(FunnelIndexerSubsystem funnelIndexerSubsystem) {
+    public IntakeCoral(FunnelSubsystem funnelIndexerSubsystem) {
         this.m_funnelIndexerSubsystem = funnelIndexerSubsystem;
         addRequirements(funnelIndexerSubsystem);
     }
@@ -43,6 +46,11 @@ public class IntakeCoral extends Command {
     public void initialize() {
     }
 
+    /**
+     * Returns the current state of the beam breaks.
+     *
+     * @return An enum representing which beam breaks are broken.
+     */
     private BeamBreakState getBeamBreakState() {
         boolean shallow = m_funnelIndexerSubsystem.isShallowBeamBreakBroken();
         boolean deep = m_funnelIndexerSubsystem.isDeepBeamBreakBroken();
@@ -57,13 +65,18 @@ public class IntakeCoral extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        // Determine the current state of the beam breaks
         BeamBreakState state = getBeamBreakState();
+
+        // Get the speed based on whether we have coral or not
         double speed;
         if (m_funnelIndexerSubsystem.getHasCoral()) {
             speed = HAS_CORAL_SPEED_MAP.get(state);
         } else {
             speed = SPEED_MAP.get(state);
         }
+
+        // Set the indexer speed
         m_funnelIndexerSubsystem.setIndexerSpeed(speed);
     }
 
