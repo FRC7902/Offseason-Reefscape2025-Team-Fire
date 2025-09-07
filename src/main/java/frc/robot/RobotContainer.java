@@ -121,8 +121,8 @@ public class RobotContainer {
         m_driverController.rightBumper().whileTrue(FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem));
 
         // EndEffectorSubsystem
-        m_driverController.leftBumper().whileTrue(new IntakeAlgaeCoralCommand(m_endEffectorSubsystem));
-        m_driverController.rightBumper().whileTrue(new OuttakeAlgaeCoralCommand(m_endEffectorSubsystem));
+        m_driverController.leftTrigger().whileTrue(new IntakeAlgaeCoralCommand(m_endEffectorSubsystem));
+        m_driverController.rightTrigger().whileTrue(new OuttakeAlgaeCoralCommand(m_endEffectorSubsystem));
 
         m_swerveSubsystem.setDefaultCommand(
                 Robot.isSimulation() ? driveFieldOrientedAngularVelocity : driveRobotOrientedAngularVelocity);
