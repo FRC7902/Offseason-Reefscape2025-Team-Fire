@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.EndEffectorCommands;
+import frc.robot.commands.end_effector.EndEffectorCommands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.FunnelCommands;
@@ -118,6 +118,7 @@ public class RobotContainer {
         m_driverController.rightBumper().whileTrue(FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem));
 
         // EndEffectorSubsystem
+        m_endEffectorSubsystem.setDefaultCommand(EndEffectorCommands.Hold(m_endEffectorSubsystem));
         m_driverController.leftTrigger().whileTrue(EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem));
         m_driverController.rightTrigger().whileTrue(EndEffectorCommands.OuttakeEffector(m_endEffectorSubsystem));
 

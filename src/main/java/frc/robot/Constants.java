@@ -49,8 +49,9 @@ public final class Constants {
         public static final int CORAL_BEAM_BREAK_PORT_ID = -1;
         public static final int ALGAE_PROXIMITY_SENSOR_PORT_ID = -1;
         public static final int MOTOR_STATOR_CURRENT_LIMIT = 40;
-        public static final int INTAKE_SPEED = 1;
-        public static final int OUTTAKE_SPEED = -1;
+        public static final double INTAKE_SPEED = 1;
+        public static final double OUTTAKE_SPEED = -1;
+        public static final double HOLD_SPEED = 0.25;
     }
 
     public static class ElevatorArmConstants {
