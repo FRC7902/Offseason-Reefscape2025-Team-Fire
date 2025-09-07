@@ -135,11 +135,11 @@ public class RobotContainer {
     // m_driverController));
     //m_swerveSubsystem.setDefaultCommand(
     //    Robot.isSimulation() ? driveFieldOrientedAngularVelocity : driveRobotOrientedAngularVelocity);
-
-    m_operatorController.a().onTrue(m_elevatorSubsystem.setPositionCommand(ElevatorPosition.CORAL_L4));
-    m_operatorController.b().onTrue(m_elevatorSubsystem.setPositionCommand(ElevatorPosition.CORAL_L3));
-    m_operatorController.x().onTrue(m_elevatorSubsystem.setPositionCommand(ElevatorPosition.CORAL_L2));
-    m_operatorController.y().onTrue(m_elevatorSubsystem.setPositionCommand(ElevatorPosition.CORAL_L1));
+    
+    m_operatorController.a().onTrue(m_elevatorSubsystem.setPositionCommand(ElevatorPosition.CORAL_L1));
+    m_operatorController.b().onTrue(m_elevatorSubsystem.setPositionCommand(ElevatorPosition.CORAL_L2));
+    m_operatorController.x().onTrue(m_elevatorSubsystem.setPositionCommand(ElevatorPosition.CORAL_L3));
+    m_operatorController.y().onTrue(m_elevatorSubsystem.setPositionCommand(ElevatorPosition.CORAL_L4));
 
 
 
