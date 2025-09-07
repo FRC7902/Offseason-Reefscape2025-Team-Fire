@@ -29,17 +29,17 @@ public final class Constants {
   }
 
   public static class FunnelIndexerConstants {
-    public static final int LEFT_MOTOR_CAN_ID = 1;
-    public static final int RIGHT_MOTOR_CAN_ID = 2;
-    public static final int KICKER_MOTOR_CAN_ID = 3;
+    public static final int LEFT_MOTOR_CAN_ID = 34;
+    public static final int RIGHT_MOTOR_CAN_ID = 33;
+    public static final int KICKER_MOTOR_CAN_ID = -1;
 
     public static final double FULL_SPEED = 0.5;
-    public static final double HALF_SPEED = 0.3;
-    public static final double REVERSE_SPEED = -0.5;
+    public static final double HALF_SPEED = 0.1;
+    public static final double REVERSE_SPEED = -0.1;
     public static final double STOP_SPEED = 0.0;
 
-    public static final int SHALLOW_BEAM_BREAK_DIO = 0;
-    public static final int DEEP_BEAM_BREAK_DIO = 1;
+    public static final int SHALLOW_BEAM_BREAK_DIO = 2;
+    public static final int DEEP_BEAM_BREAK_DIO = 3;
 
     public static final int MOTOR_CURRENT_LIMIT = 30;
   }

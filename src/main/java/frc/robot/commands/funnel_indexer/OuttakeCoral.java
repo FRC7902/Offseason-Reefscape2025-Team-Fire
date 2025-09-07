@@ -19,6 +19,6 @@ public class OuttakeCoral extends Command {
 
   @Override
   public boolean isFinished() {
-    return m_funnelIndexerSubsystem.isShallowBeamBroken() && m_funnelIndexerSubsystem.isDeepBeamBroken();
+    return !m_funnelIndexerSubsystem.isShallowBeamBreakBroken() && !m_funnelIndexerSubsystem.isDeepBeamBreakBroken();
   }
 }

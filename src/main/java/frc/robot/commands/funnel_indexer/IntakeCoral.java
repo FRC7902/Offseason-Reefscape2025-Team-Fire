@@ -4,50 +4,66 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FunnelIndexerConstants;
 import frc.robot.subsystems.FunnelIndexerSubsystem;
 
+import java.util.Map;
+
 public class IntakeCoral extends Command {
-  private final FunnelIndexerSubsystem m_funnelIndexerSubsystem;
+    private final FunnelIndexerSubsystem m_funnelIndexerSubsystem;
 
-  /** Creates a new CorrectCoralPositionCommand. */
-  public IntakeCoral(FunnelIndexerSubsystem funnelIndexerSubsystem) {
-    this.m_funnelIndexerSubsystem = funnelIndexerSubsystem;
-    addRequirements(funnelIndexerSubsystem);
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    // RobotContainer.m_operatorController.setRumble(GenericHID.RumbleType.kBothRumble,
-    // 1);
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  // ...existing code...
-  @Override
-  public void execute() {
-    if (!m_funnelIndexerSubsystem.isShallowBeamBroken()) {
-      m_funnelIndexerSubsystem.setIndexerSpeed(FunnelIndexerConstants.FULL_SPEED);
-    } else if (m_funnelIndexerSubsystem.isShallowBeamBroken()) {
-      m_funnelIndexerSubsystem.setIndexerSpeed(FunnelIndexerConstants.HALF_SPEED);
-    } else if (m_funnelIndexerSubsystem.isShallowBeamBroken()
-        && m_funnelIndexerSubsystem.isDeepBeamBroken()) {
-      m_funnelIndexerSubsystem.setIndexerSpeed(FunnelIndexerConstants.STOP_SPEED);
-    } else if (m_funnelIndexerSubsystem.isDeepBeamBroken()) {
-      m_funnelIndexerSubsystem.setIndexerSpeed(FunnelIndexerConstants.REVERSE_SPEED);
-    } else {
-      m_funnelIndexerSubsystem.setIndexerSpeed(FunnelIndexerConstants.STOP_SPEED);
+    enum BeamBreakState {
+        NONE_BROKEN,
+        SHALLOW_BROKEN,
+        BOTH_BROKEN,
+        DEEP_BROKEN
     }
-  }
-// ...existing code...
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    m_funnelIndexerSubsystem.stop();
-  }
+    private static final Map<BeamBreakState, Double> SPEED_MAP = Map.of(
+            BeamBreakState.NONE_BROKEN, FunnelIndexerConstants.FULL_SPEED,
+            BeamBreakState.SHALLOW_BROKEN, FunnelIndexerConstants.HALF_SPEED,
+            BeamBreakState.BOTH_BROKEN, FunnelIndexerConstants.STOP_SPEED,
+            BeamBreakState.DEEP_BROKEN, FunnelIndexerConstants.REVERSE_SPEED
+    );
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    /**
+     * Creates a new CorrectCoralPositionCommand.
+     */
+    public IntakeCoral(FunnelIndexerSubsystem funnelIndexerSubsystem) {
+        this.m_funnelIndexerSubsystem = funnelIndexerSubsystem;
+        addRequirements(funnelIndexerSubsystem);
+    }
+
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
+    }
+
+    private BeamBreakState getBeamBreakState() {
+        boolean shallow = m_funnelIndexerSubsystem.isShallowBeamBreakBroken();
+        boolean deep = m_funnelIndexerSubsystem.isDeepBeamBreakBroken();
+        if (!shallow && !deep) return BeamBreakState.NONE_BROKEN;
+        if (shallow && deep) return BeamBreakState.BOTH_BROKEN;
+
+        // Deep is always false here
+        if (shallow) return BeamBreakState.SHALLOW_BROKEN;
+        return BeamBreakState.DEEP_BROKEN;
+    }
+
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        BeamBreakState state = getBeamBreakState();
+        double speed = SPEED_MAP.get(state);
+        m_funnelIndexerSubsystem.setIndexerSpeed(speed);
+    }
+
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        m_funnelIndexerSubsystem.stop();
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }
