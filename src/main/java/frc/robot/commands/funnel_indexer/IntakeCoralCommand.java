@@ -6,7 +6,7 @@ import frc.robot.subsystems.FunnelSubsystem;
 
 import java.util.Map;
 
-public class IntakeCoral extends Command {
+public class IntakeCoralCommand extends Command {
     private final FunnelSubsystem m_funnelIndexerSubsystem;
 
     // Enum representing the state of the beam breaks
@@ -36,7 +36,7 @@ public class IntakeCoral extends Command {
     /**
      * Creates a new CorrectCoralPositionCommand.
      */
-    public IntakeCoral(FunnelSubsystem funnelIndexerSubsystem) {
+    public IntakeCoralCommand(FunnelSubsystem funnelIndexerSubsystem) {
         this.m_funnelIndexerSubsystem = funnelIndexerSubsystem;
         addRequirements(funnelIndexerSubsystem);
     }
