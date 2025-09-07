@@ -36,13 +36,8 @@ public class IntakeAlgaeCoralCommand extends Command {
     Boolean height = false;
     if (!RobotBase.isSimulation()) {
       int currentTag = RobotContainer.m_photonSubsystem.getTagID();
-      for (int i : PhotonSubsystem.reefIDHeights.keySet()){
-        if (currentTag == i) {
-          height = PhotonSubsystem.reefIDHeights.get(i);
-          moveElvArmCom = height ? new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH) : new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW);
-        }
-        
-      }
+      height = PhotonSubsystem.reefIDHeights.get(currentTag);
+      moveElvArmCom = height ? new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH) : new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW);
       andThen(moveElvArmCom);
     }
     RobotContainer.m_endEffectorSubsystem.setSpeed(AlgaeCoralIndexerConstants.kIntakeSpeed);
