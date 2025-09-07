@@ -12,12 +12,10 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.EndEffectorCommands;
-import frc.robot.commands.end_effector.IntakeEffectorCommand;
-import frc.robot.commands.end_effector.OuttakeEffectorCommand;
-import frc.robot.subsystems.EndEffectorSubsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.FunnelCommands;
+import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
@@ -34,8 +32,7 @@ import swervelib.SwerveInputStream;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final FunnelSubsystem m_funnelIndexerSubsystem = new FunnelSubsystem();
-
-    private final AlgaeCoralIndexerSubsystem m_algaeCoralIndexerSubsystem = new AlgaeCoralIndexerSubsystem();
+    private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController m_driverController = new CommandXboxController(
