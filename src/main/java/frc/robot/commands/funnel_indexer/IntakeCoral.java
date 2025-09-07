@@ -23,6 +23,13 @@ public class IntakeCoral extends Command {
             BeamBreakState.DEEP_BROKEN, FunnelIndexerConstants.REVERSE_SPEED
     );
 
+    private static final Map<BeamBreakState, Double> HAS_CORAL_SPEED_MAP = Map.of(
+            BeamBreakState.NONE_BROKEN, FunnelIndexerConstants.STOP_SPEED,
+            BeamBreakState.SHALLOW_BROKEN, FunnelIndexerConstants.STOP_SPEED,
+            BeamBreakState.BOTH_BROKEN, FunnelIndexerConstants.REVERSE_SPEED,
+            BeamBreakState.DEEP_BROKEN, FunnelIndexerConstants.REVERSE_SPEED
+    );
+
     /**
      * Creates a new CorrectCoralPositionCommand.
      */
@@ -51,7 +58,12 @@ public class IntakeCoral extends Command {
     @Override
     public void execute() {
         BeamBreakState state = getBeamBreakState();
-        double speed = SPEED_MAP.get(state);
+        double speed;
+        if (m_funnelIndexerSubsystem.getHasCoral()) {
+            speed = HAS_CORAL_SPEED_MAP.get(state);
+        } else {
+            speed = SPEED_MAP.get(state);
+        }
         m_funnelIndexerSubsystem.setIndexerSpeed(speed);
     }
 

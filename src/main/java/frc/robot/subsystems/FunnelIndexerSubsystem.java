@@ -1,13 +1,13 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FunnelIndexerConstants;
@@ -23,6 +23,11 @@ public class FunnelIndexerSubsystem extends SubsystemBase {
 
     private final DigitalInput m_shallowBeamBreak;
     private final DigitalInput m_deepBeamBreak;
+
+    private Boolean m_hasCoral;
+
+    private Timer m_timer;
+    private double m_lastTimeHasCoral;
 
     public FunnelIndexerSubsystem() {
         m_indexerLeftMotor = new SparkMax(FunnelIndexerConstants.LEFT_MOTOR_CAN_ID, MotorType.kBrushless); // NEO 550
@@ -48,6 +53,13 @@ public class FunnelIndexerSubsystem extends SubsystemBase {
 
         m_shallowBeamBreak = new DigitalInput(FunnelIndexerConstants.SHALLOW_BEAM_BREAK_DIO);
         m_deepBeamBreak = new DigitalInput(FunnelIndexerConstants.DEEP_BEAM_BREAK_DIO);
+
+        m_hasCoral = false;
+
+        m_timer = new Timer();
+        m_timer.start();
+
+        m_lastTimeHasCoral = 0;
 
 //        Kicker motor spins all the time
 //        m_indexerkickerMotor.set(FunnelIndexerConstants.FULL_SPEED);
@@ -76,9 +88,32 @@ public class FunnelIndexerSubsystem extends SubsystemBase {
         m_indexerRightMotor.stopMotor();
     }
 
+    public Boolean getHasCoral() {
+        return m_hasCoral;
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("Shallow Beam Break", isShallowBeamBreakBroken());
         SmartDashboard.putBoolean("Deep Beam Break", isDeepBeamBreakBroken());
+
+        SmartDashboard.putBoolean("Has Coral", m_hasCoral);
+
+        SmartDashboard.putNumber("Last Time Coral Hit", m_lastTimeHasCoral);
+        SmartDashboard.putNumber("Curr Time", m_timer.get());
+
+        if (m_hasCoral) {
+            if (!isShallowBeamBreakBroken()) {
+                double currTime = m_timer.get();
+                if (currTime - m_lastTimeHasCoral > 2) {
+                    m_hasCoral = false;
+                }
+            }
+        } else {
+            if (isShallowBeamBreakBroken() && isDeepBeamBreakBroken()) {
+                m_hasCoral = true;
+                m_lastTimeHasCoral = m_timer.get();
+            }
+        }
     }
 }
