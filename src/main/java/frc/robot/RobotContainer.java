@@ -11,8 +11,9 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.IntakeAlgaeCoralCommand;
-import frc.robot.commands.OuttakeAlgaeCoralCommand;
+import frc.robot.commands.EndEffectorCommands;
+import frc.robot.commands.end_effector.IntakeEffectorCommand;
+import frc.robot.commands.end_effector.OuttakeEffectorCommand;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -120,8 +121,8 @@ public class RobotContainer {
         m_driverController.rightBumper().whileTrue(FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem));
 
         // EndEffectorSubsystem
-        m_driverController.leftTrigger().whileTrue(new IntakeAlgaeCoralCommand(m_endEffectorSubsystem));
-        m_driverController.rightTrigger().whileTrue(new OuttakeAlgaeCoralCommand(m_endEffectorSubsystem));
+        m_driverController.leftTrigger().whileTrue(EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem));
+        m_driverController.rightTrigger().whileTrue(EndEffectorCommands.OuttakeEffector(m_endEffectorSubsystem));
 
         m_swerveSubsystem.setDefaultCommand(
                 Robot.isSimulation() ? driveFieldOrientedAngularVelocity : driveRobotOrientedAngularVelocity);

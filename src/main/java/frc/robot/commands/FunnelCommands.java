@@ -1,15 +1,15 @@
 package frc.robot.commands;
 
-import frc.robot.commands.funnel_indexer.IntakeCoral;
-import frc.robot.commands.funnel_indexer.OuttakeCoral;
+import frc.robot.commands.funnel_indexer.IntakeCoralCommand;
+import frc.robot.commands.funnel_indexer.OuttakeCoralCommand;
 import frc.robot.subsystems.FunnelSubsystem;
 
 public class FunnelCommands {
-    public static OuttakeCoral OuttakeCoral(FunnelSubsystem funnelIndexerSubsystem) {
-        return new OuttakeCoral(funnelIndexerSubsystem);
+    public static OuttakeCoralCommand OuttakeCoral(FunnelSubsystem funnelIndexerSubsystem) {
+        return new OuttakeCoralCommand(funnelIndexerSubsystem);
     }
 
-    public static IntakeCoral IntakeCoral(FunnelSubsystem funnelIndexerSubsystem) {
-        return new IntakeCoral(funnelIndexerSubsystem);
+    public static IntakeCoralCommand IntakeCoral(FunnelSubsystem funnelIndexerSubsystem) {
+        return new IntakeCoralCommand(funnelIndexerSubsystem);
     }
 }
