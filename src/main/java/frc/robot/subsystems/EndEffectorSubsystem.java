@@ -9,7 +9,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.AlgaeCoralIndexerConstants;
+import frc.robot.Constants.EndEffectorConstants;
 
 public class EndEffectorSubsystem extends SubsystemBase {
 
@@ -22,14 +22,14 @@ public class EndEffectorSubsystem extends SubsystemBase {
 
   /** Creates a new AlgaeCoralIndexerSubsystem. */
   public EndEffectorSubsystem() {
-    m_motor = new TalonFX(AlgaeCoralIndexerConstants.kMotorCANId);
+    m_motor = new TalonFX(EndEffectorConstants.MOTOR_CAN_ID);
     m_motorConfig = new TalonFXConfiguration();
-    m_coralBeamBreak = new DigitalInput(AlgaeCoralIndexerConstants.kCoralBeamBreakPortId);
-    m_algaeProximitySensor = new DigitalInput(AlgaeCoralIndexerConstants.kAlgaeProximitySensorPortId);
+    m_coralBeamBreak = new DigitalInput(EndEffectorConstants.CORAL_BEAM_BREAK_PORT_ID);
+    m_algaeProximitySensor = new DigitalInput(EndEffectorConstants.ALGAE_PROXIMITY_SENSOR_PORT_ID);
     
 
     m_motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    m_motorConfig.CurrentLimits.StatorCurrentLimit = AlgaeCoralIndexerConstants.kMotorStatorCurrentLimit;
+    m_motorConfig.CurrentLimits.StatorCurrentLimit = EndEffectorConstants.MOTOR_STATOR_CURRENT_LIMIT;
 
     m_motor.getConfigurator().apply(m_motorConfig);
 

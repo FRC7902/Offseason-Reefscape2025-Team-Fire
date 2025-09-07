@@ -115,7 +115,6 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings() {
-
         // FunnelSubsystem
         m_funnelIndexerSubsystem.setDefaultCommand(FunnelCommands.IntakeCoral(m_funnelIndexerSubsystem));
         m_driverController.rightBumper().whileTrue(FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem));

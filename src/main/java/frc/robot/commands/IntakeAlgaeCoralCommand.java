@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.AlgaeCoralIndexerConstants;
+import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -24,7 +24,7 @@ public class IntakeAlgaeCoralCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_endEffectorSubsystem.setSpeed(AlgaeCoralIndexerConstants.kIntakeSpeed);
+    m_endEffectorSubsystem.setSpeed(EndEffectorConstants.INTAKE_SPEED);
 
   }
 

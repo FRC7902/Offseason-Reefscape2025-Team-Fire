@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.AlgaeCoralIndexerConstants;
+import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
 
@@ -24,7 +24,7 @@ public class OuttakeAlgaeCoralCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_endEffectorSubsystem.setSpeed(AlgaeCoralIndexerConstants.kOuttakeSpeed);
+    m_endEffectorSubsystem.setSpeed(EndEffectorConstants.OUTTAKE_SPEED);
 
   }
 
