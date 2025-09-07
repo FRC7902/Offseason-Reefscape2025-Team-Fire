@@ -45,7 +45,7 @@ public final class Constants {
     }
 
     public static class EndEffectorConstants {
-        public static final int MOTOR_CAN_ID = -1;
+        public static final int MOTOR_CAN_ID = 20;
         public static final int CORAL_BEAM_BREAK_PORT_ID = -1;
         public static final int ALGAE_PROXIMITY_SENSOR_PORT_ID = -1;
         public static final int MOTOR_STATOR_CURRENT_LIMIT = 40;
