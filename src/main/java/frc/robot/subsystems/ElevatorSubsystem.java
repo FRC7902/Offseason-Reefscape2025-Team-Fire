@@ -27,9 +27,11 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.RobotContainer;
 
 public class ElevatorSubsystem extends SubsystemBase {
     /** Elevator position enum */
@@ -319,6 +321,10 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     public Mechanism2d getMechanism2d() {
         return m_mech2d;
+    }
+
+    public Command setPositionCommand(ElevatorPosition position) {
+        return this.runOnce(() -> RobotContainer.m_elevatorSubsystem.setElevatorPosition(position));
     }
 
     @Override

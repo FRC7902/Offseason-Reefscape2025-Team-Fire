@@ -33,7 +33,7 @@ public class IntakeAlgaeCoralCommand extends Command {
   public void initialize() {
     
     // All elv logic
-    Boolean height = false;
+    Boolean height;
     if (!RobotBase.isSimulation()) {
       int currentTag = RobotContainer.m_photonSubsystem.getTagID();
       height = PhotonSubsystem.reefIDHeights.get(currentTag);

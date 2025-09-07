@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ElevatorArmCommands.MoveElevatorArmCommand;
-import frc.robot.commands.ElevatorArmCommands.OperatorSetPositionCommand;
 import frc.robot.commands.EndEffectorCommands.IntakeAlgaeCoralCommand;
 import frc.robot.commands.EndEffectorCommands.OuttakeAlgaeCoralCommand;
 import frc.robot.subsystems.ArmSubsystem;
@@ -137,10 +136,10 @@ public class RobotContainer {
     //m_swerveSubsystem.setDefaultCommand(
     //    Robot.isSimulation() ? driveFieldOrientedAngularVelocity : driveRobotOrientedAngularVelocity);
 
-    m_operatorController.a().onTrue(new OperatorSetPositionCommand(ElevatorPosition.CORAL_L4));
-    m_operatorController.b().onTrue(new OperatorSetPositionCommand(ElevatorPosition.CORAL_L3));
-    m_operatorController.x().onTrue(new OperatorSetPositionCommand(ElevatorPosition.CORAL_L2));
-    m_operatorController.y().onTrue(new OperatorSetPositionCommand(ElevatorPosition.CORAL_L1));
+    m_operatorController.a().onTrue(m_elevatorSubsystem.setPositionCommand(ElevatorPosition.CORAL_L4));
+    m_operatorController.b().onTrue(m_elevatorSubsystem.setPositionCommand(ElevatorPosition.CORAL_L3));
+    m_operatorController.x().onTrue(m_elevatorSubsystem.setPositionCommand(ElevatorPosition.CORAL_L2));
+    m_operatorController.y().onTrue(m_elevatorSubsystem.setPositionCommand(ElevatorPosition.CORAL_L1));
 
 
 
