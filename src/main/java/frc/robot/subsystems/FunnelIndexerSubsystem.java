@@ -65,10 +65,6 @@ public class FunnelIndexerSubsystem extends SubsystemBase {
         return !m_deepBeamBreak.get();
     }
 
-    public boolean hasCoral() {
-//        return
-    }
-
     public void setIndexerSpeed(double speed) {
         m_indexerLeftMotor.set(speed);
         m_indexerRightMotor.set(-speed); // Invert right motor to ensure both motors spin in the same direction
