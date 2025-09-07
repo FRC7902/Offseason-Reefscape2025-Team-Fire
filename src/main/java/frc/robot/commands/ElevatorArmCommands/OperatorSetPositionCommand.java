@@ -22,7 +22,7 @@ public class OperatorSetPositionCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.m_elevatorSubsystem.setElevatorPositionEnum(position);
+    RobotContainer.m_elevatorSubsystem.setElevatorPosition(position);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

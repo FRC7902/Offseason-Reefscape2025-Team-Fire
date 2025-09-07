@@ -31,25 +31,21 @@ public class IntakeAlgaeCoralCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.m_endEffectorSubsystem.setSpeed(AlgaeCoralIndexerConstants.kIntakeSpeed);
+    
     // All elv logic
     Boolean height = false;
-    if (!RobotBase.isSimulation()){
+    if (!RobotBase.isSimulation()) {
       int currentTag = RobotContainer.m_photonSubsystem.getTagID();
       for (int i : PhotonSubsystem.reefIDHeights.keySet()){
         if (currentTag == i) {
           height = PhotonSubsystem.reefIDHeights.get(i);
+          moveElvArmCom = height ? new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH) : new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW);
         }
-        if (height){
-          moveElvArmCom = new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH); // high height if true
-        }
-        else {
-          moveElvArmCom = new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW); // low height if false
-        }
-        andThen(moveElvArmCom);
+        
       }
+      andThen(moveElvArmCom);
     }
-    
+    RobotContainer.m_endEffectorSubsystem.setSpeed(AlgaeCoralIndexerConstants.kIntakeSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
