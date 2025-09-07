@@ -41,6 +41,7 @@ public class IntakeEffectorCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_endEffectorSubsystem.isCoralDetected() || m_endEffectorSubsystem.isAlgaeDetected();
+    // return m_endEffectorSubsystem.isCoralDetected() || m_endEffectorSubsystem.isAlgaeDetected();
+    return false;
   }
 }
