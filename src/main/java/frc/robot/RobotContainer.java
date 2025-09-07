@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ElevatorArmCommands.MoveElevatorArmCommand;
+import frc.robot.commands.ElevatorArmCommands.OperatorSetPositionCommand;
 import frc.robot.commands.EndEffectorCommands.IntakeAlgaeCoralCommand;
 import frc.robot.commands.EndEffectorCommands.OuttakeAlgaeCoralCommand;
 import frc.robot.subsystems.ArmSubsystem;
@@ -43,7 +44,9 @@ public class RobotContainer {
   public final static PhotonSubsystem m_photonSubsystem = new PhotonSubsystem(null);
   // TODO: Camera Properties
 
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
+  public final static CommandXboxController m_operatorController = new CommandXboxController(0);
   public final static CommandXboxController m_driverController = new CommandXboxController(
       OperatorConstants.kDriverControllerPort);
 
@@ -124,10 +127,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_driverController.a().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
-    m_driverController.b().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
-    m_driverController.x().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
-    m_driverController.y().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
+    m_driverController.a().onTrue(new MoveElevatorArmCommand(m_elevatorSubsystem.getElevatorPosition()));
 
     m_driverController.leftBumper().whileTrue(new IntakeAlgaeCoralCommand());
     m_driverController.rightBumper().whileTrue(new OuttakeAlgaeCoralCommand());
@@ -136,6 +136,13 @@ public class RobotContainer {
     // m_driverController));
     //m_swerveSubsystem.setDefaultCommand(
     //    Robot.isSimulation() ? driveFieldOrientedAngularVelocity : driveRobotOrientedAngularVelocity);
+
+    m_operatorController.a().onTrue(new OperatorSetPositionCommand(ElevatorPosition.CORAL_L4));
+    m_operatorController.b().onTrue(new OperatorSetPositionCommand(ElevatorPosition.CORAL_L3));
+    m_operatorController.x().onTrue(new OperatorSetPositionCommand(ElevatorPosition.CORAL_L2));
+    m_operatorController.y().onTrue(new OperatorSetPositionCommand(ElevatorPosition.CORAL_L1));
+
+
 
   }
 

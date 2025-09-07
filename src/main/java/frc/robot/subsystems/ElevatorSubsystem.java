@@ -32,7 +32,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ElevatorConstants;
 
 public class ElevatorSubsystem extends SubsystemBase {
-    
     /** Elevator position enum */
     public enum ElevatorPosition {
         ZERO,
@@ -46,7 +45,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         BARGE,
         UNKNOWN
     }
-
+    private ElevatorPosition position;
     /** Leader TalonFX motor */
     private final TalonFX m_leaderMotor = new TalonFX(ElevatorConstants.kElevatorLeaderCANID);
 
@@ -116,7 +115,14 @@ public class ElevatorSubsystem extends SubsystemBase {
             new Color8Bit(Color.kDarkRed)
         )
     );
-
+    // Set Elevator Position
+    public void setElevatorPosition(ElevatorPosition newPos) {
+        position = newPos;
+    }
+    // Get Elevator Position
+    public ElevatorPosition getElevatorPosition() {
+        return position;
+    }
     /** Target setpoint for the elevator in meters */
     private double m_elevatorSetPointMeters;
 

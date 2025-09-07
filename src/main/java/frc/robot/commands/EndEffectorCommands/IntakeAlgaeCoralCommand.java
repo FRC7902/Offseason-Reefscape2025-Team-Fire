@@ -8,6 +8,7 @@ package frc.robot.commands.EndEffectorCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AlgaeCoralIndexerConstants;
 import frc.robot.commands.ElevatorArmCommands.MoveElevatorArmCommand;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.subsystems.vision.PhotonSubsystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.RobotContainer;
@@ -40,10 +41,10 @@ public class IntakeAlgaeCoralCommand extends Command {
           height = PhotonSubsystem.reefIDHeights.get(i);
         }
         if (height){
-          moveElvArmCom = new MoveElevatorArmCommand(null); // high height if true
+          moveElvArmCom = new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH); // high height if true
         }
         else {
-          moveElvArmCom = new MoveElevatorArmCommand(null); // low height if false
+          moveElvArmCom = new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW); // low height if false
         }
         andThen(moveElvArmCom);
       }
