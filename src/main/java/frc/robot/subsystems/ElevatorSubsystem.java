@@ -47,7 +47,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         BARGE,
         UNKNOWN
     }
-    private ElevatorPosition position;
+    
+    private ElevatorPosition position = ElevatorPosition.ZERO;
     /** Leader TalonFX motor */
     private final TalonFX m_leaderMotor = new TalonFX(ElevatorConstants.kElevatorLeaderCANID);
 

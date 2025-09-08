@@ -32,12 +32,10 @@ public class IntakeAlgaeCoralCommand extends Command {
   @Override
   public void initialize() {
     
-    // All elv logic
-    Boolean height;
     if (!RobotBase.isSimulation()) {
       int currentTag = RobotContainer.m_photonSubsystem.getTagID();
-      height = PhotonSubsystem.reefIDHeights.get(currentTag);
-      moveElvArmCom = height ? new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH) : new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW);
+      RobotContainer.m_photonSubsystem.setIDHeights(currentTag);
+      moveElvArmCom = new MoveElevatorArmCommand(RobotContainer.m_photonSubsystem.getHeight());
       andThen(moveElvArmCom);
     }
     RobotContainer.m_endEffectorSubsystem.setSpeed(AlgaeCoralIndexerConstants.kIntakeSpeed);

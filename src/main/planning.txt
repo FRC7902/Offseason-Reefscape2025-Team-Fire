@@ -4,5 +4,20 @@
  selects the setpoint,
  - one command 
  Drive presses intake or outtake button to trigger the height
- - 
  autoalign button brings elv up
+
+ LT "Intake"
+- if at low/high algae setpoint, EE intake ONLY IF not holding coral
+- if at home position AND if NOT at algae setpoint, AND NOT holding coral/algae, EA go to loading setpoint then FN outtake and EE intake until EE has coral
+- RT "outtake" if at barge setpoint OR if at coral L1 / L2 / L3 / L4 EE outtake
+- LB "auto-align left"
+- RB "auto-align right"
+- LS - SW translation
+- RS - SW w-velocity
+Operator
+A - L1
+B - L2
+C - L3
+Y - L4
+
+This only happens if EE has coral
