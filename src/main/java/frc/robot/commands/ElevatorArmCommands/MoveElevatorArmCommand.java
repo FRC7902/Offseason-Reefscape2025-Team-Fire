@@ -36,14 +36,10 @@ public class MoveElevatorArmCommand extends Command {
   @Override
   public void execute() {
     if (isEnum) {
-      if (RobotContainer.m_armSubsystem.getArmPositionDegrees() > -45) {
-        RobotContainer.m_elevatorSubsystem.setElevatorPositionEnum(position);
-      }
+      RobotContainer.m_elevatorSubsystem.setElevatorPositionEnum(position);
       RobotContainer.m_armSubsystem.setArmPositionEnum(position);
     } else {
-      if (RobotContainer.m_armSubsystem.getArmPositionDegrees() > -45) {
-        RobotContainer.m_elevatorSubsystem.setElevatorPositionMeters(positionMeters);
-      }
+      RobotContainer.m_elevatorSubsystem.setElevatorPositionMeters(positionMeters);
       RobotContainer.m_armSubsystem.setArmPositionDegrees(angleDegrees);
     }
   }

@@ -199,11 +199,16 @@ public class ArmSubsystem extends SubsystemBase {
    */
   public void setArmPositionDegrees(double position) {
     // Ensure position is within bounds
-    
     if (position < ArmConstants.kArmMinAngle) {
       position = ArmConstants.kArmMinAngle;
     } else if (position > ArmConstants.kArmMaxAngle) {
       position = ArmConstants.kArmMaxAngle;
+    }
+
+    if ((getElevatorPositionMeters() < Units.inchesToMeters(34) || getElevatorSetpointMeters() < Units.inchesToMeters(34)) && position > 50) {
+      position = 50;
+    } else if ((getElevatorPositionMeters() > Units.inchesToMeters(34) || getElevatorSetpointMeters() > Units.inchesToMeters(34)) && position < -45) {
+      position = -45;
     }
     
     double targetPositionRot = (position / 360.0) ; // Convert degrees to rotations
@@ -281,6 +286,22 @@ public class ArmSubsystem extends SubsystemBase {
    */
   public double getArmSetpointDegrees() {
     return m_armMotor.getClosedLoopReference().getValueAsDouble();
+  }
+
+  /**
+   * Gets the current elevator setpoint in meters
+   */
+  public double getElevatorSetpointMeters() {
+    return RobotContainer.m_elevatorSubsystem.getSetpoint();
+  }
+
+  /**
+   * Get the elevator position in meters
+   * 
+   * @return The elevator position in meters
+   */
+  private double getElevatorPositionMeters() {
+    return RobotContainer.m_elevatorSubsystem.getElevatorPositionMeters();
   }
 
   /**
