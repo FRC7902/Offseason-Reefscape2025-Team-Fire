@@ -123,7 +123,7 @@ public class RobotContainer {
         // EndEffectorSubsystem
         m_driverController.leftTrigger().whileTrue(EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem));
         m_driverController.rightTrigger().whileTrue(EndEffectorCommands.OuttakeEffector(m_endEffectorSubsystem));
-
+        
         // Elevator Setpoints
         m_driverController.a().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
         m_driverController.b().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));

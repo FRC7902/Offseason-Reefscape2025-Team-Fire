@@ -6,24 +6,24 @@ package frc.robot.commands.ElevatorArmCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MoveElevatorArmCommand extends Command {
-  /** Creates a new MoveElevatorCommand. */
-  private final boolean isEnum;
-  private double positionMeters;
-  private double angleDegrees;
-  private ElevatorPosition positionEnum;
+  boolean isEnum;
+  ElevatorSubsystem.ElevatorPosition position;
+  double positionMeters;
+  double angleDegrees;
 
-  public MoveElevatorArmCommand(ElevatorPosition position) {
+  public MoveElevatorArmCommand(ElevatorSubsystem.ElevatorPosition position) {
     isEnum = true;
-    positionEnum = position;
+    this.position = position;
     addRequirements(RobotContainer.m_elevatorSubsystem, RobotContainer.m_armSubsystem);
   }
-  public MoveElevatorArmCommand(double position, double angleDegrees) {
+
+  public MoveElevatorArmCommand(double positionMeters, double angleDegrees) {
     isEnum = false;
-    positionMeters = position;
+    this.positionMeters = positionMeters;
     this.angleDegrees = angleDegrees;
     addRequirements(RobotContainer.m_elevatorSubsystem, RobotContainer.m_armSubsystem);
   }
@@ -36,10 +36,14 @@ public class MoveElevatorArmCommand extends Command {
   @Override
   public void execute() {
     if (isEnum) {
-      RobotContainer.m_elevatorSubsystem.setElevatorPositionEnum(positionEnum);
-      RobotContainer.m_armSubsystem.setArmPositionEnum(positionEnum);
+      if (RobotContainer.m_armSubsystem.getArmPositionDegrees() > -45) {
+        RobotContainer.m_elevatorSubsystem.setElevatorPositionEnum(position);
+      }
+      RobotContainer.m_armSubsystem.setArmPositionEnum(position);
     } else {
-      RobotContainer.m_elevatorSubsystem.setElevatorPositionMeters(positionMeters);
+      if (RobotContainer.m_armSubsystem.getArmPositionDegrees() > -45) {
+        RobotContainer.m_elevatorSubsystem.setElevatorPositionMeters(positionMeters);
+      }
       RobotContainer.m_armSubsystem.setArmPositionDegrees(angleDegrees);
     }
   }

@@ -4,10 +4,12 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -18,10 +20,12 @@ import com.ctre.phoenix6.sim.TalonFXSimState;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.RobotContainer;
@@ -58,6 +62,23 @@ public class ArmSubsystem extends SubsystemBase {
       ArmConstants.kArmLength, 
       266
     )
+  );
+  /** Motor voltage request object */
+  private VoltageOut m_voltageRequest = new VoltageOut(0);
+
+  /** SysId routine object to determine S, V, and A constants */
+  private final SysIdRoutine m_sysIdRoutine = new SysIdRoutine(
+      new SysIdRoutine.Config(
+          null,
+          Volts.of(4),
+          null,
+          (state) -> SignalLogger.writeString("state", state.toString())
+      ),
+      new SysIdRoutine.Mechanism(
+          (volts) -> m_armMotor.setControl(m_voltageRequest.withOutput(volts.in(Volts))),
+          null,
+          this
+      )
   );
 
   /** Arm simulation ligament */
@@ -120,17 +141,25 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     if (ArmConstants.kTuningMode) {
+      // Track previous and current values of constants
+      double previousP = ArmConstants.kArmP;
+      double previousI = ArmConstants.kArmI;
+      double previousD = ArmConstants.kArmD;
+      double previousG = ArmConstants.kArmG;
+
       ArmConstants.kArmP = SmartDashboard.getNumber("Arm P", ArmConstants.kArmP);
       ArmConstants.kArmI = SmartDashboard.getNumber("Arm I", ArmConstants.kArmI);
       ArmConstants.kArmD = SmartDashboard.getNumber("Arm D", ArmConstants.kArmD);
       ArmConstants.kArmG = SmartDashboard.getNumber("Arm G", ArmConstants.kArmG);
 
-      m_armMotorConfig.Slot0.kP = ElevatorConstants.kElevatorP;
-      m_armMotorConfig.Slot0.kI = ElevatorConstants.kElevatorI;
-      m_armMotorConfig.Slot0.kD = ElevatorConstants.kElevatorD;
-      m_armMotorConfig.Slot0.kG = ElevatorConstants.kElevatorG;
-        
-      m_armMotor.getConfigurator().apply(m_armMotorConfig);
+      // Reapply config if any constants have changed
+      if (previousP != ArmConstants.kArmP || previousI != ArmConstants.kArmI || previousD != ArmConstants.kArmD || previousG != ArmConstants.kArmG) {
+        m_armMotorConfig.Slot0.kP = ElevatorConstants.kElevatorP;
+        m_armMotorConfig.Slot0.kI = ElevatorConstants.kElevatorI;
+        m_armMotorConfig.Slot0.kD = ElevatorConstants.kElevatorD;
+        m_armMotorConfig.Slot0.kG = ElevatorConstants.kElevatorG;
+        m_armMotor.getConfigurator().apply(m_armMotorConfig);
+      }
     }
 
     SmartDashboard.putNumber("Arm Position (deg)", getArmPositionDegrees()/360);
@@ -243,5 +272,34 @@ public class ArmSubsystem extends SubsystemBase {
       return ElevatorPosition.BARGE;
     }
     return ElevatorPosition.UNKNOWN; // Default case
+  }
+
+  /**
+   * Gets the current arm setpoint in degrees.
+   * 
+   * @return The current arm setpoint in degrees.
+   */
+  public double getArmSetpointDegrees() {
+    return m_armMotor.getClosedLoopReference().getValueAsDouble();
+  }
+
+  /**
+   * SysId quasistatic test
+   * 
+   * @param direction The direction of the test (up or down)
+   * @see SysIdRoutine.Direction
+   */
+  public void sysIdQuasistatic(SysIdRoutine.Direction direction) {
+      m_sysIdRoutine.quasistatic(direction);
+  }
+
+  /**
+   * SysId dynamic test
+   * 
+   * @param direction The direction of the test (up or down)
+   * @see SysIdRoutine.Direction
+   */
+  public void sysIdDynamic(SysIdRoutine.Direction direction) {
+      m_sysIdRoutine.dynamic(direction);
   }
 }

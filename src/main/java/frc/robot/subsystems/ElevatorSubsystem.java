@@ -234,9 +234,16 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         m_elevatorSetPointMeters = positionMeters;
 
-        double positionRotations = (m_elevatorSetPointMeters - ElevatorConstants.kElevatorMinHeightMeters) / ElevatorConstants.kElevatorMetersPerMotorRotation;
+        double positionRotations = (m_elevatorSetPointMeters - (RobotBase.isSimulation() ? 0 : ElevatorConstants.kElevatorMinHeightMeters)) / ElevatorConstants.kElevatorMetersPerMotorRotation;
         m_motionMagicRequest = m_motionMagicRequest.withPosition(positionRotations).withSlot(0);
         m_leaderMotor.setControl(m_motionMagicRequest);
+    }
+
+    /**
+     * Holds the elevator in place by applying a zero velocity control.
+     */
+    public void holdElevatorInPlace() {
+        m_leaderMotor.setControl(m_voltageRequest.withOutput(0));
     }
 
     /**
@@ -246,7 +253,7 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     public double getElevatorPositionMeters() {
         double positionRotations = m_leaderMotor.getPosition().getValueAsDouble();
-        return positionRotations * ElevatorConstants.kElevatorMetersPerMotorRotation+ElevatorConstants.kElevatorMinHeightMeters;
+        return positionRotations * ElevatorConstants.kElevatorMetersPerMotorRotation + (RobotBase.isSimulation() ? 0 : ElevatorConstants.kElevatorMinHeightMeters);
     }
 
     /**
@@ -309,6 +316,15 @@ public class ElevatorSubsystem extends SubsystemBase {
             m_elevator2d.setLength(ElevatorConstants.kElevatorHeightMeters);
         }
         m_elevatorCarriageRoot2d.setPosition(Units.inchesToMeters(25), Units.inchesToMeters(0.5)+getElevatorPositionMeters());
+    }
+
+    /**
+     * Gets the current setpoint for the elevator in meters.
+     * 
+     * @return The current elevator setpoint in meters.
+     */
+    public double getSetpoint() {
+        return m_elevatorSetPointMeters;
     }
 
     /**
