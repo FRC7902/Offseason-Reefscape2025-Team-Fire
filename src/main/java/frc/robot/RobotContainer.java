@@ -121,10 +121,10 @@ public class RobotContainer {
     m_driverController.rightBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH));
     m_driverController.leftBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));
 
-    m_driverController.rightStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ZERO));
+    m_driverController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ZERO));
     m_driverController.leftStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
 
-    m_driverController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
+    m_driverController.rightStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
     // m_driveSubsystem.setDefaultCommand(new ArcadeDriveCommand(m_driveSubsystem,
     // m_driverController));
   }
