@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.RobotContainer;
 
 public class ElevatorSubsystem extends SubsystemBase {
     
@@ -226,10 +227,14 @@ public class ElevatorSubsystem extends SubsystemBase {
      * @param positionMeters The desired elevator position in meters.
      */
     public void setElevatorPositionMeters(double positionMeters) {
+        double currentPosMeters = getElevatorPositionMeters();
         if(positionMeters < ElevatorConstants.kElevatorMinHeightMeters) {
             positionMeters = ElevatorConstants.kElevatorMinHeightMeters;
         } else if(positionMeters > ElevatorConstants.kElevatorMaxHeightMeters) {
             positionMeters = ElevatorConstants.kElevatorMaxHeightMeters;
+        }
+        if (getArmPositionDegrees() < -45) {
+            positionMeters = currentPosMeters;
         }
 
         m_elevatorSetPointMeters = positionMeters;
@@ -334,6 +339,15 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     public Mechanism2d getMechanism2d() {
         return m_mech2d;
+    }
+
+    /**
+     * Gets the position of the arm in degrees
+     * 
+     * @return The position of the arm in degrees
+     */
+    private double getArmPositionDegrees() {
+        return RobotContainer.m_armSubsystem.getArmPositionDegrees();
     }
 
     @Override
