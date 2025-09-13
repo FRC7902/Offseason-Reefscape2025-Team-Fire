@@ -207,10 +207,10 @@ public class ArmSubsystem extends SubsystemBase {
       position = ArmConstants.kArmMaxAngle;
     }
 
-    if ((getElevatorPositionMeters() < Units.inchesToMeters(34) || getElevatorSetpointMeters() < Units.inchesToMeters(34)) && position > 50) {
-      position = 50;
-    } else if ((getElevatorPositionMeters() > Units.inchesToMeters(34) || getElevatorSetpointMeters() > Units.inchesToMeters(34)) && position < -45) {
-      position = -45;
+    if ((getElevatorPositionMeters() < Units.inchesToMeters(ElevatorConstants.kElvPosBad) || getElevatorSetpointMeters() < Units.inchesToMeters(ElevatorConstants.kElvPosBad)) && position > ArmConstants.kbadARMPOS) {
+      position = ArmConstants.kbadARMPOS;
+    } else if ((getElevatorPositionMeters() > Units.inchesToMeters(ElevatorConstants.kElvPosBad) || getElevatorSetpointMeters() > Units.inchesToMeters(ElevatorConstants.kElvPosBad)) && position < ElevatorConstants.kAngleBad) {
+      position = ElevatorConstants.kAngleBad;
     }
     
     double targetPositionRot = (position / 360.0) ; // Convert degrees to rotations
