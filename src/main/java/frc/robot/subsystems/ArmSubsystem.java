@@ -14,6 +14,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.sim.CANcoderSimState;
 import com.ctre.phoenix6.sim.TalonFXSimState;
@@ -122,6 +123,7 @@ public class ArmSubsystem extends SubsystemBase {
     m_armMotorConfig.Feedback.FeedbackRemoteSensorID = m_armEncoder.getDeviceID();
 
     m_armMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    m_armMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
     m_armMotor.getConfigurator().apply(m_armMotorConfig);
 
@@ -162,7 +164,7 @@ public class ArmSubsystem extends SubsystemBase {
       }
     }
 
-    SmartDashboard.putNumber("Arm Position (deg)", getArmPositionDegrees()/360);
+    SmartDashboard.putNumber("Arm Position (rotations)", getArmPositionDegrees()/360);
     SmartDashboard.putNumber("Arm position setpoint (rotations)", m_armMotor.getClosedLoopReference().getValueAsDouble());
     updateTelemetry();
   }
