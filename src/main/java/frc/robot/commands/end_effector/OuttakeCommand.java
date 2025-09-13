@@ -10,12 +10,12 @@ import frc.robot.subsystems.EndEffectorSubsystem;
 
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Outtake extends Command {
+public class OuttakeCommand extends Command {
 
   private EndEffectorSubsystem m_endEffectorSubsystem;
 
   /** Creates a new OuttakeAlgaeCoralCommand. */
-  public Outtake(EndEffectorSubsystem endEffectorSubsystem) {
+  public OuttakeCommand(EndEffectorSubsystem endEffectorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(endEffectorSubsystem);
     m_endEffectorSubsystem = endEffectorSubsystem;

@@ -9,12 +9,12 @@ import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Intake extends Command {
+public class IntakeCommand extends Command {
 
   private EndEffectorSubsystem m_endEffectorSubsystem;
 
   /** Creates a new IntakeAlgaeCoralCommand. */
-  public Intake(EndEffectorSubsystem endEffectorSubsystem) {
+  public IntakeCommand(EndEffectorSubsystem endEffectorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(endEffectorSubsystem);
     m_endEffectorSubsystem = endEffectorSubsystem;
