@@ -233,7 +233,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         } else if(positionMeters > ElevatorConstants.kElevatorMaxHeightMeters) {
             positionMeters = ElevatorConstants.kElevatorMaxHeightMeters;
         }
-        if (getArmPositionDegrees() < -45) {
+        if (getArmPositionDegrees() < ElevatorConstants.kAngleBad) {
             positionMeters = currentPosMeters;
         }
 
