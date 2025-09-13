@@ -1,5 +1,7 @@
-package frc.robot.commands.end_effector;
+package frc.robot.commands;
 
+import frc.robot.commands.end_effector.Intake;
+import frc.robot.commands.end_effector.Outtake;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
 public class EndEffectorCommands {
