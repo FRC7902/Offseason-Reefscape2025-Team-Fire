@@ -46,7 +46,7 @@ public class ArmSubsystem extends SubsystemBase {
   private final MotionMagicVoltage m_motionMagicRequest = new MotionMagicVoltage(0).withSlot(0);
 
   /** WCP Through-Bore encoder object */
-  private final CANcoder m_armEncoder = new CANcoder(ArmConstants.kArmEncoderPort);
+  private final CANcoder m_armEncoder = new CANcoder(ArmConstants.kArmCANID);
 
   /** Arm encoder sim state */
   private final CANcoderSimState m_armEncoderSim = m_armEncoder.getSimState();

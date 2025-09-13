@@ -66,10 +66,8 @@ public final class Constants {
         public static final boolean kTuningMode = false;
 
         // CAN IDs
-        public static final int kArmMotorCANID = 50;
-
-        // Encoder Ports
-        public static final int kArmEncoderPort = 5;
+        public static final int kArmMotorCANID = 21;
+        public static final int kArmCANID = 2;
 
         // Physical Constants
         public static final double kArmGearing = 67.5;
