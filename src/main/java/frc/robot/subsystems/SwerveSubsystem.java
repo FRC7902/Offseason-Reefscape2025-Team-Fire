@@ -466,4 +466,9 @@ public class SwerveSubsystem extends SubsystemBase {
                 new Translation2d(0, strafePower * Math.abs(speedMultiplier) * swerveDrive.getMaximumChassisVelocity()),
                 0, false, false);
     }
+
+    public Pose2d getNearestWaypoint() {
+        Pose2d currPos = swerveDrive.getPose();
+        return currPos.nearest(List.copyOf(Constants.VisionConstants.WAYPOINTS.values()));
+    }
 }
