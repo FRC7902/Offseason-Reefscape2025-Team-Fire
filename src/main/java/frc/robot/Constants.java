@@ -51,7 +51,6 @@ public final class Constants {
         public static final int MOTOR_STATOR_CURRENT_LIMIT = 40;
         public static final double INTAKE_SPEED = 1;
         public static final double OUTTAKE_SPEED = -1;
-        public static final double HOLD_SPEED = 0.25;
     }
 
     public static class ElevatorArmConstants {

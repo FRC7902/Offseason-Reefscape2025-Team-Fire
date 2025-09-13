@@ -48,8 +48,8 @@ public class RobotContainer {
     public RobotContainer() {
         // Configure the trigger bindings
         configureBindings();
-        m_swerveSubsystem.setDefaultCommand(
-                !RobotBase.isSimulation() ? driveFieldOrientedAngularVelocity : driveFieldOrientedDirectAngleSim);
+        /*m_swerveSubsystem.setDefaultCommand(
+                !RobotBase.isSimulation() ? driveFieldOrientedAngularVelocity : driveFieldOrientedDirectAngleSim);*/
     }
 
     public SwerveInputStream driveAngularVelocity = SwerveInputStream
@@ -118,12 +118,11 @@ public class RobotContainer {
         m_driverController.rightBumper().whileTrue(FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem));
 
         // EndEffectorSubsystem
-        m_endEffectorSubsystem.setDefaultCommand(EndEffectorCommands.Hold(m_endEffectorSubsystem));
         m_driverController.leftTrigger().whileTrue(EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem));
         m_driverController.rightTrigger().whileTrue(EndEffectorCommands.OuttakeEffector(m_endEffectorSubsystem));
 
-        m_swerveSubsystem.setDefaultCommand(
-                Robot.isSimulation() ? driveFieldOrientedAngularVelocity : driveRobotOrientedAngularVelocity);
+        /*m_swerveSubsystem.setDefaultCommand(
+                Robot.isSimulation() ? driveFieldOrientedAngularVelocity : driveRobotOrientedAngularVelocity);*/
     }
 
     /**

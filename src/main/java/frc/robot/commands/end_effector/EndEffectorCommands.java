@@ -10,8 +10,4 @@ public class EndEffectorCommands {
     public static Outtake OuttakeEffector(EndEffectorSubsystem endEffectorSubsystem) {
         return new Outtake(endEffectorSubsystem);
     }
-
-    public static Hold Hold(EndEffectorSubsystem endEffectorSubsystem) {
-        return new Hold(endEffectorSubsystem);
-    }
 }
