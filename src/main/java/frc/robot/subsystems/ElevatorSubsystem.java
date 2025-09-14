@@ -150,7 +150,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         // Set motor configuration
         m_motorConfig.MotorOutput.Inverted = RobotBase.isSimulation() ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive;
-        m_motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        m_motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast; // TODO: Change back to brake mode
 
         // Set slot 0 values
         m_motorConfig.Slot0.kP = ElevatorConstants.kElevatorP;

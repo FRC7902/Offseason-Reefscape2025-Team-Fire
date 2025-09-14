@@ -141,12 +141,13 @@ public final class Constants {
 
         // SAFETY CONSTANT
         public static final double kAngleBad = -40;
-        public static final double kElvPosBadMeters = Units.inchesToMeters(11.25);
+        //        public static final double kElvPosBadMeters = Units.inchesToMeters(11.25);
+        public static final double kElvPosBadMeters = 0.403;
 
 
         // Motion Constraints
         public static final double kElevatorMaxVelocity =
-                2/kElevatorMetersPerMotorRotation;
+                2 / kElevatorMetersPerMotorRotation;
         // rotations per second
         public static final double kElevatorMaxAcceleration = 1600.0;
 
