@@ -46,7 +46,7 @@ public final class Constants {
 
     public static class EndEffectorConstants {
         public static final int MOTOR_CAN_ID = 20;
-        public static final int CORAL_BEAM_BREAK_PORT_ID = 4;
+        public static final int CORAL_BEAM_BREAK_PORT_ID = 0;
         public static final int ALGAE_PROXIMITY_SENSOR_PORT_ID = -1;
         public static final int MOTOR_STATOR_CURRENT_LIMIT = 40;
         public static final double INTAKE_SPEED = 1;
@@ -109,6 +109,8 @@ public final class Constants {
         public static final double kArmAlgaeHighAngle = 0.0;
 
         public static final double kArmBargeAngle = 50.0;
+
+        public static final double kArmTargetError = 3;
     }
 
     public static class ElevatorConstants {
@@ -132,14 +134,14 @@ public final class Constants {
 
         // Elevator Dimensions
         public static final double kElevatorHeightMeters = Units.inchesToMeters(42);
-        public static final double kElevatorMinHeightMeters = Units.inchesToMeters(22.75);
+        public static final double kElevatorMinHeightMeters = Units.inchesToMeters(0);
         public static final double kElevatorZeroThreshold = kElevatorMinHeightMeters + 0.01;
-        public static final double kElevatorMaxHeightMeters = Units.inchesToMeters(69.0 + 1);
+        public static final double kElevatorMaxHeightMeters = Units.inchesToMeters(49);
         public static final double kElevatorCarriageHeightMeters = Units.inchesToMeters(18.5);
 
         // SAFETY CONSTANT
         public static final double kAngleBad = -40;
-        public static final double kElvPosBad = 34;
+        public static final double kElvPosBadMeters = Units.inchesToMeters(11.25);
 
 
         // Motion Constraints
@@ -165,12 +167,12 @@ public final class Constants {
 
         public static final double kElevatorCoralLevel1Height = Units.inchesToMeters(26.75);
         public static final double kElevatorCoralLevel2Height = Units.inchesToMeters(27.5);
-        public static final double kElevatorCoralLevel3Height = Units.inchesToMeters(44);
-        public static final double kElevatorCoralLevel4Height = Units.inchesToMeters(69.0 + 1);
+        public static final double kElevatorCoralLevel3Height = Units.inchesToMeters(30);
+        public static final double kElevatorCoralLevel4Height = Units.inchesToMeters(47);
 
         public static final double kElevatorAlgaeLowHeight = Units.inchesToMeters(28.5);
         public static final double kElevatorAlgaeHighHeight = Units.inchesToMeters(44.25);
-        public static final double kElevatorBargeHeight = Units.inchesToMeters(69.0 + 1);
+        public static final double kElevatorBargeHeight = Units.inchesToMeters(47);
         // ==============================
 
         // ===== Control Parameters =====

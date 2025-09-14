@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -45,11 +44,11 @@ public class EndEffectorSubsystem extends SubsystemBase {
 
   }
 
-  public boolean isCoralDetected() {
+  public boolean hasCoral() {
      return !m_coralBeamBreak.get();
   }
 
-  public boolean isAlgaeDetected() {
+  public boolean hasAlgae() {
     // return m_algaeProximitySensor.get();
     return false;
   }
@@ -65,6 +64,6 @@ public class EndEffectorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-      SmartDashboard.putBoolean("Coral Beam Break Broken", isCoralDetected());
+      SmartDashboard.putBoolean("End Effector — Has Coral", hasCoral());
   }
 }

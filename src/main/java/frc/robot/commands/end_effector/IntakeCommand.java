@@ -43,6 +43,6 @@ public class IntakeCommand extends Command {
     @Override
     public boolean isFinished() {
         // return m_endEffectorSubsystem.isCoralDetected() || m_endEffectorSubsystem.isAlgaeDetected();
-        return m_endEffectorSubsystem.isCoralDetected();
+        return m_endEffectorSubsystem.hasCoral();
     }
 }

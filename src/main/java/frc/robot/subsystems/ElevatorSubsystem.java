@@ -350,6 +350,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         return RobotContainer.m_armSubsystem.getArmPositionDegrees();
     }
 
+    public boolean hasReachedSetpoint() {
+        return Math.abs(getElevatorPositionMeters() - getSetpoint()) < ElevatorConstants.kElevatorTargetError;
+    }
+
     @Override
     public void periodic() {
         if (m_leaderMotor.getClosedLoopReference().getValueAsDouble()*ElevatorConstants.kElevatorMetersPerMotorRotation > ElevatorConstants.kElevatorMinHeightMeters &&
@@ -382,6 +386,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Leader Motor Pos", m_leaderMotor.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("Follower Motor Pos", m_followerMotor.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("Closed loop error metres", m_leaderMotor.getClosedLoopError().getValueAsDouble() * ElevatorConstants.kElevatorMetersPerMotorRotation);
+
+        SmartDashboard.putBoolean("Elevator — At Setpoint", hasReachedSetpoint());
 
         updateTelemetry();
     }
