@@ -50,6 +50,7 @@ public final class Constants {
         public static final int ALGAE_PROXIMITY_SENSOR_PORT_ID = -1;
         public static final int MOTOR_STATOR_CURRENT_LIMIT = 40;
         public static final double INTAKE_SPEED = 1;
+        public static final double SLOW_INTAKE_SPEED = 0.1;
         public static final double OUTTAKE_SPEED = -1;
     }
 
@@ -101,9 +102,12 @@ public final class Constants {
         public static final double kArmProcessorAngle = -45;
 
         public static final double kArmCoralLevel1Angle = 25;
-        public static final double kArmCoralLevel2Angle = 46.0;
-        public static final double kArmCoralLevel3Angle = 65;
-        public static final double kArmCoralLevel4Angle = 46;
+        //        public static final double kArmCoralLevel2Angle = 46.0;
+//        public static final double kArmCoralLevel3Angle = 65;
+//        public static final double kArmCoralLevel4Angle = 46;
+        public static final double kArmCoralLevel2Angle = 58.0;
+        public static final double kArmCoralLevel3Angle = 79.6;
+        public static final double kArmCoralLevel4Angle = 62.57;
 
         public static final double kArmAlgaeLowAngle = 0.0;
         public static final double kArmAlgaeHighAngle = 0.0;
@@ -166,10 +170,13 @@ public final class Constants {
         // ===== Elevator Setpoints =====
         public static final double kElevatorProcessorHeight = Units.inchesToMeters(22.5);
 
-        public static final double kElevatorCoralLevel1Height = Units.inchesToMeters(15.75);
-        public static final double kElevatorCoralLevel2Height = Units.inchesToMeters(27.5);
-        public static final double kElevatorCoralLevel3Height = Units.inchesToMeters(30);
-        public static final double kElevatorCoralLevel4Height = Units.inchesToMeters(47);
+        public static final double kElevatorCoralLevel1Height = 0.250; // TODO
+//        public static final double kElevatorCoralLevel2Height = Units.inchesToMeters(27.5);
+//        public static final double kElevatorCoralLevel3Height = Units.inchesToMeters(30);
+//        public static final double kElevatorCoralLevel4Height = Units.inchesToMeters(47);
+        public static final double kElevatorCoralLevel2Height = 0.315;
+        public static final double kElevatorCoralLevel3Height = 0.561;
+        public static final double kElevatorCoralLevel4Height = 1.228;
 
         public static final double kElevatorAlgaeLowHeight = Units.inchesToMeters(28.5);
         public static final double kElevatorAlgaeHighHeight = Units.inchesToMeters(44.25);
@@ -177,7 +184,7 @@ public final class Constants {
         // ==============================
 
         // ===== Control Parameters =====
-        public static final double kElevatorTargetError = 0.005;
+        public static final double kElevatorTargetError = 0.01;
         public static final double kElevatorMotorResistance = 0.002; // Assume 2mOhm resistance for
         // voltage drop calculation
         // ==============================

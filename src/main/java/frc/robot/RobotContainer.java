@@ -117,10 +117,27 @@ public class RobotContainer {
      */
     private void configureBindings() {
         // FunnelSubsystem
-        m_funnelIndexerSubsystem.setDefaultCommand(FunnelCommands.IntakeCoral(m_funnelIndexerSubsystem));
+        m_funnelIndexerSubsystem.setDefaultCommand(
+                new ConditionalCommand(
+                        new InstantCommand(),
+                        FunnelCommands.IntakeCoral(m_funnelIndexerSubsystem),
+                        m_endEffectorSubsystem::hasCoral
+                )
+        );
 //        m_driverController.rightBumper().whileTrue(FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem));
 
         // EndEffectorSubsystem
+        m_endEffectorSubsystem.setDefaultCommand(
+                new ConditionalCommand(
+                        new InstantCommand(),
+                        new InstantCommand(
+                                () ->
+                                        m_endEffectorSubsystem.setSpeed(Constants.EndEffectorConstants.SLOW_INTAKE_SPEED),
+                                m_endEffectorSubsystem
+                        ),
+                        m_endEffectorSubsystem::hasCoral
+                )
+        );
 //        m_endEffectorSubsystem.setDefaultCommand(
 //                new ConditionalCommand(
 //                        EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem)

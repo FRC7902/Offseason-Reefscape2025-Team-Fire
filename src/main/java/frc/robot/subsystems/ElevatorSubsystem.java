@@ -16,7 +16,9 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+
 import static edu.wpi.first.units.Units.Volts;
+
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
@@ -33,8 +35,10 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.RobotContainer;
 
 public class ElevatorSubsystem extends SubsystemBase {
-    
-    /** Elevator position enum */
+
+    /**
+     * Elevator position enum
+     */
     public enum ElevatorPosition {
         ZERO,
         CORAL_L1,
@@ -48,92 +52,118 @@ public class ElevatorSubsystem extends SubsystemBase {
         UNKNOWN
     }
 
-    /** Leader TalonFX motor */
+    /**
+     * Leader TalonFX motor
+     */
     private final TalonFX m_leaderMotor = new TalonFX(ElevatorConstants.kElevatorLeaderCANID);
 
-    /** Follower TalonFX motor */
+    /**
+     * Follower TalonFX motor
+     */
     private final TalonFX m_followerMotor = new TalonFX(ElevatorConstants.kElevatorFollowerCANID);
 
-    /** TalonFX motor configuration */
+    /**
+     * TalonFX motor configuration
+     */
     private final TalonFXConfiguration m_motorConfig = new TalonFXConfiguration();
 
-    /** Motor voltage request object */
+    /**
+     * Motor voltage request object
+     */
     private VoltageOut m_voltageRequest = new VoltageOut(0);
 
-    /** Motion magic request object */
+    /**
+     * Motion magic request object
+     */
     private MotionMagicVoltage m_motionMagicRequest = new MotionMagicVoltage(0);
 
-    /** Simulated elevator instance object */
+    /**
+     * Simulated elevator instance object
+     */
     private final ElevatorSim m_elevatorSim = new ElevatorSim(
-        DCMotor.getKrakenX60(2),
-        ElevatorConstants.kElevatorGearing,
-        ElevatorConstants.kElevatorCarriageMass,
-        ElevatorConstants.kElevatorDrumRadius,
-        ElevatorConstants.kElevatorMinHeightMeters,
-        ElevatorConstants.kElevatorMaxHeightMeters,
-        true,
-        ElevatorConstants.kElevatorHeightMeters,
-        0, 0
-    );
-
-    /** Mechanism2d instance for the elevator */
-    private final Mechanism2d m_mech2d = new Mechanism2d(
-        Units.inchesToMeters(50), 
-        Units.inchesToMeters(100)
-    );
-
-    /** Elevator base mechanism root */
-    private final MechanismRoot2d m_elevatorBase2d = m_mech2d.getRoot(
-        "ElevatorRoot", 
-        Units.inchesToMeters(25), 
-        Units.inchesToMeters(0.5)
-    );
-
-    /** Elevator carriage mechanism root */
-    private final MechanismRoot2d m_elevatorCarriageRoot2d = m_mech2d.getRoot(
-        "ElevatorCarriage",
-        Units.inchesToMeters(25),
-        Units.inchesToMeters(0.5) + ElevatorConstants.kElevatorMinHeightMeters
-    );
-
-    /** Main elevator ligament, represents the whole elevator */
-    private final MechanismLigament2d m_elevator2d = m_elevatorBase2d.append(
-        new MechanismLigament2d(
-            "Elevator",
+            DCMotor.getKrakenX60(2),
+            ElevatorConstants.kElevatorGearing,
+            ElevatorConstants.kElevatorCarriageMass,
+            ElevatorConstants.kElevatorDrumRadius,
+            ElevatorConstants.kElevatorMinHeightMeters,
+            ElevatorConstants.kElevatorMaxHeightMeters,
+            true,
             ElevatorConstants.kElevatorHeightMeters,
-            90,
-            7,
-            new Color8Bit(Color.kAntiqueWhite)
-        ) 
+            0, 0
     );
 
-    /** Elevator carriage ligament */
-    private final MechanismLigament2d m_elevatorCarriageLigament2d = m_elevatorCarriageRoot2d.append(
-        new MechanismLigament2d(
+    /**
+     * Mechanism2d instance for the elevator
+     */
+    private final Mechanism2d m_mech2d = new Mechanism2d(
+            Units.inchesToMeters(50),
+            Units.inchesToMeters(100)
+    );
+
+    /**
+     * Elevator base mechanism root
+     */
+    private final MechanismRoot2d m_elevatorBase2d = m_mech2d.getRoot(
+            "ElevatorRoot",
+            Units.inchesToMeters(25),
+            Units.inchesToMeters(0.5)
+    );
+
+    /**
+     * Elevator carriage mechanism root
+     */
+    private final MechanismRoot2d m_elevatorCarriageRoot2d = m_mech2d.getRoot(
             "ElevatorCarriage",
-            ElevatorConstants.kElevatorCarriageHeightMeters,
-            270,
-            15,
-            new Color8Bit(Color.kDarkRed)
-        )
+            Units.inchesToMeters(25),
+            Units.inchesToMeters(0.5) + ElevatorConstants.kElevatorMinHeightMeters
     );
 
-    /** Target setpoint for the elevator in meters */
+    /**
+     * Main elevator ligament, represents the whole elevator
+     */
+    private final MechanismLigament2d m_elevator2d = m_elevatorBase2d.append(
+            new MechanismLigament2d(
+                    "Elevator",
+                    ElevatorConstants.kElevatorHeightMeters,
+                    90,
+                    7,
+                    new Color8Bit(Color.kAntiqueWhite)
+            )
+    );
+
+    /**
+     * Elevator carriage ligament
+     */
+    private final MechanismLigament2d m_elevatorCarriageLigament2d = m_elevatorCarriageRoot2d.append(
+            new MechanismLigament2d(
+                    "ElevatorCarriage",
+                    ElevatorConstants.kElevatorCarriageHeightMeters,
+                    270,
+                    15,
+                    new Color8Bit(Color.kDarkRed)
+            )
+    );
+
+    /**
+     * Target setpoint for the elevator in meters
+     */
     private double m_elevatorSetPointMeters = ElevatorConstants.kElevatorMinHeightMeters;
 
-    /** SysId routine object to determine S, V, and A constants */
+    /**
+     * SysId routine object to determine S, V, and A constants
+     */
     private final SysIdRoutine m_sysIdRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(
-            null,
-            Volts.of(4),
-            null,
-            (state) -> SignalLogger.writeString("state", state.toString())
-        ),
-        new SysIdRoutine.Mechanism(
-            (volts) -> m_leaderMotor.setControl(m_voltageRequest.withOutput(volts.in(Volts))),
-            null,
-            this
-        )
+            new SysIdRoutine.Config(
+                    null,
+                    Volts.of(4),
+                    null,
+                    (state) -> SignalLogger.writeString("state", state.toString())
+            ),
+            new SysIdRoutine.Mechanism(
+                    (volts) -> m_leaderMotor.setControl(m_voltageRequest.withOutput(volts.in(Volts))),
+                    null,
+                    this
+            )
     );
 
     public ElevatorSubsystem() {
@@ -182,7 +212,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         // Set current limits
         m_motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        m_motorConfig.CurrentLimits.SupplyCurrentLimit = ElevatorConstants.kElevatorSupplyCurrentLimit; 
+        m_motorConfig.CurrentLimits.SupplyCurrentLimit = ElevatorConstants.kElevatorSupplyCurrentLimit;
 
         // Set follower
         m_followerMotor.setControl(new Follower(m_leaderMotor.getDeviceID(), true));
@@ -201,8 +231,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     /**
      * Sets the elevator position based on the provided ElevatorPosition enum.
-     * 
-     * @param position The desired elevator position enum.
+     *
+     * @param positionEnum The desired elevator position enum.
      */
     public void setElevatorPositionEnum(ElevatorPosition positionEnum) {
         m_elevatorSetPointMeters = switch (positionEnum) {
@@ -223,14 +253,14 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     /**
      * Sets the elevator position in meters.
-     * 
+     *
      * @param positionMeters The desired elevator position in meters.
      */
     public void setElevatorPositionMeters(double positionMeters) {
         double currentPosMeters = getElevatorPositionMeters();
-        if(positionMeters < ElevatorConstants.kElevatorMinHeightMeters) {
+        if (positionMeters < ElevatorConstants.kElevatorMinHeightMeters) {
             positionMeters = ElevatorConstants.kElevatorMinHeightMeters;
-        } else if(positionMeters > ElevatorConstants.kElevatorMaxHeightMeters) {
+        } else if (positionMeters > ElevatorConstants.kElevatorMaxHeightMeters) {
             positionMeters = ElevatorConstants.kElevatorMaxHeightMeters;
         }
         if (getArmPositionDegrees() < ElevatorConstants.kAngleBad) {
@@ -253,7 +283,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     /**
      * Gets the current elevator position in meters.
-     * 
+     *
      * @return The current elevator position in meters.
      */
     public double getElevatorPositionMeters() {
@@ -263,28 +293,50 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     /**
      * Gets the current elevator position in the ElevatorPosition enum. Returns UKNOWN if not in a valid position.
-     * 
+     *
      * @return The current elevator position as an ElevatorPosition enum.
      */
     public ElevatorPosition getElevatorPositionEnum() {
-        double positionMeters = getElevatorPositionMeters();
-        if (positionMeters < ElevatorConstants.kElevatorMinHeightMeters + 0.01) {
+        double currentHeightMeters = getElevatorPositionMeters();
+//        if (positionMeters < ElevatorConstants.kElevatorMinHeightMeters + 0.01) {
+//            return ElevatorPosition.ZERO;
+//        } else if (positionMeters < ElevatorConstants.kElevatorCoralLevel1Height + ElevatorConstants.kElevatorTargetError*2) {
+//            return ElevatorPosition.CORAL_L1;
+//        } else if (positionMeters < ElevatorConstants.kElevatorCoralLevel2Height + ElevatorConstants.kElevatorTargetError*2) {
+//            return ElevatorPosition.CORAL_L2;
+//        } else if (positionMeters < ElevatorConstants.kElevatorCoralLevel3Height + ElevatorConstants.kElevatorTargetError*2) {
+//            return ElevatorPosition.CORAL_L3;
+//        } else if (positionMeters < ElevatorConstants.kElevatorCoralLevel4Height + ElevatorConstants.kElevatorTargetError*2) {
+//            return ElevatorPosition.CORAL_L4;
+//        } else if (positionMeters < ElevatorConstants.kElevatorProcessorHeight + ElevatorConstants.kElevatorTargetError*2) {
+//            return ElevatorPosition.PROCESSOR;
+//        } else if (positionMeters < ElevatorConstants.kElevatorAlgaeHighHeight + ElevatorConstants.kElevatorTargetError*2) {
+//            return ElevatorPosition.ALGAE_HIGH;
+//        } else if (positionMeters < ElevatorConstants.kElevatorMaxHeightMeters + ElevatorConstants.kElevatorTargetError*2) {
+//            return ElevatorPosition.ALGAE_LOW;
+//        } else if (positionMeters < ElevatorConstants.kElevatorBargeHeight + ElevatorConstants.kElevatorTargetError*2) {
+//            return ElevatorPosition.BARGE;
+//        } else {
+//            return ElevatorPosition.UNKNOWN;
+//        }
+
+        if (Math.abs(currentHeightMeters - ElevatorConstants.kElevatorMinHeightMeters) < ElevatorConstants.kElevatorTargetError * 2) {
             return ElevatorPosition.ZERO;
-        } else if (positionMeters < ElevatorConstants.kElevatorCoralLevel1Height + ElevatorConstants.kElevatorTargetError*2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.kElevatorCoralLevel1Height) < ElevatorConstants.kElevatorTargetError * 2) {
             return ElevatorPosition.CORAL_L1;
-        } else if (positionMeters < ElevatorConstants.kElevatorCoralLevel2Height + ElevatorConstants.kElevatorTargetError*2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.kElevatorCoralLevel2Height) < ElevatorConstants.kElevatorTargetError * 2) {
             return ElevatorPosition.CORAL_L2;
-        } else if (positionMeters < ElevatorConstants.kElevatorCoralLevel3Height + ElevatorConstants.kElevatorTargetError*2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.kElevatorCoralLevel3Height) < ElevatorConstants.kElevatorTargetError * 2) {
             return ElevatorPosition.CORAL_L3;
-        } else if (positionMeters < ElevatorConstants.kElevatorCoralLevel4Height + ElevatorConstants.kElevatorTargetError*2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.kElevatorCoralLevel4Height) < ElevatorConstants.kElevatorTargetError * 2) {
             return ElevatorPosition.CORAL_L4;
-        } else if (positionMeters < ElevatorConstants.kElevatorProcessorHeight + ElevatorConstants.kElevatorTargetError*2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.kElevatorProcessorHeight) < ElevatorConstants.kElevatorTargetError * 2) {
             return ElevatorPosition.PROCESSOR;
-        } else if (positionMeters < ElevatorConstants.kElevatorAlgaeHighHeight + ElevatorConstants.kElevatorTargetError*2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.kElevatorAlgaeHighHeight) < ElevatorConstants.kElevatorTargetError * 2) {
             return ElevatorPosition.ALGAE_HIGH;
-        } else if (positionMeters < ElevatorConstants.kElevatorMaxHeightMeters + ElevatorConstants.kElevatorTargetError*2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.kElevatorMaxHeightMeters) < ElevatorConstants.kElevatorTargetError * 2) {
             return ElevatorPosition.ALGAE_LOW;
-        } else if (positionMeters < ElevatorConstants.kElevatorBargeHeight + ElevatorConstants.kElevatorTargetError*2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.kElevatorBargeHeight) < ElevatorConstants.kElevatorTargetError * 2) {
             return ElevatorPosition.BARGE;
         } else {
             return ElevatorPosition.UNKNOWN;
@@ -293,7 +345,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     /**
      * SysId quasistatic test
-     * 
+     *
      * @param direction The direction of the test (up or down)
      * @see SysIdRoutine.Direction
      */
@@ -303,7 +355,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     /**
      * SysId dynamic test
-     * 
+     *
      * @param direction The direction of the test (up or down)
      * @see SysIdRoutine.Direction
      */
@@ -311,8 +363,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_sysIdRoutine.dynamic(direction);
     }
 
-    /** 
-     * Update telemetry, including the mechanism visualization 
+    /**
+     * Update telemetry, including the mechanism visualization
      */
     public void updateTelemetry() {
         if (getElevatorPositionMeters() > ElevatorConstants.kElevatorHeightMeters) {
@@ -320,12 +372,12 @@ public class ElevatorSubsystem extends SubsystemBase {
         } else {
             m_elevator2d.setLength(ElevatorConstants.kElevatorHeightMeters);
         }
-        m_elevatorCarriageRoot2d.setPosition(Units.inchesToMeters(25), Units.inchesToMeters(0.5)+getElevatorPositionMeters());
+        m_elevatorCarriageRoot2d.setPosition(Units.inchesToMeters(25), Units.inchesToMeters(0.5) + getElevatorPositionMeters());
     }
 
     /**
      * Gets the current setpoint for the elevator in meters.
-     * 
+     *
      * @return The current elevator setpoint in meters.
      */
     public double getSetpoint() {
@@ -334,7 +386,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     /**
      * Gets the Mechanism2d instance for the elevator subsystem.
-     * 
+     *
      * @return The Mechanism2d instance.
      */
     public Mechanism2d getMechanism2d() {
@@ -343,7 +395,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     /**
      * Gets the position of the arm in degrees
-     * 
+     *
      * @return The position of the arm in degrees
      */
     private double getArmPositionDegrees() {
@@ -356,10 +408,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (m_leaderMotor.getClosedLoopReference().getValueAsDouble()*ElevatorConstants.kElevatorMetersPerMotorRotation > ElevatorConstants.kElevatorMinHeightMeters &&
-            m_leaderMotor.getClosedLoopReference().getValueAsDouble()*ElevatorConstants.kElevatorMetersPerMotorRotation < ElevatorConstants.kElevatorZeroThreshold &&
-            m_leaderMotor.getPosition().getValueAsDouble()*ElevatorConstants.kElevatorMetersPerMotorRotation > ElevatorConstants.kElevatorMinHeightMeters &&
-            m_leaderMotor.getPosition().getValueAsDouble()*ElevatorConstants.kElevatorMetersPerMotorRotation < ElevatorConstants.kElevatorZeroThreshold)
+        if (m_leaderMotor.getClosedLoopReference().getValueAsDouble() * ElevatorConstants.kElevatorMetersPerMotorRotation > ElevatorConstants.kElevatorMinHeightMeters &&
+                m_leaderMotor.getClosedLoopReference().getValueAsDouble() * ElevatorConstants.kElevatorMetersPerMotorRotation < ElevatorConstants.kElevatorZeroThreshold &&
+                m_leaderMotor.getPosition().getValueAsDouble() * ElevatorConstants.kElevatorMetersPerMotorRotation > ElevatorConstants.kElevatorMinHeightMeters &&
+                m_leaderMotor.getPosition().getValueAsDouble() * ElevatorConstants.kElevatorMetersPerMotorRotation < ElevatorConstants.kElevatorZeroThreshold)
             m_leaderMotor.setVoltage(0);
         else {
             m_leaderMotor.setControl(m_motionMagicRequest);
@@ -378,7 +430,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
             m_leaderMotor.getConfigurator().apply(m_motorConfig);
         }
-        
+
         SmartDashboard.putNumber("Elevator Position (m)", getElevatorPositionMeters());
         SmartDashboard.putNumber("Elevator Setpoint (m)", m_elevatorSetPointMeters);
         SmartDashboard.putString("Elevator Position Enum", getElevatorPositionEnum().toString());
@@ -404,7 +456,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_leaderMotor.getSimState().setRotorVelocity(velocityRPS);
 
         RoboRioSim.setVInVoltage(
-            BatterySim.calculateDefaultBatteryLoadedVoltage(m_elevatorSim.getCurrentDrawAmps())
+                BatterySim.calculateDefaultBatteryLoadedVoltage(m_elevatorSim.getCurrentDrawAmps())
         );
     }
 }
