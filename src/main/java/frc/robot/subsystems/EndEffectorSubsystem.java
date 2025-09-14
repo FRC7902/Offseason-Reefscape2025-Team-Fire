@@ -11,6 +11,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.EndEffectorConstants;
 
@@ -20,7 +21,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   private final TalonFXConfiguration m_motorConfig;
   private final MotorOutputConfigs m_motorOutputConfig;
 
-  // private final DigitalInput m_coralBeamBreak;
+   private final DigitalInput m_coralBeamBreak;
   // private final DigitalInput m_algaeProximitySensor;
 
 
@@ -31,7 +32,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
     m_motorConfig = new TalonFXConfiguration();
     m_motorOutputConfig = new MotorOutputConfigs();
     
-    // m_coralBeamBreak = new DigitalInput(EndEffectorConstants.CORAL_BEAM_BREAK_PORT_ID);
+     m_coralBeamBreak = new DigitalInput(EndEffectorConstants.CORAL_BEAM_BREAK_PORT_ID);
     // m_algaeProximitySensor = new DigitalInput(EndEffectorConstants.ALGAE_PROXIMITY_SENSOR_PORT_ID);
     
     m_motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -45,8 +46,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public boolean isCoralDetected() {
-    // return m_coralBeamBreak.get();
-    return false;
+     return !m_coralBeamBreak.get();
   }
 
   public boolean isAlgaeDetected() {
@@ -65,5 +65,6 @@ public class EndEffectorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+      SmartDashboard.putBoolean("Coral Beam Break Broken", isCoralDetected());
   }
 }
