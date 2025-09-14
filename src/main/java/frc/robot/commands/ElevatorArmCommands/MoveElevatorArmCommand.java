@@ -4,7 +4,9 @@
 
 package frc.robot.commands.ElevatorArmCommands;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.ElevatorSubsystem;
 
@@ -43,6 +45,16 @@ public class MoveElevatorArmCommand extends Command {
             RobotContainer.m_elevatorSubsystem.setElevatorPositionMeters(positionMeters);
             RobotContainer.m_armSubsystem.setArmPositionDegrees(angleDegrees);
         }
+
+//        if (RobotContainer.m_elevatorSubsystem.getElevatorPositionMeters() > Constants.ElevatorConstants.kElevatorCoralLevel1Height) {
+//            RobotContainer.m_swerveSubsystem.setSlewRateLimiters(
+//                    new SlewRateLimiter(
+//                            0.1,
+//                            -0.1,
+//                            0.0
+//                    )
+//            );
+//        }
     }
 
     // Called once the command ends or is interrupted.
@@ -54,5 +66,6 @@ public class MoveElevatorArmCommand extends Command {
     @Override
     public boolean isFinished() {
 //        return RobotContainer.m_elevatorSubsystem.hasReachedSetpoint() && RobotContainer.m_armSubsystem.hasReachedAngle();
+        return false;
     }
 }

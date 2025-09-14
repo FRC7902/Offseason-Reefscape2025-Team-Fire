@@ -12,6 +12,7 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -79,6 +80,10 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.swerveController.setMaximumChassisAngularVelocity(20);
     }
 
+    public void setSlewRateLimiters(SlewRateLimiter xLimiter, SlewRateLimiter yLimiter, SlewRateLimiter omegaLimiter) {
+        swerveDrive.swerveController.addSlewRateLimiters(xLimiter, yLimiter, omegaLimiter);
+    }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
@@ -133,6 +138,10 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.replaceSwerveModuleFeedforward(new SimpleMotorFeedforward(kS, kV, kA));
     }
 
+    public double getMaximumChassisAngularVelocity() {
+        return swerveDrive.getMaximumChassisAngularVelocity();
+    }
+
     /**
      * Command to drive the robot using translative values and heading as angular
      * velocity.
@@ -145,11 +154,6 @@ public class SwerveSubsystem extends SubsystemBase {
      *                         smoother controls.
      * @return Drive command.
      */
-
-    public double getMaximumChassisAngularVelocity() {
-        return swerveDrive.getMaximumChassisAngularVelocity();
-    }
-
     public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY,
             DoubleSupplier angularRotationX) {
         return run(() -> {

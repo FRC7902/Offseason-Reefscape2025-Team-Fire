@@ -146,7 +146,7 @@ public class ArmSubsystem extends SubsystemBase {
         m_armMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
         m_armMotorConfig.Feedback.FeedbackRemoteSensorID = m_armEncoder.getDeviceID();
 
-        m_armMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast; // TODO: Change back to coast mode
+        m_armMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         m_armMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         m_armMotor.getConfigurator().apply(m_armMotorConfig);
@@ -254,7 +254,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         if ((getElevatorPositionMeters() < ElevatorConstants.kElvPosBadMeters || getElevatorSetpointMeters() < ElevatorConstants.kElvPosBadMeters) && targetPosition > ArmConstants.kbadARMPOS) {
             targetPosition = ArmConstants.kbadARMPOS;
-        } else if ((getElevatorPositionMeters() > ElevatorConstants.kElvPosBadMeters || getElevatorSetpointMeters() > ElevatorConstants.kElvPosBadMeters) && targetPosition < ElevatorConstants.kAngleBad) {
+        } else if ((getElevatorPositionMeters() > 0.0598 || getElevatorSetpointMeters() > 0.0598) && targetPosition < ElevatorConstants.kAngleBad) {
             targetPosition = ElevatorConstants.kAngleBad;
         }
 

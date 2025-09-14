@@ -41,7 +41,7 @@ public final class Constants {
         public static final int SHALLOW_BEAM_BREAK_DIO = 2;
         public static final int DEEP_BEAM_BREAK_DIO = 3;
 
-        public static final int MOTOR_CURRENT_LIMIT = 30;
+        public static final int MOTOR_CURRENT_LIMIT = 20;
     }
 
     public static class EndEffectorConstants {
@@ -97,7 +97,7 @@ public final class Constants {
         // SAFETIES
         public static double kbadARMPOS = 45;
         // Arm Setpoints
-        public static final double kArmZeroAngle = -92;
+        public static final double kArmZeroAngle = -85;
         public static final double kArmProcessorAngle = -45;
 
         public static final double kArmCoralLevel1Angle = 25;
@@ -166,7 +166,7 @@ public final class Constants {
         // ===== Elevator Setpoints =====
         public static final double kElevatorProcessorHeight = Units.inchesToMeters(22.5);
 
-        public static final double kElevatorCoralLevel1Height = Units.inchesToMeters(26.75);
+        public static final double kElevatorCoralLevel1Height = Units.inchesToMeters(15.75);
         public static final double kElevatorCoralLevel2Height = Units.inchesToMeters(27.5);
         public static final double kElevatorCoralLevel3Height = Units.inchesToMeters(30);
         public static final double kElevatorCoralLevel4Height = Units.inchesToMeters(47);
