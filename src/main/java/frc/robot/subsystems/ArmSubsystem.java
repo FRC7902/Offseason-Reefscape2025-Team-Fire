@@ -238,18 +238,24 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
         // if the elevator is below a certain height, don't let the arm go above a certain angle - on the way up
-        if (
-                (getElevatorPositionMeters() < ElevatorConstants.kElvPosBadMeters) || // elevator is currently below the elevator threshold OR
-                        getElevatorSetpointMeters() < ElevatorConstants.kElvPosBadMeters &&  // the elevator is trying to go below the threshold and the arm is trying to go above the threshold
-                                targetPosition < ArmConstants.kbadARMPOS       //
-        ) {
-            targetPosition = ElevatorConstants.kAngleBad; // clamp the arm at the threshold -40
+//        if (
+//                (getElevatorPositionMeters() < ElevatorConstants.kElvPosBadMeters) || // elevator is currently below the elevator threshold OR
+//                        getElevatorSetpointMeters() < ElevatorConstants.kElvPosBadMeters &&  // the elevator is trying to go below the threshold and the arm is trying to go above the threshold
+//                                targetPosition < ArmConstants.kbadARMPOS       //
+//        ) {
+//            targetPosition = ElevatorConstants.kAngleBad; // clamp the arm at the threshold -40
 
-            // if the elevator is above a certain height, don't let the arm go below a certain angle - on the way down
-        } else if ((getElevatorPositionMeters() > ElevatorConstants.kElvPosBadMeters) || // elevator is currently above the elevator threshold OR
-                getElevatorSetpointMeters() > ElevatorConstants.kElvPosBadMeters // the elevator is trying to go above the threshold and the arm is trying to go below the threshold
-                        && targetPosition > ElevatorConstants.kAngleBad) {
-            targetPosition = ArmConstants.kbadARMPOS; // clamp the arm at 45
+        // if the elevator is above a certain height, don't let the arm go below a certain angle - on the way down
+//        } else if ((getElevatorPositionMeters() > ElevatorConstants.kElvPosBadMeters) || // elevator is currently above the elevator threshold OR
+//                getElevatorSetpointMeters() > ElevatorConstants.kElvPosBadMeters // the elevator is trying to go above the threshold and the arm is trying to go below the threshold
+//                        && targetPosition > ElevatorConstants.kAngleBad) {
+//            targetPosition = ArmConstants.kbadARMPOS; // clamp the arm at 45
+//        }
+
+        if ((getElevatorPositionMeters() < ElevatorConstants.kElvPosBadMeters || getElevatorSetpointMeters() < ElevatorConstants.kElvPosBadMeters) && targetPosition > ArmConstants.kbadARMPOS) {
+            targetPosition = ArmConstants.kbadARMPOS;
+        } else if ((getElevatorPositionMeters() > ElevatorConstants.kElvPosBadMeters || getElevatorSetpointMeters() > ElevatorConstants.kElvPosBadMeters) && targetPosition < ElevatorConstants.kAngleBad) {
+            targetPosition = ElevatorConstants.kAngleBad;
         }
 
 
