@@ -58,25 +58,27 @@ public final class Constants {
         public static final double kSupplyCurrentLimit = 50.0;
 
         // PID Constants
-        public static double kArmP = 20;
-        public static double kArmI = 0;
-        public static double kArmD = 0;
+        public static double kArmP = 60;
+        public static double kArmI = 0.1;
+
+        public static double kArmD = 0.01;
 
         // Feedforward Constants
-        public static double kArmS = 0.0; 
+        public static double kArmS = 0.0;
+
         public static double kArmG = 0.5; 
         public static double kArmV = 0.3; 
-        public static double kArmA = 0.1; 
+        public static double kArmA = 0.01; 
         // SAFETIES
         public static double kbadARMPOS = 45;
         // Arm Setpoints
         public static final double kArmZeroAngle = -92;
         public static final double kArmProcessorAngle = -45;
 
-        public static final double kArmCoralLevel1Angle = 25.0; 
+        public static final double kArmCoralLevel1Angle = 25; 
         public static final double kArmCoralLevel2Angle = 46.0;
-        public static final double kArmCoralLevel3Angle = 65.0;
-        public static final double kArmCoralLevel4Angle = 46.0;
+        public static final double kArmCoralLevel3Angle = 65;
+        public static final double kArmCoralLevel4Angle = 46;
 
         public static final double kArmAlgaeLowAngle = 0.0;
         public static final double kArmAlgaeHighAngle = 0.0;
@@ -117,20 +119,21 @@ public final class Constants {
 
         // Motion Constraints
         public static final double kElevatorMaxVelocity =
-                1.4/kElevatorMetersPerMotorRotation;
+                2/kElevatorMetersPerMotorRotation;
         // rotations per second
         public static final double kElevatorMaxAcceleration = 1600.0;
 
         // PID Constants
-        public static double kElevatorP = 60;
+        public static double kElevatorP = 20;
         public static double kElevatorI = 0;
         public static double kElevatorD = 0;
 
+
         // Elevator Gains
         public static double kElevatorS = 0.0;
-        public static double kElevatorG = 0.32; //0.23;
-        public static double kElevatorV = 6.17 * kElevatorMetersPerMotorRotation;
-        public static double kElevatorA = 0.2;
+        public static double kElevatorG = 0.23;
+        public static double kElevatorV = 0;//6.17 * kElevatorMetersPerMotorRotation;
+        public static double kElevatorA = 0;//0.02;
 
         // ===== Elevator Setpoints =====
         public static final double kElevatorProcessorHeight = Units.inchesToMeters(22.5);
