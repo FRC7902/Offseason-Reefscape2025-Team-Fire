@@ -25,8 +25,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -40,7 +42,9 @@ public class SwerveSubsystem extends SubsystemBase {
     /* Swerve drive object */
     private final SwerveDrive swerveDrive;
 
-    /** Creates a new SwerveSubsystem. */
+    /**
+     * Creates a new SwerveSubsystem.
+     */
     public SwerveSubsystem(CommandXboxController m_driverController, File directory) {
 
         // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary
@@ -78,18 +82,6 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.setChassisDiscretization(false, true, 0.03);
         swerveDrive.swerveController.addSlewRateLimiters(null, null, null);
         swerveDrive.swerveController.setMaximumChassisAngularVelocity(20);
-    }
-
-    @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
-        SmartDashboard.putNumber("Gyro angle rotation (rad)", swerveDrive.getGyro().getRotation3d().getAngle());
-
-        SmartDashboard.putString("Robo Pose2D", swerveDrive.getPose().toString());
-    }
-
-    @Override
-    public void simulationPeriodic() {
     }
 
     /**
@@ -151,13 +143,13 @@ public class SwerveSubsystem extends SubsystemBase {
      * @return Drive command.
      */
     public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY,
-            DoubleSupplier angularRotationX) {
+                                DoubleSupplier angularRotationX) {
         return run(() -> {
             // Make the robot move
             swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
-                    translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
-                    translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()),
-                    0.8),
+                                    translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
+                                    translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()),
+                            0.8),
                     Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumChassisAngularVelocity(),
                     true, false);
         });
@@ -176,7 +168,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * @return Drive command.
      */
     public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY,
-            DoubleSupplier headingX, DoubleSupplier headingY) {
+                                DoubleSupplier headingX, DoubleSupplier headingY) {
         // swerveDrive.setHeadingCorrection(true); // Normally you would want heading
         // correction for this kind of control.
         return run(() -> {
@@ -218,8 +210,8 @@ public class SwerveSubsystem extends SubsystemBase {
      */
     public void drive(Translation2d translation, double rotation, boolean fieldRelative) {
         swerveDrive.drive(translation, rotation, fieldRelative, false); // Open loop is disabled
-                                                                        // since it shouldn't be
-                                                                        // used most of the time.
+        // since it shouldn't be
+        // used most of the time.
     }
 
     /**
@@ -317,7 +309,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * Checks if the alliance is red, defaults to false if alliance isn't available.
      *
      * @return true if the red alliance, false if blue. Defaults to false if none is
-     *         available.
+     * available.
      */
     private boolean isRedAlliance() {
         var alliance = DriverStation.getAlliance();
@@ -374,7 +366,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * @return {@link ChassisSpeeds} which can be sent to the Swerve Drive.
      */
     public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, double headingX,
-            double headingY) {
+                                         double headingY) {
         Translation2d scaledInputs = SwerveMath.cubeTranslation(new Translation2d(xInput, yInput));
         return swerveDrive.swerveController.getTargetSpeeds(scaledInputs.getX(),
                 scaledInputs.getY(), headingX, headingY, getHeading().getRadians(),
@@ -465,5 +457,54 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.drive(
                 new Translation2d(0, strafePower * Math.abs(speedMultiplier) * swerveDrive.getMaximumChassisVelocity()),
                 0, false, false);
+    }
+
+    public void updateSlewRateLimiters() {
+        double currElevatorPositionMeters = RobotContainer.m_elevatorSubsystem.getElevatorPositionMeters();
+
+        if (currElevatorPositionMeters >= ElevatorConstants.L4_HEIGHT_METERS) {
+            swerveDrive.swerveController.addSlewRateLimiters(
+                    new SlewRateLimiter(0.25), // m/s^2 acceleration limit in the X direction
+                    new SlewRateLimiter(0.25), // m/s^2 acceleration limit in the Y direction
+                    new SlewRateLimiter(0.5) // rad/s^2 angular acceleration limit
+            );
+        } else if (currElevatorPositionMeters >= ElevatorConstants.L3_HEIGHT_METERS) {
+            swerveDrive.swerveController.addSlewRateLimiters(
+                    new SlewRateLimiter(0.5),
+                    new SlewRateLimiter(0.5),
+                    new SlewRateLimiter(1)
+            );
+        } else if (currElevatorPositionMeters >= ElevatorConstants.L2_HEIGHT_METERS) {
+            swerveDrive.swerveController.addSlewRateLimiters(
+                    new SlewRateLimiter(1),
+                    new SlewRateLimiter(1),
+                    new SlewRateLimiter(2)
+            );
+        } else if (currElevatorPositionMeters >= ElevatorConstants.L1_HEIGHT_METERS) {
+            swerveDrive.swerveController.addSlewRateLimiters(
+                    new SlewRateLimiter(2),
+                    new SlewRateLimiter(2),
+                    new SlewRateLimiter(3)
+            );
+        } else {
+            swerveDrive.swerveController.addSlewRateLimiters(
+                    new SlewRateLimiter(3),
+                    new SlewRateLimiter(3),
+                    new SlewRateLimiter(6)
+            );
+        }
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        SmartDashboard.putNumber("Swerve — Gyro angle rotation (rad)", swerveDrive.getGyro().getRotation3d().getAngle());
+        SmartDashboard.putString("Swerve — Robo Pose2D", swerveDrive.getPose().toString());
+
+        updateSlewRateLimiters();
+    }
+
+    @Override
+    public void simulationPeriodic() {
     }
 }
