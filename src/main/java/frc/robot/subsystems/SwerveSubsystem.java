@@ -80,10 +80,6 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.swerveController.setMaximumChassisAngularVelocity(20);
     }
 
-    public void setSlewRateLimiters(SlewRateLimiter xLimiter, SlewRateLimiter yLimiter, SlewRateLimiter omegaLimiter) {
-        swerveDrive.swerveController.addSlewRateLimiters(xLimiter, yLimiter, omegaLimiter);
-    }
-
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
