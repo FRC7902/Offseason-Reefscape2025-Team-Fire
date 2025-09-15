@@ -113,10 +113,10 @@ public class FunnelSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Shallow Beam Break", isShallowBeamBreakBroken());
-        SmartDashboard.putBoolean("Deep Beam Break", isDeepBeamBreakBroken());
+        SmartDashboard.putBoolean("Funnel — Shallow Beam Break", isShallowBeamBreakBroken());
+        SmartDashboard.putBoolean("Funnel — Deep Beam Break", isDeepBeamBreakBroken());
 
-        SmartDashboard.putBoolean("Has Coral", m_hasCoral);
+        SmartDashboard.putBoolean("Funnel — Has Coral", m_hasCoral);
 
         if (m_hasCoral) {
             if (!isShallowBeamBreakBroken()) {

@@ -8,7 +8,7 @@ import java.io.File;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.EndEffectorCommands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -18,6 +18,10 @@ import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
+import frc.robot.commands.ElevatorArmCommands.MoveElevatorArmCommand;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -32,6 +36,8 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final FunnelSubsystem m_funnelIndexerSubsystem = new FunnelSubsystem();
     private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
+    public final static ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
+    public final static ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController m_driverController = new CommandXboxController(
@@ -111,15 +117,109 @@ public class RobotContainer {
      */
     private void configureBindings() {
         // FunnelSubsystem
-        m_funnelIndexerSubsystem.setDefaultCommand(FunnelCommands.IntakeCoral(m_funnelIndexerSubsystem));
-        m_driverController.rightBumper().whileTrue(FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem));
+        m_funnelIndexerSubsystem.setDefaultCommand(
+                new ConditionalCommand(
+                        new InstantCommand(),
+                        FunnelCommands.IntakeCoral(m_funnelIndexerSubsystem),
+                        m_endEffectorSubsystem::hasCoral
+                )
+        );
+//        m_driverController.rightBumper().whileTrue(FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem));
 
         // EndEffectorSubsystem
-        m_driverController.leftTrigger().whileTrue(EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem));
+        m_endEffectorSubsystem.setDefaultCommand(
+                new ConditionalCommand(
+                        new InstantCommand(),
+                        new InstantCommand(
+                                () ->
+                                        m_endEffectorSubsystem.setSpeed(Constants.EndEffectorConstants.SLOW_INTAKE_SPEED),
+                                m_endEffectorSubsystem
+                        ),
+                        m_endEffectorSubsystem::hasCoral
+                )
+        );
+//        m_endEffectorSubsystem.setDefaultCommand(
+//                new ConditionalCommand(
+//                        EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem)
+//                                .until(
+//                                        () -> m_elevatorSubsystem.getElevatorPositionEnum() != ElevatorPosition.ZERO
+//                                ),
+//                        new InstantCommand(),
+//                        () -> m_elevatorSubsystem.getElevatorPositionEnum() == ElevatorPosition.ZERO &&
+//                                !m_endEffectorSubsystem.hasCoral()
+//                )
+//        );
+
+
+//        m_driverController.leftTrigger().onTrue(
+//                new ParallelCommandGroup(
+//                        new MoveElevatorArmCommand(ElevatorPosition.ZERO),
+//                        new ConditionalCommand(
+//                                new InstantCommand(),
+//                                new InstantCommand(),
+//                                () -> m_elevatorSubsystem.getElevatorPositionEnum() == ElevatorPosition.ZERO
+//                        )
+//                )
+//                new ParallelCommandGroup(
+//                        EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem),
+//                        FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem)
+//                )
+//        );
         m_driverController.rightTrigger().whileTrue(EndEffectorCommands.OuttakeEffector(m_endEffectorSubsystem));
 
-        m_swerveSubsystem.setDefaultCommand(
-                Robot.isSimulation() ? driveFieldOrientedAngularVelocity : driveRobotOrientedAngularVelocity);
+        // Intake coral
+//        m_driverController.leftTrigger().whileTrue(
+//                new MoveElevatorArmCommand(ElevatorPosition.ZERO)
+//                        .andThen(EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem))
+//        );
+
+        m_driverController.leftTrigger().whileTrue(
+                new ConditionalCommand(
+                        new InstantCommand(),
+                        new SequentialCommandGroup(
+                                // Move elevator to pickup position
+                                new ParallelRaceGroup(
+                                        new MoveElevatorArmCommand(ElevatorPosition.ZERO)
+                                                .until(
+                                                        () -> m_elevatorSubsystem.getElevatorPositionEnum() == ElevatorPosition.ZERO
+                                                                && m_funnelIndexerSubsystem.getHasCoral()
+                                                ),
+                                        FunnelCommands.IntakeCoral(m_funnelIndexerSubsystem)
+                                ),
+                                // Intake coral until funnel no longer detects it (shallow beam break)
+                                new ParallelCommandGroup(
+                                        EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem),
+                                        FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem)
+                                ).until(
+                                        () -> !m_funnelIndexerSubsystem.getHasCoral()
+                                ),
+                                // Run end effector intake, funnel intake, and move elevator + arm to level 1 simultaneously
+                                new ParallelCommandGroup(
+                                        EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem),
+                                        FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem),
+                                        new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1)
+                                )
+                        ),
+                        m_endEffectorSubsystem::hasCoral
+                )
+        );
+
+        // Elevator Setpoints
+        m_driverController.y().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
+        m_driverController.b().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
+        m_driverController.x().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
+        m_driverController.a().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
+
+//        m_driverController.rightBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH));
+//        m_driverController.leftBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));
+
+        m_driverController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ZERO));
+//        m_driverController.leftStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
+//
+//        m_driverController.rightStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
+
+        m_swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
+        m_driverController.start().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
     }
 
     /**
