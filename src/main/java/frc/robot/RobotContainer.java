@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.FunnelCommands;
 import frc.robot.commands.end_effector.IntakeCommand.IntakeMode;
+import frc.robot.commands.SwereCommands;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -48,7 +49,7 @@ public class RobotContainer {
     private final CommandPS5Controller m_operatorController = new CommandPS5Controller(
             OperatorConstants.OPERATOR_CONTROLLER_PORT);
 
-    public final SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem(
+    public final static SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem(
             new File(Filesystem.getDeployDirectory(), "swerve"));
 
     /**
@@ -226,6 +227,8 @@ public class RobotContainer {
         // ==========================
 
         m_operatorController.options().whileTrue(m_swerveSubsystem.centerModulesCommand());
+        m_driverController.povLeft().whileTrue(SwereCommands.StrafeLeft());
+        m_driverController.povRight().whileTrue(SwereCommands.StrafeRight());
     }
 
     /**
