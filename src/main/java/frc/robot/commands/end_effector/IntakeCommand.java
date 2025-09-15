@@ -62,8 +62,6 @@ public class IntakeCommand extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        // return RobotContainer.m_endEffectorSubsystem.isCoralDetected() || RobotContainer.m_endEffectorSubsystem.isAlgaeDetected();
-
         // Coral mode
         if (m_mode == IntakeMode.CORAL) {
             return RobotContainer.m_endEffectorSubsystem.hasCoral();
