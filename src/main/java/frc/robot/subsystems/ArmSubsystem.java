@@ -39,7 +39,7 @@ public class ArmSubsystem extends SubsystemBase {
     /**
      * Main arm TalonFX motor
      */
-    private final TalonFX m_armMotor = new TalonFX(ArmConstants.kArmMotorCANID);
+    private final TalonFX m_armMotor = new TalonFX(ArmConstants.MOTOR_CAN_ID);
 
     /**
      * Motor sim object
@@ -59,7 +59,7 @@ public class ArmSubsystem extends SubsystemBase {
     /**
      * WCP Through-Bore encoder object
      */
-    private final CANcoder m_armEncoder = new CANcoder(ArmConstants.kArmCANID);
+    private final CANcoder m_armEncoder = new CANcoder(ArmConstants.ENCODER_CAN_ID);
 
     /**
      * Arm encoder sim state
@@ -78,7 +78,7 @@ public class ArmSubsystem extends SubsystemBase {
             "ElevatorCarriage", 0, 0
     ).append(new MechanismLigament2d(
                     "Arm",
-                    ArmConstants.kArmLength,
+                    ArmConstants.LENGTH_METERS,
                     266
             )
     );
@@ -116,27 +116,27 @@ public class ArmSubsystem extends SubsystemBase {
     );
 
     public ArmSubsystem() {
-        if (ArmConstants.kTuningMode) {
-            SmartDashboard.putNumber("Arm P", ArmConstants.kArmP);
-            SmartDashboard.putNumber("Arm I", ArmConstants.kArmI);
-            SmartDashboard.putNumber("Arm D", ArmConstants.kArmD);
-            SmartDashboard.putNumber("Arm G", ArmConstants.kArmG);
+        if (ArmConstants.TUNING_MODE_ENABLED) {
+            SmartDashboard.putNumber("Arm P", ArmConstants.PID_P);
+            SmartDashboard.putNumber("Arm I", ArmConstants.PID_I);
+            SmartDashboard.putNumber("Arm D", ArmConstants.PID_D);
+            SmartDashboard.putNumber("Arm G", ArmConstants.FF_G);
         }
 
         // Configure motor
         Slot0Configs configs = m_armMotorConfig.Slot0;
-        configs.kP = ArmConstants.kArmP;
-        configs.kI = ArmConstants.kArmI;
-        configs.kD = ArmConstants.kArmD;
-        configs.kS = ArmConstants.kArmS;
-        configs.kV = ArmConstants.kArmV;
-        configs.kG = ArmConstants.kArmG;
-        configs.kA = ArmConstants.kArmA;
+        configs.kP = ArmConstants.PID_P;
+        configs.kI = ArmConstants.PID_I;
+        configs.kD = ArmConstants.PID_D;
+        configs.kS = ArmConstants.FF_S;
+        configs.kV = ArmConstants.FF_V;
+        configs.kG = ArmConstants.FF_G;
+        configs.kA = ArmConstants.FF_A;
         configs.GravityType = GravityTypeValue.Arm_Cosine;
 
         CurrentLimitsConfigs currentLimits = m_armMotorConfig.CurrentLimits;
-        currentLimits.StatorCurrentLimit = ArmConstants.kStatorCurrentLimit;
-        currentLimits.SupplyCurrentLimit = ArmConstants.kSupplyCurrentLimit;
+        currentLimits.StatorCurrentLimit = ArmConstants.STATOR_CURRENT_LIMIT;
+        currentLimits.SupplyCurrentLimit = ArmConstants.SUPPLY_CURRENT_LIMIT;
 
         m_armMotorConfig.MotionMagic.MotionMagicAcceleration = 20;
         m_armMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 20;
@@ -154,11 +154,11 @@ public class ArmSubsystem extends SubsystemBase {
         // Initialize arm simulation
         m_armSim = new SingleJointedArmSim(
                 DCMotor.getKrakenX60(1),
-                ArmConstants.kArmGearing,
-                SingleJointedArmSim.estimateMOI(ArmConstants.kArmLength, ArmConstants.kArmMass),
-                ArmConstants.kArmLength,
-                Units.degreesToRadians(ArmConstants.kArmMinAngle),
-                Units.degreesToRadians(ArmConstants.kArmMaxAngle),
+                ArmConstants.GEARING,
+                SingleJointedArmSim.estimateMOI(ArmConstants.LENGTH_METERS, ArmConstants.MASS_KG),
+                ArmConstants.LENGTH_METERS,
+                Units.degreesToRadians(ArmConstants.MIN_ANGLE_DEGREES),
+                Units.degreesToRadians(ArmConstants.MAX_ANGLE_DEGREES),
                 true,
                 Units.degreesToRadians(0)
         );
@@ -166,24 +166,24 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (ArmConstants.kTuningMode) {
+        if (ArmConstants.TUNING_MODE_ENABLED) {
             // Track previous and current values of constants
-            double previousP = ArmConstants.kArmP;
-            double previousI = ArmConstants.kArmI;
-            double previousD = ArmConstants.kArmD;
-            double previousG = ArmConstants.kArmG;
+            double previousP = ArmConstants.PID_P;
+            double previousI = ArmConstants.PID_I;
+            double previousD = ArmConstants.PID_D;
+            double previousG = ArmConstants.FF_G;
 
-            ArmConstants.kArmP = SmartDashboard.getNumber("Arm P", ArmConstants.kArmP);
-            ArmConstants.kArmI = SmartDashboard.getNumber("Arm I", ArmConstants.kArmI);
-            ArmConstants.kArmD = SmartDashboard.getNumber("Arm D", ArmConstants.kArmD);
-            ArmConstants.kArmG = SmartDashboard.getNumber("Arm G", ArmConstants.kArmG);
+            ArmConstants.PID_P = SmartDashboard.getNumber("Arm P", ArmConstants.PID_P);
+            ArmConstants.PID_I = SmartDashboard.getNumber("Arm I", ArmConstants.PID_I);
+            ArmConstants.PID_D = SmartDashboard.getNumber("Arm D", ArmConstants.PID_D);
+            ArmConstants.FF_G = SmartDashboard.getNumber("Arm G", ArmConstants.FF_G);
 
             // Reapply config if any constants have changed
-            if (previousP != ArmConstants.kArmP || previousI != ArmConstants.kArmI || previousD != ArmConstants.kArmD || previousG != ArmConstants.kArmG) {
-                m_armMotorConfig.Slot0.kP = ElevatorConstants.kElevatorP;
-                m_armMotorConfig.Slot0.kI = ElevatorConstants.kElevatorI;
-                m_armMotorConfig.Slot0.kD = ElevatorConstants.kElevatorD;
-                m_armMotorConfig.Slot0.kG = ElevatorConstants.kElevatorG;
+            if (previousP != ArmConstants.PID_P || previousI != ArmConstants.PID_I || previousD != ArmConstants.PID_D || previousG != ArmConstants.FF_G) {
+                m_armMotorConfig.Slot0.kP = ElevatorConstants.PID_P;
+                m_armMotorConfig.Slot0.kI = ElevatorConstants.PID_I;
+                m_armMotorConfig.Slot0.kD = ElevatorConstants.PID_D;
+                m_armMotorConfig.Slot0.kG = ElevatorConstants.FF_G;
                 m_armMotor.getConfigurator().apply(m_armMotorConfig);
             }
         }
@@ -209,11 +209,11 @@ public class ArmSubsystem extends SubsystemBase {
 
         // Convert mechanism angle to rotor rotations
 
-        double rotorPosition = (m_armSim.getAngleRads() / (2.0 * Math.PI)) * ArmConstants.kArmGearing;
-        double rotorVelocity = (m_armSim.getVelocityRadPerSec() / (2.0 * Math.PI)) * ArmConstants.kArmGearing;
+        double rotorPosition = (m_armSim.getAngleRads() / (2.0 * Math.PI)) * ArmConstants.GEARING;
+        double rotorVelocity = (m_armSim.getVelocityRadPerSec() / (2.0 * Math.PI)) * ArmConstants.GEARING;
 
         m_armMotorSim.setRawRotorPosition(rotorPosition);
-        m_armEncoderSim.setRawPosition(rotorPosition / ArmConstants.kArmGearing); // Divide to account for gearing
+        m_armEncoderSim.setRawPosition(rotorPosition / ArmConstants.GEARING); // Divide to account for gearing
         m_armMotorSim.setRotorVelocity(rotorVelocity);
     }
 
@@ -231,33 +231,17 @@ public class ArmSubsystem extends SubsystemBase {
      */
     public void setArmPositionDegrees(double targetPosition) {
         // Ensure position is within bounds
-        if (targetPosition < ArmConstants.kArmMinAngle) {
-            targetPosition = ArmConstants.kArmMinAngle;
-        } else if (targetPosition > ArmConstants.kArmMaxAngle) {
-            targetPosition = ArmConstants.kArmMaxAngle;
+        if (targetPosition < ArmConstants.MIN_ANGLE_DEGREES) {
+            targetPosition = ArmConstants.MIN_ANGLE_DEGREES;
+        } else if (targetPosition > ArmConstants.MAX_ANGLE_DEGREES) {
+            targetPosition = ArmConstants.MAX_ANGLE_DEGREES;
         }
 
-        // if the elevator is below a certain height, don't let the arm go above a certain angle - on the way up
-//        if (
-//                (getElevatorPositionMeters() < ElevatorConstants.kElvPosBadMeters) || // elevator is currently below the elevator threshold OR
-//                        getElevatorSetpointMeters() < ElevatorConstants.kElvPosBadMeters &&  // the elevator is trying to go below the threshold and the arm is trying to go above the threshold
-//                                targetPosition < ArmConstants.kbadARMPOS       //
-//        ) {
-//            targetPosition = ElevatorConstants.kAngleBad; // clamp the arm at the threshold -40
-
-        // if the elevator is above a certain height, don't let the arm go below a certain angle - on the way down
-//        } else if ((getElevatorPositionMeters() > ElevatorConstants.kElvPosBadMeters) || // elevator is currently above the elevator threshold OR
-//                getElevatorSetpointMeters() > ElevatorConstants.kElvPosBadMeters // the elevator is trying to go above the threshold and the arm is trying to go below the threshold
-//                        && targetPosition > ElevatorConstants.kAngleBad) {
-//            targetPosition = ArmConstants.kbadARMPOS; // clamp the arm at 45
-//        }
-
-        if ((getElevatorPositionMeters() < ElevatorConstants.kElvPosBadMeters || getElevatorSetpointMeters() < ElevatorConstants.kElvPosBadMeters) && targetPosition > ArmConstants.kbadARMPOS) {
-            targetPosition = ArmConstants.kbadARMPOS;
-        } else if ((getElevatorPositionMeters() > 0.0598 || getElevatorSetpointMeters() > 0.0598) && targetPosition < ElevatorConstants.kAngleBad) {
-            targetPosition = ElevatorConstants.kAngleBad;
+        if ((getElevatorPositionMeters() < ElevatorConstants.SAFETY_POSITION_METERS || getElevatorSetpointMeters() < ElevatorConstants.SAFETY_POSITION_METERS) && targetPosition > ArmConstants.SAFETY_ANGLE_DOWNWARD_DEGREES) {
+            targetPosition = ArmConstants.SAFETY_ANGLE_DOWNWARD_DEGREES;
+        } else if ((getElevatorPositionMeters() > 0.0598 || getElevatorSetpointMeters() > 0.0598) && targetPosition < ArmConstants.SAFETY_ANGLE_UPWARD_DEGREES) {
+            targetPosition = ArmConstants.SAFETY_ANGLE_UPWARD_DEGREES;
         }
-
 
         double targetPositionRot = (targetPosition / 360.0); // Convert degrees to rotations
 
@@ -284,16 +268,16 @@ public class ArmSubsystem extends SubsystemBase {
      */
     public void setArmPositionEnum(ElevatorPosition position) {
         double degrees = switch (position) {
-            case ZERO -> ArmConstants.kArmZeroAngle;
-            case CORAL_L1 -> ArmConstants.kArmCoralLevel1Angle;
-            case CORAL_L2 -> ArmConstants.kArmCoralLevel2Angle;
-            case CORAL_L3 -> ArmConstants.kArmCoralLevel3Angle;
-            case CORAL_L4 -> ArmConstants.kArmCoralLevel4Angle;
-            case PROCESSOR -> ArmConstants.kArmProcessorAngle;
-            case ALGAE_HIGH -> ArmConstants.kArmAlgaeHighAngle;
-            case ALGAE_LOW -> ArmConstants.kArmAlgaeLowAngle;
-            case BARGE -> ArmConstants.kArmBargeAngle;
-            default -> ArmConstants.kArmMinAngle;
+            case ZERO -> ArmConstants.ZERO_ANGLE_DEGREES;
+            case CORAL_L1 -> ArmConstants.L1_ANGLE_DEGREES;
+            case CORAL_L2 -> ArmConstants.L2_ANGLE_DEGREES;
+            case CORAL_L3 -> ArmConstants.L3_ANGLE_DEGREES;
+            case CORAL_L4 -> ArmConstants.L4_ANGLE_DEGREES;
+            case PROCESSOR -> ArmConstants.PROCESSOR_ANGLE_DEGREES;
+            case ALGAE_HIGH -> ArmConstants.HIGH_ALGAE_ANGLE_DEGREES;
+            case ALGAE_LOW -> ArmConstants.LOW_ALGAE_ANGLE_DEGREES;
+            case BARGE -> ArmConstants.BARGE_ANGLE_DEGREES;
+            default -> ArmConstants.MIN_ANGLE_DEGREES;
         };
         setArmPositionDegrees(degrees);
     }
@@ -305,23 +289,23 @@ public class ArmSubsystem extends SubsystemBase {
      */
     public ElevatorPosition getArmPositionEnum() {
         double positionDeg = getArmPositionDegrees();
-        if (positionDeg == ArmConstants.kArmZeroAngle) {
+        if (positionDeg == ArmConstants.ZERO_ANGLE_DEGREES) {
             return ElevatorPosition.ZERO;
-        } else if (positionDeg == ArmConstants.kArmCoralLevel1Angle) {
+        } else if (positionDeg == ArmConstants.L1_ANGLE_DEGREES) {
             return ElevatorPosition.CORAL_L1;
-        } else if (positionDeg == ArmConstants.kArmCoralLevel2Angle) {
+        } else if (positionDeg == ArmConstants.L2_ANGLE_DEGREES) {
             return ElevatorPosition.CORAL_L2;
-        } else if (positionDeg == ArmConstants.kArmCoralLevel3Angle) {
+        } else if (positionDeg == ArmConstants.L3_ANGLE_DEGREES) {
             return ElevatorPosition.CORAL_L3;
-        } else if (positionDeg == ArmConstants.kArmCoralLevel4Angle) {
+        } else if (positionDeg == ArmConstants.L4_ANGLE_DEGREES) {
             return ElevatorPosition.CORAL_L4;
-        } else if (positionDeg == ArmConstants.kArmProcessorAngle) {
+        } else if (positionDeg == ArmConstants.PROCESSOR_ANGLE_DEGREES) {
             return ElevatorPosition.PROCESSOR;
-        } else if (positionDeg == ArmConstants.kArmAlgaeHighAngle) {
+        } else if (positionDeg == ArmConstants.HIGH_ALGAE_ANGLE_DEGREES) {
             return ElevatorPosition.ALGAE_HIGH;
-        } else if (positionDeg == ArmConstants.kArmAlgaeLowAngle) {
+        } else if (positionDeg == ArmConstants.LOW_ALGAE_ANGLE_DEGREES) {
             return ElevatorPosition.ALGAE_LOW;
-        } else if (positionDeg == ArmConstants.kArmBargeAngle) {
+        } else if (positionDeg == ArmConstants.BARGE_ANGLE_DEGREES) {
             return ElevatorPosition.BARGE;
         }
         return ElevatorPosition.UNKNOWN; // Default case
@@ -373,6 +357,6 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public boolean hasReachedAngle() {
-        return Math.abs(getArmPositionDegrees() - getArmSetpointDegrees()) < ArmConstants.kArmTargetError;
+        return Math.abs(getArmPositionDegrees() - getArmSetpointDegrees()) < ArmConstants.TARGET_ERROR;
     }
 }

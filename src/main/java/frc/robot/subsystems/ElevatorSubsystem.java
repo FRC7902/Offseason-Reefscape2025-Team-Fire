@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.RobotContainer;
 
@@ -55,12 +56,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     /**
      * Leader TalonFX motor
      */
-    private final TalonFX m_leaderMotor = new TalonFX(ElevatorConstants.kElevatorLeaderCANID);
+    private final TalonFX m_leaderMotor = new TalonFX(ElevatorConstants.LEADER_MOTOR_CAN_ID);
 
     /**
      * Follower TalonFX motor
      */
-    private final TalonFX m_followerMotor = new TalonFX(ElevatorConstants.kElevatorFollowerCANID);
+    private final TalonFX m_followerMotor = new TalonFX(ElevatorConstants.FOLLOWER_MOTOR_CAN_ID);
 
     /**
      * TalonFX motor configuration
@@ -82,13 +83,13 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     private final ElevatorSim m_elevatorSim = new ElevatorSim(
             DCMotor.getKrakenX60(2),
-            ElevatorConstants.kElevatorGearing,
-            ElevatorConstants.kElevatorCarriageMass,
-            ElevatorConstants.kElevatorDrumRadius,
-            ElevatorConstants.kElevatorMinHeightMeters,
-            ElevatorConstants.kElevatorMaxHeightMeters,
+            ElevatorConstants.GEARING,
+            ElevatorConstants.CARRIAGE_MASS,
+            ElevatorConstants.DRUM_RADIUS,
+            ElevatorConstants.MIN_HEIGHT_METERS,
+            ElevatorConstants.MAX_HEIGHT_METERS,
             true,
-            ElevatorConstants.kElevatorHeightMeters,
+            ElevatorConstants.HEIGHT_METERS,
             0, 0
     );
 
@@ -115,7 +116,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final MechanismRoot2d m_elevatorCarriageRoot2d = m_mech2d.getRoot(
             "ElevatorCarriage",
             Units.inchesToMeters(25),
-            Units.inchesToMeters(0.5) + ElevatorConstants.kElevatorMinHeightMeters
+            Units.inchesToMeters(0.5) + ElevatorConstants.MIN_HEIGHT_METERS
     );
 
     /**
@@ -124,7 +125,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final MechanismLigament2d m_elevator2d = m_elevatorBase2d.append(
             new MechanismLigament2d(
                     "Elevator",
-                    ElevatorConstants.kElevatorHeightMeters,
+                    ElevatorConstants.HEIGHT_METERS,
                     90,
                     7,
                     new Color8Bit(Color.kAntiqueWhite)
@@ -137,7 +138,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final MechanismLigament2d m_elevatorCarriageLigament2d = m_elevatorCarriageRoot2d.append(
             new MechanismLigament2d(
                     "ElevatorCarriage",
-                    ElevatorConstants.kElevatorCarriageHeightMeters,
+                    ElevatorConstants.CARRIAGE_HEIGHT_METERS,
                     270,
                     15,
                     new Color8Bit(Color.kDarkRed)
@@ -147,7 +148,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     /**
      * Target setpoint for the elevator in meters
      */
-    private double m_elevatorSetPointMeters = ElevatorConstants.kElevatorMinHeightMeters;
+    private double m_elevatorSetPointMeters = ElevatorConstants.MIN_HEIGHT_METERS;
 
     /**
      * SysId routine object to determine S, V, and A constants
@@ -171,11 +172,11 @@ public class ElevatorSubsystem extends SubsystemBase {
             SmartDashboard.putData("ElevatorSimulation", m_mech2d);
         }
 
-        if (ElevatorConstants.kTuningMode) {
-            SmartDashboard.putNumber("Elevator P", ElevatorConstants.kElevatorP);
-            SmartDashboard.putNumber("Elevator I", ElevatorConstants.kElevatorI);
-            SmartDashboard.putNumber("Elevator D", ElevatorConstants.kElevatorD);
-            SmartDashboard.putNumber("Elevator G", ElevatorConstants.kElevatorG);
+        if (ElevatorConstants.TUNING_MODE_ENABLED) {
+            SmartDashboard.putNumber("Elevator P", ElevatorConstants.PID_P);
+            SmartDashboard.putNumber("Elevator I", ElevatorConstants.PID_I);
+            SmartDashboard.putNumber("Elevator D", ElevatorConstants.PID_D);
+            SmartDashboard.putNumber("Elevator G", ElevatorConstants.FF_G);
         }
 
         // Set motor configuration
@@ -183,20 +184,20 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         // Set slot 0 values
-        m_motorConfig.Slot0.kP = ElevatorConstants.kElevatorP;
-        m_motorConfig.Slot0.kI = ElevatorConstants.kElevatorI;
-        m_motorConfig.Slot0.kD = ElevatorConstants.kElevatorD;
-        m_motorConfig.Slot0.kS = ElevatorConstants.kElevatorS;
-        m_motorConfig.Slot0.kV = ElevatorConstants.kElevatorV;
-        m_motorConfig.Slot0.kA = ElevatorConstants.kElevatorA;
-        m_motorConfig.Slot0.kG = ElevatorConstants.kElevatorG;
+        m_motorConfig.Slot0.kP = ElevatorConstants.PID_P;
+        m_motorConfig.Slot0.kI = ElevatorConstants.PID_I;
+        m_motorConfig.Slot0.kD = ElevatorConstants.PID_D;
+        m_motorConfig.Slot0.kS = ElevatorConstants.FF_S;
+        m_motorConfig.Slot0.kV = ElevatorConstants.FF_V;
+        m_motorConfig.Slot0.kA = ElevatorConstants.FF_A;
+        m_motorConfig.Slot0.kG = ElevatorConstants.FF_G;
 
         // Set gravity type
         m_motorConfig.Slot0.GravityType = GravityTypeValue.Elevator_Static;
 
         // Set motion magic
         m_motorConfig.MotionMagic.MotionMagicCruiseVelocity =
-                ElevatorConstants.kElevatorMaxVelocity;
+                ElevatorConstants.MAX_VELOCITY;
         m_motorConfig.MotionMagic.MotionMagicAcceleration = 160;
 
         // Set safety limits
@@ -208,11 +209,11 @@ public class ElevatorSubsystem extends SubsystemBase {
  */
         // Set current limits
         m_motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        m_motorConfig.CurrentLimits.StatorCurrentLimit = ElevatorConstants.kElevatorStatorCurrentLimit;
+        m_motorConfig.CurrentLimits.StatorCurrentLimit = ElevatorConstants.STATOR_CURRENT_LIMIT;
 
         // Set current limits
         m_motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        m_motorConfig.CurrentLimits.SupplyCurrentLimit = ElevatorConstants.kElevatorSupplyCurrentLimit;
+        m_motorConfig.CurrentLimits.SupplyCurrentLimit = ElevatorConstants.SUPPLY_CURRENT_LIMIT;
 
         // Set follower
         m_followerMotor.setControl(new Follower(m_leaderMotor.getDeviceID(), true));
@@ -236,16 +237,16 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     public void setElevatorPositionEnum(ElevatorPosition positionEnum) {
         m_elevatorSetPointMeters = switch (positionEnum) {
-            case ZERO -> ElevatorConstants.kElevatorMinHeightMeters;
-            case CORAL_L1 -> ElevatorConstants.kElevatorCoralLevel1Height;
-            case CORAL_L2 -> ElevatorConstants.kElevatorCoralLevel2Height;
-            case CORAL_L3 -> ElevatorConstants.kElevatorCoralLevel3Height;
-            case CORAL_L4 -> ElevatorConstants.kElevatorCoralLevel4Height;
-            case PROCESSOR -> ElevatorConstants.kElevatorProcessorHeight;
-            case ALGAE_HIGH -> ElevatorConstants.kElevatorAlgaeHighHeight;
-            case ALGAE_LOW -> ElevatorConstants.kElevatorAlgaeLowHeight;
-            case BARGE -> ElevatorConstants.kElevatorBargeHeight;
-            default -> ElevatorConstants.kElevatorMinHeightMeters;
+            case ZERO -> ElevatorConstants.MIN_HEIGHT_METERS;
+            case CORAL_L1 -> ElevatorConstants.L1_HEIGHT_METERS;
+            case CORAL_L2 -> ElevatorConstants.L2_HEIGHT_METERS;
+            case CORAL_L3 -> ElevatorConstants.L3_HEIGHT_METERS;
+            case CORAL_L4 -> ElevatorConstants.L4_HEIGHT_METERS;
+            case PROCESSOR -> ElevatorConstants.PROCESSOR_HEIGHT_METERS;
+            case ALGAE_HIGH -> ElevatorConstants.HIGH_ALGAE_HEIGHT_METERS;
+            case ALGAE_LOW -> ElevatorConstants.LOW_ALGAE_HEIGHT_METERS;
+            case BARGE -> ElevatorConstants.BARGE_HEIGHT_METERS;
+            default -> ElevatorConstants.MIN_HEIGHT_METERS;
         };
 
         setElevatorPositionMeters(m_elevatorSetPointMeters);
@@ -258,18 +259,19 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     public void setElevatorPositionMeters(double positionMeters) {
         double currentPosMeters = getElevatorPositionMeters();
-        if (positionMeters < ElevatorConstants.kElevatorMinHeightMeters) {
-            positionMeters = ElevatorConstants.kElevatorMinHeightMeters;
-        } else if (positionMeters > ElevatorConstants.kElevatorMaxHeightMeters) {
-            positionMeters = ElevatorConstants.kElevatorMaxHeightMeters;
+        if (positionMeters < ElevatorConstants.MIN_HEIGHT_METERS) {
+            positionMeters = ElevatorConstants.MIN_HEIGHT_METERS;
+        } else if (positionMeters > ElevatorConstants.MAX_HEIGHT_METERS) {
+            positionMeters = ElevatorConstants.MAX_HEIGHT_METERS;
         }
-        if (getArmPositionDegrees() < ElevatorConstants.kAngleBad) {
+
+        if (getArmPositionDegrees() < Constants.ArmConstants.SAFETY_ANGLE_UPWARD_DEGREES) {
             positionMeters = currentPosMeters;
         }
 
         m_elevatorSetPointMeters = positionMeters;
 
-        double positionRotations = (m_elevatorSetPointMeters - (RobotBase.isSimulation() ? 0 : ElevatorConstants.kElevatorMinHeightMeters)) / ElevatorConstants.kElevatorMetersPerMotorRotation;
+        double positionRotations = (m_elevatorSetPointMeters - (RobotBase.isSimulation() ? 0 : ElevatorConstants.MIN_HEIGHT_METERS)) / ElevatorConstants.METERS_PER_MOTOR_ROTATION;
         m_motionMagicRequest = m_motionMagicRequest.withPosition(positionRotations).withSlot(0);
         m_leaderMotor.setControl(m_motionMagicRequest);
     }
@@ -288,7 +290,7 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     public double getElevatorPositionMeters() {
         double positionRotations = m_leaderMotor.getPosition().getValueAsDouble();
-        return positionRotations * ElevatorConstants.kElevatorMetersPerMotorRotation + (RobotBase.isSimulation() ? 0 : ElevatorConstants.kElevatorMinHeightMeters);
+        return positionRotations * ElevatorConstants.METERS_PER_MOTOR_ROTATION + (RobotBase.isSimulation() ? 0 : ElevatorConstants.MIN_HEIGHT_METERS);
     }
 
     /**
@@ -320,23 +322,23 @@ public class ElevatorSubsystem extends SubsystemBase {
 //            return ElevatorPosition.UNKNOWN;
 //        }
 
-        if (Math.abs(currentHeightMeters - ElevatorConstants.kElevatorMinHeightMeters) < ElevatorConstants.kElevatorTargetError * 2) {
+        if (Math.abs(currentHeightMeters - ElevatorConstants.MIN_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.ZERO;
-        } else if (Math.abs(currentHeightMeters - ElevatorConstants.kElevatorCoralLevel1Height) < ElevatorConstants.kElevatorTargetError * 2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.L1_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.CORAL_L1;
-        } else if (Math.abs(currentHeightMeters - ElevatorConstants.kElevatorCoralLevel2Height) < ElevatorConstants.kElevatorTargetError * 2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.L2_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.CORAL_L2;
-        } else if (Math.abs(currentHeightMeters - ElevatorConstants.kElevatorCoralLevel3Height) < ElevatorConstants.kElevatorTargetError * 2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.L3_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.CORAL_L3;
-        } else if (Math.abs(currentHeightMeters - ElevatorConstants.kElevatorCoralLevel4Height) < ElevatorConstants.kElevatorTargetError * 2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.L4_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.CORAL_L4;
-        } else if (Math.abs(currentHeightMeters - ElevatorConstants.kElevatorProcessorHeight) < ElevatorConstants.kElevatorTargetError * 2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.PROCESSOR_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.PROCESSOR;
-        } else if (Math.abs(currentHeightMeters - ElevatorConstants.kElevatorAlgaeHighHeight) < ElevatorConstants.kElevatorTargetError * 2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.HIGH_ALGAE_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.ALGAE_HIGH;
-        } else if (Math.abs(currentHeightMeters - ElevatorConstants.kElevatorMaxHeightMeters) < ElevatorConstants.kElevatorTargetError * 2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.MAX_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.ALGAE_LOW;
-        } else if (Math.abs(currentHeightMeters - ElevatorConstants.kElevatorBargeHeight) < ElevatorConstants.kElevatorTargetError * 2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.BARGE_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.BARGE;
         } else {
             return ElevatorPosition.UNKNOWN;
@@ -367,10 +369,10 @@ public class ElevatorSubsystem extends SubsystemBase {
      * Update telemetry, including the mechanism visualization
      */
     public void updateTelemetry() {
-        if (getElevatorPositionMeters() > ElevatorConstants.kElevatorHeightMeters) {
+        if (getElevatorPositionMeters() > ElevatorConstants.HEIGHT_METERS) {
             m_elevator2d.setLength(getElevatorPositionMeters());
         } else {
-            m_elevator2d.setLength(ElevatorConstants.kElevatorHeightMeters);
+            m_elevator2d.setLength(ElevatorConstants.HEIGHT_METERS);
         }
         m_elevatorCarriageRoot2d.setPosition(Units.inchesToMeters(25), Units.inchesToMeters(0.5) + getElevatorPositionMeters());
     }
@@ -403,30 +405,30 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public boolean hasReachedSetpoint() {
-        return Math.abs(getElevatorPositionMeters() - getSetpoint()) < ElevatorConstants.kElevatorTargetError;
+        return Math.abs(getElevatorPositionMeters() - getSetpoint()) < ElevatorConstants.TARGET_ERROR;
     }
 
     @Override
     public void periodic() {
-        if (m_leaderMotor.getClosedLoopReference().getValueAsDouble() * ElevatorConstants.kElevatorMetersPerMotorRotation > ElevatorConstants.kElevatorMinHeightMeters &&
-                m_leaderMotor.getClosedLoopReference().getValueAsDouble() * ElevatorConstants.kElevatorMetersPerMotorRotation < ElevatorConstants.kElevatorZeroThreshold &&
-                m_leaderMotor.getPosition().getValueAsDouble() * ElevatorConstants.kElevatorMetersPerMotorRotation > ElevatorConstants.kElevatorMinHeightMeters &&
-                m_leaderMotor.getPosition().getValueAsDouble() * ElevatorConstants.kElevatorMetersPerMotorRotation < ElevatorConstants.kElevatorZeroThreshold)
+        if (m_leaderMotor.getClosedLoopReference().getValueAsDouble() * ElevatorConstants.METERS_PER_MOTOR_ROTATION > ElevatorConstants.MIN_HEIGHT_METERS &&
+                m_leaderMotor.getClosedLoopReference().getValueAsDouble() * ElevatorConstants.METERS_PER_MOTOR_ROTATION < ElevatorConstants.ZERO_THRESHOLD &&
+                m_leaderMotor.getPosition().getValueAsDouble() * ElevatorConstants.METERS_PER_MOTOR_ROTATION > ElevatorConstants.MIN_HEIGHT_METERS &&
+                m_leaderMotor.getPosition().getValueAsDouble() * ElevatorConstants.METERS_PER_MOTOR_ROTATION < ElevatorConstants.ZERO_THRESHOLD)
             m_leaderMotor.setVoltage(0);
         else {
             m_leaderMotor.setControl(m_motionMagicRequest);
         }
 
-        if (ElevatorConstants.kTuningMode) {
-            ElevatorConstants.kElevatorP = SmartDashboard.getNumber("Elevator P", ElevatorConstants.kElevatorP);
-            ElevatorConstants.kElevatorI = SmartDashboard.getNumber("Elevator I", ElevatorConstants.kElevatorI);
-            ElevatorConstants.kElevatorD = SmartDashboard.getNumber("Elevator D", ElevatorConstants.kElevatorD);
-            ElevatorConstants.kElevatorG = SmartDashboard.getNumber("Elevator G", ElevatorConstants.kElevatorG);
+        if (ElevatorConstants.TUNING_MODE_ENABLED) {
+            ElevatorConstants.PID_P = SmartDashboard.getNumber("Elevator P", ElevatorConstants.PID_P);
+            ElevatorConstants.PID_I = SmartDashboard.getNumber("Elevator I", ElevatorConstants.PID_I);
+            ElevatorConstants.PID_D = SmartDashboard.getNumber("Elevator D", ElevatorConstants.PID_D);
+            ElevatorConstants.FF_G = SmartDashboard.getNumber("Elevator G", ElevatorConstants.FF_G);
 
-            m_motorConfig.Slot0.kP = ElevatorConstants.kElevatorP;
-            m_motorConfig.Slot0.kI = ElevatorConstants.kElevatorI;
-            m_motorConfig.Slot0.kD = ElevatorConstants.kElevatorD;
-            m_motorConfig.Slot0.kG = ElevatorConstants.kElevatorG;
+            m_motorConfig.Slot0.kP = ElevatorConstants.PID_P;
+            m_motorConfig.Slot0.kI = ElevatorConstants.PID_I;
+            m_motorConfig.Slot0.kD = ElevatorConstants.PID_D;
+            m_motorConfig.Slot0.kG = ElevatorConstants.FF_G;
 
             m_leaderMotor.getConfigurator().apply(m_motorConfig);
         }
@@ -437,7 +439,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Elevator Stator Current", m_leaderMotor.getStatorCurrent().getValueAsDouble());
         SmartDashboard.putNumber("Leader Motor Pos", m_leaderMotor.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("Follower Motor Pos", m_followerMotor.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Closed loop error metres", m_leaderMotor.getClosedLoopError().getValueAsDouble() * ElevatorConstants.kElevatorMetersPerMotorRotation);
+        SmartDashboard.putNumber("Closed loop error metres", m_leaderMotor.getClosedLoopError().getValueAsDouble() * ElevatorConstants.METERS_PER_MOTOR_ROTATION);
 
         SmartDashboard.putBoolean("Elevator — At Setpoint", hasReachedSetpoint());
 
@@ -449,8 +451,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_elevatorSim.setInputVoltage(m_leaderMotor.getMotorVoltage().getValueAsDouble());
         m_elevatorSim.update(0.02);
 
-        final double positionRotations = m_elevatorSim.getPositionMeters() / ElevatorConstants.kElevatorMetersPerMotorRotation;
-        final double velocityRPS = m_elevatorSim.getVelocityMetersPerSecond() / ElevatorConstants.kElevatorMetersPerMotorRotation;
+        final double positionRotations = m_elevatorSim.getPositionMeters() / ElevatorConstants.METERS_PER_MOTOR_ROTATION;
+        final double velocityRPS = m_elevatorSim.getVelocityMetersPerSecond() / ElevatorConstants.METERS_PER_MOTOR_ROTATION;
 
         m_leaderMotor.getSimState().setRawRotorPosition(positionRotations);
         m_leaderMotor.getSimState().setRotorVelocity(velocityRPS);

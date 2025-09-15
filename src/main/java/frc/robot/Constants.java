@@ -64,128 +64,121 @@ public final class Constants {
 
     public static class ArmConstants {
         //PID tuning mode
-        public static final boolean kTuningMode = false;
+        public static final boolean TUNING_MODE_ENABLED = false;
 
         // CAN IDs
-        public static final int kArmMotorCANID = 21;
-        public static final int kArmCANID = 2;
+        public static final int MOTOR_CAN_ID = 21;
+        public static final int ENCODER_CAN_ID = 2;
 
         // Physical Constants
-        public static final double kArmGearing = 67.5;
-        public static final double kArmMass = Units.lbsToKilograms(8);
-        public static final double kArmLength = Units.inchesToMeters(13.386);
+        public static final double GEARING = 67.5;
+        public static final double MASS_KG = Units.lbsToKilograms(8);
+        public static final double LENGTH_METERS = Units.inchesToMeters(13.386);
 
         // Motion Constraints
-        public static final double kArmMinAngle = -94; // Minimum angle for the arm
-        public static final double kArmMaxAngle = 65;
+        public static final double MIN_ANGLE_DEGREES = -94; // Minimum angle for the arm
+        public static final double MAX_ANGLE_DEGREES = 65;
 
         // Current limits
-        public static final double kStatorCurrentLimit = 50.0;
-        public static final double kSupplyCurrentLimit = 50.0;
+        public static final double STATOR_CURRENT_LIMIT = 50.0;
+        public static final double SUPPLY_CURRENT_LIMIT = 50.0;
 
         // PID Constants
-        public static double kArmP = 60;
-        public static double kArmI = 0.1;
-
-        public static double kArmD = 0.01;
+        public static double PID_P = 60;
+        public static double PID_I = 0.1;
+        public static double PID_D = 0.01;
 
         // Feedforward Constants
-        public static double kArmS = 0.0;
+        public static double FF_S = 0.0;
+        public static double FF_G = 0.5;
+        public static double FF_V = 0.3;
+        public static double FF_A = 0.01;
 
-        public static double kArmG = 0.5;
-        public static double kArmV = 0.3;
-        public static double kArmA = 0.01;
         // SAFETIES
-        public static double kbadARMPOS = 45;
+        public static final double SAFETY_ANGLE_DOWNWARD_DEGREES = 45;
+        public static final double SAFETY_ANGLE_UPWARD_DEGREES = -40;
+
         // Arm Setpoints
-        public static final double kArmZeroAngle = -85;
-        public static final double kArmProcessorAngle = -45;
+        public static final double ZERO_ANGLE_DEGREES = -85;
+        public static final double PROCESSOR_ANGLE_DEGREES = -45;
 
-        public static final double kArmCoralLevel1Angle = 25;
-        //        public static final double kArmCoralLevel2Angle = 46.0;
-//        public static final double kArmCoralLevel3Angle = 65;
-//        public static final double kArmCoralLevel4Angle = 46;
-        public static final double kArmCoralLevel2Angle = 58.0;
-        public static final double kArmCoralLevel3Angle = 79.6;
-        public static final double kArmCoralLevel4Angle = 62.57;
+        public static final double L1_ANGLE_DEGREES = 25;
+        public static final double L2_ANGLE_DEGREES = 58.0;
+        public static final double L3_ANGLE_DEGREES = 79.6;
+        public static final double L4_ANGLE_DEGREES = 62.57;
 
-        public static final double kArmAlgaeLowAngle = 0.0;
-        public static final double kArmAlgaeHighAngle = 0.0;
+        public static final double LOW_ALGAE_ANGLE_DEGREES = 0.0;
+        public static final double HIGH_ALGAE_ANGLE_DEGREES = 0.0;
 
-        public static final double kArmBargeAngle = 50.0;
+        public static final double BARGE_ANGLE_DEGREES = 50.0;
 
-        public static final double kArmTargetError = 3;
+        public static final double TARGET_ERROR = 3;
     }
 
     public static class ElevatorConstants {
         //PID tuning mode
-        public static final boolean kTuningMode = false;
+        public static final boolean TUNING_MODE_ENABLED = false;
 
         // CAN IDs
-        public static final int kElevatorLeaderCANID = 19;
-        public static final int kElevatorFollowerCANID = 18;
+        public static final int LEADER_MOTOR_CAN_ID = 19;
+        public static final int FOLLOWER_MOTOR_CAN_ID = 18;
 
         // Current Limits
-        public static final double kElevatorStatorCurrentLimit = 80.0;
-        public static final double kElevatorSupplyCurrentLimit = 50.0;
+        public static final double STATOR_CURRENT_LIMIT = 80.0;
+        public static final double SUPPLY_CURRENT_LIMIT = 50.0;
 
         // Physical Constants
-        public static final double kElevatorGearing = 8.125;
-        public static final double kElevatorCarriageMass = Units.lbsToKilograms(24);
-        public static final double kElevatorDrumRadius = Units.inchesToMeters(1);
-        public static final double kElevatorMetersPerMotorRotation =
-                (kElevatorDrumRadius * 2 * Math.PI) / kElevatorGearing;
+        public static final double GEARING = 8.125;
+        public static final double CARRIAGE_MASS = Units.lbsToKilograms(24);
+        public static final double DRUM_RADIUS = Units.inchesToMeters(1);
+        public static final double METERS_PER_MOTOR_ROTATION =
+                (DRUM_RADIUS * 2 * Math.PI) / GEARING;
 
         // Elevator Dimensions
-        public static final double kElevatorHeightMeters = Units.inchesToMeters(42);
-        public static final double kElevatorMinHeightMeters = Units.inchesToMeters(0);
-        public static final double kElevatorZeroThreshold = kElevatorMinHeightMeters + 0.01;
-        public static final double kElevatorMaxHeightMeters = Units.inchesToMeters(49);
-        public static final double kElevatorCarriageHeightMeters = Units.inchesToMeters(18.5);
+        public static final double HEIGHT_METERS = Units.inchesToMeters(42);
+        public static final double MIN_HEIGHT_METERS = Units.inchesToMeters(0);
+        public static final double ZERO_THRESHOLD = MIN_HEIGHT_METERS + 0.01;
+        public static final double MAX_HEIGHT_METERS = Units.inchesToMeters(49);
+        public static final double CARRIAGE_HEIGHT_METERS = Units.inchesToMeters(18.5);
 
-        // SAFETY CONSTANT
-        public static final double kAngleBad = -40;
-        //        public static final double kElvPosBadMeters = Units.inchesToMeters(11.25);
-        public static final double kElvPosBadMeters = 0.403;
+        // Elevator safety
+        public static final double SAFETY_POSITION_METERS = 0.403;
 
 
         // Motion Constraints
-        public static final double kElevatorMaxVelocity =
-                2 / kElevatorMetersPerMotorRotation;
+        public static final double MAX_VELOCITY =
+                2 / METERS_PER_MOTOR_ROTATION;
         // rotations per second
-        public static final double kElevatorMaxAcceleration = 1600.0;
+        public static final double MAX_ACCELERATION = 1600.0;
 
         // PID Constants
-        public static double kElevatorP = 20;
-        public static double kElevatorI = 0;
-        public static double kElevatorD = 0;
+        public static double PID_P = 20;
+        public static double PID_I = 0;
+        public static double PID_D = 0;
 
 
         // Elevator Gains
-        public static double kElevatorS = 0.0;
-        public static double kElevatorG = 0.23;
-        public static double kElevatorV = 0;//6.17 * kElevatorMetersPerMotorRotation;
-        public static double kElevatorA = 0;//0.02;
+        public static double FF_S = 0.0;
+        public static double FF_G = 0.23;
+        public static double FF_V = 0;//6.17 * kElevatorMetersPerMotorRotation;
+        public static double FF_A = 0;//0.02;
 
         // ===== Elevator Setpoints =====
-        public static final double kElevatorProcessorHeight = Units.inchesToMeters(22.5);
+        public static final double PROCESSOR_HEIGHT_METERS = Units.inchesToMeters(22.5);
 
-        public static final double kElevatorCoralLevel1Height = 0.250; // TODO
-//        public static final double kElevatorCoralLevel2Height = Units.inchesToMeters(27.5);
-//        public static final double kElevatorCoralLevel3Height = Units.inchesToMeters(30);
-//        public static final double kElevatorCoralLevel4Height = Units.inchesToMeters(47);
-        public static final double kElevatorCoralLevel2Height = 0.315;
-        public static final double kElevatorCoralLevel3Height = 0.561;
-        public static final double kElevatorCoralLevel4Height = 1.228;
+        public static final double L1_HEIGHT_METERS = 0.250; // TODO
+        public static final double L2_HEIGHT_METERS = 0.315;
+        public static final double L3_HEIGHT_METERS = 0.561;
+        public static final double L4_HEIGHT_METERS = 1.228;
 
-        public static final double kElevatorAlgaeLowHeight = Units.inchesToMeters(28.5);
-        public static final double kElevatorAlgaeHighHeight = Units.inchesToMeters(44.25);
-        public static final double kElevatorBargeHeight = Units.inchesToMeters(47);
+        public static final double LOW_ALGAE_HEIGHT_METERS = Units.inchesToMeters(28.5);
+        public static final double HIGH_ALGAE_HEIGHT_METERS = Units.inchesToMeters(44.25);
+        public static final double BARGE_HEIGHT_METERS = Units.inchesToMeters(47);
         // ==============================
 
         // ===== Control Parameters =====
-        public static final double kElevatorTargetError = 0.01;
-        public static final double kElevatorMotorResistance = 0.002; // Assume 2mOhm resistance for
+        public static final double TARGET_ERROR = 0.01;
+        public static final double MOTOR_RESISTANCE = 0.002; // Assume 2mOhm resistance for
         // voltage drop calculation
         // ==============================
     }
