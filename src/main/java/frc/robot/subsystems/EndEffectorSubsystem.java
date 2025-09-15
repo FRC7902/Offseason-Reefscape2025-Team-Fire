@@ -16,54 +16,61 @@ import frc.robot.Constants.EndEffectorConstants;
 
 public class EndEffectorSubsystem extends SubsystemBase {
 
-  private final TalonFX m_motor;
-  private final TalonFXConfiguration m_motorConfig;
-  private final MotorOutputConfigs m_motorOutputConfig;
+    private final TalonFX m_motor;
+    private final TalonFXConfiguration m_motorConfig;
+    private final MotorOutputConfigs m_motorOutputConfig;
 
-   private final DigitalInput m_coralBeamBreak;
-  // private final DigitalInput m_algaeProximitySensor;
+    private final DigitalInput m_coralBeamBreak;
+    // private final DigitalInput m_algaeProximitySensor;
 
 
-  /** Creates a new AlgaeCoralIndexerSubsystem. */
-  public EndEffectorSubsystem() {
-    m_motor = new TalonFX(EndEffectorConstants.MOTOR_CAN_ID);
+    /**
+     * Creates a new AlgaeCoralIndexerSubsystem.
+     */
+    public EndEffectorSubsystem() {
+        m_motor = new TalonFX(EndEffectorConstants.MOTOR_CAN_ID);
 
-    m_motorConfig = new TalonFXConfiguration();
-    m_motorOutputConfig = new MotorOutputConfigs();
-    
-     m_coralBeamBreak = new DigitalInput(EndEffectorConstants.CORAL_BEAM_BREAK_PORT_ID);
-    // m_algaeProximitySensor = new DigitalInput(EndEffectorConstants.ALGAE_PROXIMITY_SENSOR_PORT_ID);
-    
-    m_motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    m_motorConfig.CurrentLimits.StatorCurrentLimit = EndEffectorConstants.MOTOR_STATOR_CURRENT_LIMIT;
-    
-    m_motorOutputConfig.withNeutralMode(NeutralModeValue.Brake);
-    m_motorConfig.withMotorOutput(m_motorOutputConfig);
+        m_motorConfig = new TalonFXConfiguration();
+        m_motorOutputConfig = new MotorOutputConfigs();
 
-    m_motor.getConfigurator().apply(m_motorConfig);
+        m_coralBeamBreak = new DigitalInput(EndEffectorConstants.CORAL_BEAM_BREAK_PORT_ID);
+        // m_algaeProximitySensor = new DigitalInput(EndEffectorConstants.ALGAE_PROXIMITY_SENSOR_PORT_ID);
 
-  }
+        m_motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        m_motorConfig.CurrentLimits.StatorCurrentLimit = EndEffectorConstants.MOTOR_STATOR_CURRENT_LIMIT;
+        m_motorConfig.CurrentLimits.SupplyCurrentLimit = EndEffectorConstants.MOTOR_SUPPLY_CURRENT_LIMIT; // TODO: Find value by lowering supply current limit until failure, then add a few A as buffer
 
-  public boolean hasCoral() {
-     return !m_coralBeamBreak.get();
-  }
+        m_motorOutputConfig.withNeutralMode(NeutralModeValue.Brake);
+        m_motorConfig.withMotorOutput(m_motorOutputConfig);
 
-  public boolean hasAlgae() {
-    // return m_algaeProximitySensor.get();
-    return false;
-  }
+        m_motor.getConfigurator().apply(m_motorConfig);
 
-  public void stop() {
-    m_motor.stopMotor();
-  }
+    }
 
-  public void setSpeed(double speed) {
-    m_motor.set(speed);
-  }
+    public boolean hasCoral() {
+        return !m_coralBeamBreak.get();
+    }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-      SmartDashboard.putBoolean("End Effector — Has Coral", hasCoral());
-  }
+    public boolean hasAlgae() {
+        // return m_algaeProximitySensor.get();
+        return false;
+    }
+
+    public void stop() {
+        m_motor.stopMotor();
+    }
+
+    public void setSpeed(double speed) {
+        m_motor.set(speed);
+    }
+
+    public double getSupplyCurrent() {
+        return m_motor.getSupplyCurrent().getValueAsDouble();
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        SmartDashboard.putBoolean("End Effector — Has Coral", hasCoral());
+    }
 }

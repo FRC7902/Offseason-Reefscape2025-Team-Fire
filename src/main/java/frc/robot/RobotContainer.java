@@ -35,7 +35,7 @@ import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final FunnelSubsystem m_funnelIndexerSubsystem = new FunnelSubsystem();
-    private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
+    public final static EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
     public final static ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
     public final static ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
@@ -127,17 +127,19 @@ public class RobotContainer {
 //        m_driverController.rightBumper().whileTrue(FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem));
 
         // EndEffectorSubsystem
-        m_endEffectorSubsystem.setDefaultCommand(
-                new ConditionalCommand(
-                        new InstantCommand(),
-                        new InstantCommand(
-                                () ->
-                                        m_endEffectorSubsystem.setSpeed(Constants.EndEffectorConstants.SLOW_INTAKE_SPEED),
-                                m_endEffectorSubsystem
-                        ),
-                        m_endEffectorSubsystem::hasCoral
-                )
-        );
+        // Run intake at slow sleep if coral is not detected
+//        m_endEffectorSubsystem.setDefaultCommand(
+//                new ConditionalCommand(
+//                        new InstantCommand(),
+//                        new InstantCommand(
+//                                () ->
+//                                        m_endEffectorSubsystem.setSpeed(Constants.EndEffectorConstants.SLOW_INTAKE_SPEED),
+//                                m_endEffectorSubsystem
+//                        ),
+//                        m_endEffectorSubsystem::hasCoral
+//                )
+//        );
+
 //        m_endEffectorSubsystem.setDefaultCommand(
 //                new ConditionalCommand(
 //                        EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem)
