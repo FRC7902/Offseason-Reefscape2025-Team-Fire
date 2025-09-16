@@ -38,7 +38,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
 
         m_motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         m_motorConfig.CurrentLimits.StatorCurrentLimit = EndEffectorConstants.MOTOR_STATOR_CURRENT_LIMIT;
-        m_motorConfig.CurrentLimits.SupplyCurrentLimit = EndEffectorConstants.MOTOR_SUPPLY_CURRENT_LIMIT; // TODO: Find value by lowering supply current limit until failure, then add a few A as buffer
+        m_motorConfig.CurrentLimits.SupplyCurrentLimit = EndEffectorConstants.MOTOR_SUPPLY_CURRENT_LIMIT;
 
         m_motorOutputConfig.withNeutralMode(NeutralModeValue.Brake);
         m_motorConfig.withMotorOutput(m_motorOutputConfig);

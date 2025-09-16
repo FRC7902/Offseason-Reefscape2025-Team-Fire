@@ -55,6 +55,7 @@ public class IntakeCommand extends Command {
         if (m_mode == IntakeMode.CORAL) {
             RobotContainer.m_endEffectorSubsystem.setSpeed(EndEffectorConstants.CORAL_HOLD_SPEED);
         } else {
+            // TODO: Tune if 1.0 speed is necessary
             RobotContainer.m_endEffectorSubsystem.setSpeed(EndEffectorConstants.ALGAE_HOLD_SPEED);
         }
     }

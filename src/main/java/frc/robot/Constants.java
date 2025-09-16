@@ -50,7 +50,9 @@ public final class Constants {
         public static final int CORAL_BEAM_BREAK_PORT_ID = 0;
         public static final int ALGAE_PROXIMITY_SENSOR_PORT_ID = -1;
 
+        // TODO: Tune stator current limit if motor is too hot
         public static final int MOTOR_STATOR_CURRENT_LIMIT = 40;
+        // TODO: Tune supply current limit by lowering supply current limit until failure, then add a few A as buffer
         public static final int MOTOR_SUPPLY_CURRENT_LIMIT = 20;
 
         public static final double INTAKE_SPEED = 1;
