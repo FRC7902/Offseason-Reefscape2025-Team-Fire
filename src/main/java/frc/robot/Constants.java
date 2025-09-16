@@ -171,6 +171,11 @@ public final class Constants {
         public static final double L3_HEIGHT_METERS = 0.561;
         public static final double L4_HEIGHT_METERS = 1.228;
 
+        public static final double SLEW_RATE_SETPOINT_1_METERS = 0.3;
+        public static final double SLEW_RATE_SETPOINT_2_METERS = 0.6;
+        public static final double SLEW_RATE_SETPOINT_3_METERS = 0.9;
+        public static final double SLEW_RATE_SETPOINT_4_METERS = 1.2;
+
         public static final double LOW_ALGAE_HEIGHT_METERS = Units.inchesToMeters(28.5);
         public static final double HIGH_ALGAE_HEIGHT_METERS = Units.inchesToMeters(44.25);
         public static final double BARGE_HEIGHT_METERS = Units.inchesToMeters(47);

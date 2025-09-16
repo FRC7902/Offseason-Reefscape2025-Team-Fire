@@ -462,25 +462,25 @@ public class SwerveSubsystem extends SubsystemBase {
     public void updateSlewRateLimiters() {
         double currElevatorPositionMeters = RobotContainer.m_elevatorSubsystem.getElevatorPositionMeters();
 
-        if (currElevatorPositionMeters >= ElevatorConstants.L4_HEIGHT_METERS) {
+        if (currElevatorPositionMeters >= ElevatorConstants.SLEW_RATE_SETPOINT_4_METERS) {
             swerveDrive.swerveController.addSlewRateLimiters(
                     new SlewRateLimiter(0.25), // m/s^2 acceleration limit in the X direction
                     new SlewRateLimiter(0.25), // m/s^2 acceleration limit in the Y direction
                     new SlewRateLimiter(0.5) // rad/s^2 angular acceleration limit
             );
-        } else if (currElevatorPositionMeters >= ElevatorConstants.L3_HEIGHT_METERS) {
+        } else if (currElevatorPositionMeters >= ElevatorConstants.SLEW_RATE_SETPOINT_3_METERS) {
             swerveDrive.swerveController.addSlewRateLimiters(
                     new SlewRateLimiter(0.5),
                     new SlewRateLimiter(0.5),
                     new SlewRateLimiter(1)
             );
-        } else if (currElevatorPositionMeters >= ElevatorConstants.L2_HEIGHT_METERS) {
+        } else if (currElevatorPositionMeters >= ElevatorConstants.SLEW_RATE_SETPOINT_2_METERS) {
             swerveDrive.swerveController.addSlewRateLimiters(
                     new SlewRateLimiter(1),
                     new SlewRateLimiter(1),
                     new SlewRateLimiter(2)
             );
-        } else if (currElevatorPositionMeters >= ElevatorConstants.L1_HEIGHT_METERS) {
+        } else if (currElevatorPositionMeters >= ElevatorConstants.SLEW_RATE_SETPOINT_1_METERS) {
             swerveDrive.swerveController.addSlewRateLimiters(
                     new SlewRateLimiter(2),
                     new SlewRateLimiter(2),
