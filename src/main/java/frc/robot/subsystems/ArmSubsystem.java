@@ -289,23 +289,23 @@ public class ArmSubsystem extends SubsystemBase {
      */
     public ElevatorPosition getArmPositionEnum() {
         double positionDeg = getArmPositionDegrees();
-        if (positionDeg == ArmConstants.ZERO_ANGLE_DEGREES) {
+        if (Math.abs(positionDeg - ArmConstants.ZERO_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.ZERO;
-        } else if (positionDeg == ArmConstants.L1_ANGLE_DEGREES) {
+        } else if (Math.abs(positionDeg - ArmConstants.L1_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.CORAL_L1;
-        } else if (positionDeg == ArmConstants.L2_ANGLE_DEGREES) {
+        } else if (Math.abs(positionDeg - ArmConstants.L2_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.CORAL_L2;
-        } else if (positionDeg == ArmConstants.L3_ANGLE_DEGREES) {
+        } else if (Math.abs(positionDeg - ArmConstants.L3_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.CORAL_L3;
-        } else if (positionDeg == ArmConstants.L4_ANGLE_DEGREES) {
+        } else if (Math.abs(positionDeg - ArmConstants.L4_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.CORAL_L4;
-        } else if (positionDeg == ArmConstants.PROCESSOR_ANGLE_DEGREES) {
+        } else if (Math.abs(positionDeg - ArmConstants.PROCESSOR_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.PROCESSOR;
-        } else if (positionDeg == ArmConstants.HIGH_ALGAE_ANGLE_DEGREES) {
+        } else if (Math.abs(positionDeg - ArmConstants.HIGH_ALGAE_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.ALGAE_HIGH;
-        } else if (positionDeg == ArmConstants.LOW_ALGAE_ANGLE_DEGREES) {
+        } else if (Math.abs(positionDeg - ArmConstants.LOW_ALGAE_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.ALGAE_LOW;
-        } else if (positionDeg == ArmConstants.BARGE_ANGLE_DEGREES) {
+        } else if (Math.abs(positionDeg - ArmConstants.BARGE_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.BARGE;
         }
         return ElevatorPosition.UNKNOWN; // Default case
