@@ -14,6 +14,7 @@ import frc.robot.commands.EndEffectorCommands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.FunnelCommands;
+import frc.robot.commands.end_effector.IntakeCommand.IntakeMode;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -167,7 +168,7 @@ public class RobotContainer {
 //                        FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem)
 //                )
 //        );
-        m_driverController.rightTrigger().whileTrue(EndEffectorCommands.OuttakeEffector(m_endEffectorSubsystem));
+        m_driverController.rightTrigger().whileTrue(EndEffectorCommands.OuttakeEffector());
 
         // Intake coral
 //        m_driverController.leftTrigger().whileTrue(
@@ -190,14 +191,14 @@ public class RobotContainer {
                                 ),
                                 // Intake coral until funnel no longer detects it (shallow beam break)
                                 new ParallelCommandGroup(
-                                        EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem),
+                                        EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
                                         FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem)
                                 ).until(
                                         () -> !m_funnelIndexerSubsystem.getHasCoral()
                                 ),
                                 // Run end effector intake, funnel intake, and move elevator + arm to level 1 simultaneously
                                 new ParallelCommandGroup(
-                                        EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem),
+                                        EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
                                         FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem),
                                         new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1)
                                 )
