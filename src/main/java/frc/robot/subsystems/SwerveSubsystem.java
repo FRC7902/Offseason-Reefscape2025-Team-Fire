@@ -11,6 +11,14 @@ import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.commands.PathfindingCommand;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -78,8 +86,89 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.setChassisDiscretization(false, true, 0.03);
         swerveDrive.swerveController.addSlewRateLimiters(null, null, null);
         swerveDrive.swerveController.setMaximumChassisAngularVelocity(20);
+        setupPathPlanner();
     }
+    /**
+   * Setup AutoBuilder for PathPlanner.
+   */
+    public void setupPathPlanner()
+    {
+        // Load the RobotConfig from the GUI settings. You should probably
+        // store this in your Constants file
+        RobotConfig config;
+        try
+        {
+        config = RobotConfig.fromGUISettings();
 
+        final boolean enableFeedforward = true;
+        // Configure AutoBuilder last
+        AutoBuilder.configure(
+            this::getPose,
+            // Robot pose supplier
+            this::resetOdometry,
+            // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getRobotVelocity,
+            // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            (speedsRobotRelative, moduleFeedForwards) -> {
+                if (enableFeedforward)
+                {
+                swerveDrive.drive(
+                    speedsRobotRelative,
+                    swerveDrive.kinematics.toSwerveModuleStates(speedsRobotRelative),
+                    moduleFeedForwards.linearForces()
+                                );
+                } else
+                {
+                swerveDrive.setChassisSpeeds(speedsRobotRelative);
+                }
+            },
+            // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+            new PPHolonomicDriveController(
+                // PPHolonomicController is the built in path following controller for holonomic drive trains
+                new PIDConstants(5.0, 0.0, 0.0),
+                // Translation PID constants
+                new PIDConstants(5.0, 0.0, 0.0)
+                // Rotation PID constants
+            ),
+            config,
+            // The robot configuration
+            () -> {
+                // Boolean supplier that controls when the path will be mirrored for the red alliance
+                // This will flip the path being followed to the red side of the field.
+                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+                var alliance = DriverStation.getAlliance();
+                if (alliance.isPresent())
+                {
+                return alliance.get() == DriverStation.Alliance.Red;
+                }
+                return false;
+            },
+            this
+            // Reference to this subsystem to set requirements
+                            );
+
+        } catch (Exception e)
+        {
+        // Handle exception as needed
+        e.printStackTrace();
+        }
+
+        //Preload PathPlanner Path finding
+        // IF USING CUSTOM PATHFINDER ADD BEFORE THIS LINE
+        PathfindingCommand.warmupCommand().schedule();
+    }
+    /**
+   * Get the path follower with events.
+   *
+   * @param pathName PathPlanner path name.
+   * @return {@link AutoBuilder#followPath(PathPlannerPath)} path command.
+   */
+    public Command getAutonomousCommand(String pathName)
+    {
+        // Create a path following command using AutoBuilder. This will also trigger event markers.
+        return new PathPlannerAuto(pathName);
+    }
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
