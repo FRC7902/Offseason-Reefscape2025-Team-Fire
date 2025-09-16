@@ -181,7 +181,8 @@ public class RobotContainer {
                                 new ParallelRaceGroup(
                                         new MoveElevatorArmCommand(ElevatorPosition.ZERO)
                                                 .until(
-                                                        () -> m_elevatorSubsystem.getElevatorPositionEnum() == ElevatorPosition.ZERO
+                                                        () -> m_elevatorSubsystem.getElevatorPositionEnum() == ElevatorPosition.ZERO &&
+                                                                m_armSubsystem.getArmPositionEnum() == ElevatorPosition.ZERO
                                                                 && m_funnelIndexerSubsystem.getHasCoral()
                                                 ),
                                         FunnelCommands.IntakeCoral(m_funnelIndexerSubsystem)
