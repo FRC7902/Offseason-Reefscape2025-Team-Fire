@@ -40,8 +40,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     /**
      * Elevator position enum
      */
-    public enum ElevatorPosition {
+    public enum ElevatorArmPosition {
         ZERO,
+        REST,
         CORAL_L1,
         CORAL_L2,
         CORAL_L3,
@@ -235,9 +236,10 @@ public class ElevatorSubsystem extends SubsystemBase {
      *
      * @param positionEnum The desired elevator position enum.
      */
-    public void setElevatorPositionEnum(ElevatorPosition positionEnum) {
+    public void setElevatorPositionEnum(ElevatorArmPosition positionEnum) {
         m_elevatorSetPointMeters = switch (positionEnum) {
             case ZERO -> ElevatorConstants.MIN_HEIGHT_METERS;
+            case REST -> ElevatorConstants.REST_HEIGHT_METERS;
             case CORAL_L1 -> ElevatorConstants.L1_HEIGHT_METERS;
             case CORAL_L2 -> ElevatorConstants.L2_HEIGHT_METERS;
             case CORAL_L3 -> ElevatorConstants.L3_HEIGHT_METERS;
@@ -298,7 +300,7 @@ public class ElevatorSubsystem extends SubsystemBase {
      *
      * @return The current elevator position as an ElevatorPosition enum.
      */
-    public ElevatorPosition getElevatorPositionEnum() {
+    public ElevatorArmPosition getElevatorPositionEnum() {
         double currentHeightMeters = getElevatorPositionMeters();
 //        if (positionMeters < ElevatorConstants.kElevatorMinHeightMeters + 0.01) {
 //            return ElevatorPosition.ZERO;
@@ -323,25 +325,27 @@ public class ElevatorSubsystem extends SubsystemBase {
 //        }
 
         if (Math.abs(currentHeightMeters - ElevatorConstants.MIN_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
-            return ElevatorPosition.ZERO;
+            return ElevatorArmPosition.ZERO;
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.REST_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
+            return ElevatorArmPosition.REST;
         } else if (Math.abs(currentHeightMeters - ElevatorConstants.L1_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
-            return ElevatorPosition.CORAL_L1;
+            return ElevatorArmPosition.CORAL_L1;
         } else if (Math.abs(currentHeightMeters - ElevatorConstants.L2_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
-            return ElevatorPosition.CORAL_L2;
+            return ElevatorArmPosition.CORAL_L2;
         } else if (Math.abs(currentHeightMeters - ElevatorConstants.L3_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
-            return ElevatorPosition.CORAL_L3;
+            return ElevatorArmPosition.CORAL_L3;
         } else if (Math.abs(currentHeightMeters - ElevatorConstants.L4_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
-            return ElevatorPosition.CORAL_L4;
+            return ElevatorArmPosition.CORAL_L4;
         } else if (Math.abs(currentHeightMeters - ElevatorConstants.PROCESSOR_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
-            return ElevatorPosition.PROCESSOR;
+            return ElevatorArmPosition.PROCESSOR;
         } else if (Math.abs(currentHeightMeters - ElevatorConstants.HIGH_ALGAE_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
-            return ElevatorPosition.ALGAE_HIGH;
+            return ElevatorArmPosition.ALGAE_HIGH;
         } else if (Math.abs(currentHeightMeters - ElevatorConstants.MAX_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
-            return ElevatorPosition.ALGAE_LOW;
+            return ElevatorArmPosition.ALGAE_LOW;
         } else if (Math.abs(currentHeightMeters - ElevatorConstants.BARGE_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
-            return ElevatorPosition.BARGE;
+            return ElevatorArmPosition.BARGE;
         } else {
-            return ElevatorPosition.UNKNOWN;
+            return ElevatorArmPosition.UNKNOWN;
         }
     }
 

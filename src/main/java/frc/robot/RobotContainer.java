@@ -21,7 +21,7 @@ import swervelib.SwerveInputStream;
 import frc.robot.commands.MoveElevatorArmCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorArmPosition;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -179,9 +179,9 @@ public class RobotContainer {
                         new SequentialCommandGroup(
                                 // Move elevator to pickup position
                                 new ParallelRaceGroup(
-                                        new MoveElevatorArmCommand(ElevatorPosition.ZERO)
+                                        new MoveElevatorArmCommand(ElevatorArmPosition.ZERO)
                                                 .until(
-                                                        () -> m_elevatorSubsystem.getElevatorPositionEnum() == ElevatorPosition.ZERO
+                                                        () -> m_elevatorSubsystem.getElevatorPositionEnum() == ElevatorArmPosition.ZERO
                                                                 && m_funnelIndexerSubsystem.getHasCoral()
                                                 ),
                                         FunnelCommands.IntakeCoral(m_funnelIndexerSubsystem)
@@ -197,7 +197,7 @@ public class RobotContainer {
                                 new ParallelCommandGroup(
                                         EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem),
                                         FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem),
-                                        new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1)
+                                        new MoveElevatorArmCommand(ElevatorArmPosition.CORAL_L1)
                                 )
                         ),
                         m_endEffectorSubsystem::hasCoral
@@ -205,15 +205,15 @@ public class RobotContainer {
         );
 
         // Elevator Setpoints
-        m_driverController.y().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
-        m_driverController.b().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
-        m_driverController.x().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
-        m_driverController.a().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
+        m_driverController.y().onTrue(new MoveElevatorArmCommand(ElevatorArmPosition.CORAL_L4));
+        m_driverController.b().onTrue(new MoveElevatorArmCommand(ElevatorArmPosition.CORAL_L3));
+        m_driverController.x().onTrue(new MoveElevatorArmCommand(ElevatorArmPosition.CORAL_L2));
+        m_driverController.a().onTrue(new MoveElevatorArmCommand(ElevatorArmPosition.CORAL_L1));
 
 //        m_driverController.rightBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH));
 //        m_driverController.leftBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));
 
-        m_driverController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ZERO));
+        m_driverController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorArmPosition.ZERO));
 //        m_driverController.leftStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
 //
 //        m_driverController.rightStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));

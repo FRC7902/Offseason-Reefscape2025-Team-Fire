@@ -32,7 +32,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorArmPosition;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -266,9 +266,10 @@ public class ArmSubsystem extends SubsystemBase {
      *
      * @param position The desired arm position as an enum.
      */
-    public void setArmPositionEnum(ElevatorPosition position) {
+    public void setArmPositionEnum(ElevatorArmPosition position) {
         double degrees = switch (position) {
             case ZERO -> ArmConstants.ZERO_ANGLE_DEGREES;
+            case REST -> ArmConstants.REST_ANGLE_DEGREES;
             case CORAL_L1 -> ArmConstants.L1_ANGLE_DEGREES;
             case CORAL_L2 -> ArmConstants.L2_ANGLE_DEGREES;
             case CORAL_L3 -> ArmConstants.L3_ANGLE_DEGREES;
@@ -287,28 +288,30 @@ public class ArmSubsystem extends SubsystemBase {
      *
      * @return The current arm position as an ElevatorPosition enum.
      */
-    public ElevatorPosition getArmPositionEnum() {
+    public ElevatorArmPosition getArmPositionEnum() {
         double positionDeg = getArmPositionDegrees();
         if (positionDeg == ArmConstants.ZERO_ANGLE_DEGREES) {
-            return ElevatorPosition.ZERO;
+            return ElevatorArmPosition.ZERO;
+        } else if (positionDeg == ArmConstants.REST_ANGLE_DEGREES) {
+            return ElevatorArmPosition.REST;
         } else if (positionDeg == ArmConstants.L1_ANGLE_DEGREES) {
-            return ElevatorPosition.CORAL_L1;
+            return ElevatorArmPosition.CORAL_L1;
         } else if (positionDeg == ArmConstants.L2_ANGLE_DEGREES) {
-            return ElevatorPosition.CORAL_L2;
+            return ElevatorArmPosition.CORAL_L2;
         } else if (positionDeg == ArmConstants.L3_ANGLE_DEGREES) {
-            return ElevatorPosition.CORAL_L3;
+            return ElevatorArmPosition.CORAL_L3;
         } else if (positionDeg == ArmConstants.L4_ANGLE_DEGREES) {
-            return ElevatorPosition.CORAL_L4;
+            return ElevatorArmPosition.CORAL_L4;
         } else if (positionDeg == ArmConstants.PROCESSOR_ANGLE_DEGREES) {
-            return ElevatorPosition.PROCESSOR;
+            return ElevatorArmPosition.PROCESSOR;
         } else if (positionDeg == ArmConstants.HIGH_ALGAE_ANGLE_DEGREES) {
-            return ElevatorPosition.ALGAE_HIGH;
+            return ElevatorArmPosition.ALGAE_HIGH;
         } else if (positionDeg == ArmConstants.LOW_ALGAE_ANGLE_DEGREES) {
-            return ElevatorPosition.ALGAE_LOW;
+            return ElevatorArmPosition.ALGAE_LOW;
         } else if (positionDeg == ArmConstants.BARGE_ANGLE_DEGREES) {
-            return ElevatorPosition.BARGE;
+            return ElevatorArmPosition.BARGE;
         }
-        return ElevatorPosition.UNKNOWN; // Default case
+        return ElevatorArmPosition.UNKNOWN; // Default case
     }
 
     /**

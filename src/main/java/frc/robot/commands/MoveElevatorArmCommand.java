@@ -11,11 +11,11 @@ import frc.robot.subsystems.ElevatorSubsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MoveElevatorArmCommand extends Command {
     boolean isEnum;
-    ElevatorSubsystem.ElevatorPosition position;
+    ElevatorSubsystem.ElevatorArmPosition position;
     double positionMeters;
     double angleDegrees;
 
-    public MoveElevatorArmCommand(ElevatorSubsystem.ElevatorPosition position) {
+    public MoveElevatorArmCommand(ElevatorSubsystem.ElevatorArmPosition position) {
         isEnum = true;
         this.position = position;
         addRequirements(RobotContainer.m_elevatorSubsystem, RobotContainer.m_armSubsystem);
