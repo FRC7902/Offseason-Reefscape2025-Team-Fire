@@ -197,7 +197,7 @@ public class RobotContainer {
                                 new ParallelCommandGroup(
                                         EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem),
                                         FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem),
-                                        new MoveElevatorArmCommand(ElevatorArmPosition.CORAL_L1)
+                                        new MoveElevatorArmCommand(ElevatorArmPosition.REST)
                                 )
                         ),
                         m_endEffectorSubsystem::hasCoral
@@ -214,6 +214,7 @@ public class RobotContainer {
 //        m_driverController.leftBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));
 
         m_driverController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorArmPosition.ZERO));
+        m_driverController.povUp().onTrue(new MoveElevatorArmCommand(ElevatorArmPosition.REST));
 //        m_driverController.leftStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
 //
 //        m_driverController.rightStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
