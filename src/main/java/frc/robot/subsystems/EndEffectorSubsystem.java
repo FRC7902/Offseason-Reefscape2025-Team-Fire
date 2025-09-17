@@ -25,7 +25,6 @@ public class EndEffectorSubsystem extends SubsystemBase {
     private final DigitalInput m_coralBeamBreak;
     // private final DigitalInput m_algaeProximitySensor;
 
-    
 
     /**
      * Creates a new AlgaeCoralIndexerSubsystem.
@@ -49,14 +48,15 @@ public class EndEffectorSubsystem extends SubsystemBase {
         m_motor.getConfigurator().apply(m_motorConfig);
 
     }
-    // sets algae
-    public void setHasAlgae(boolean hasAlgae){
+
+    public void setHasAlgae(boolean hasAlgae) {
         this.hasAlgae = hasAlgae;
     }
-    // gets algae 
-    public boolean getHasAlgae (){
+
+    public boolean getHasAlgae() {
         return hasAlgae;
     }
+
     public boolean hasCoral() {
         return !m_coralBeamBreak.get();
     }
@@ -77,11 +77,12 @@ public class EndEffectorSubsystem extends SubsystemBase {
     public double getSupplyCurrent() {
         return m_motor.getSupplyCurrent().getValueAsDouble();
     }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
         SmartDashboard.putBoolean("End Effector — Has Coral", hasCoral());
-        SmartDashboard.putBoolean("End Effector - Has Algae" , getHasAlgae());
+        SmartDashboard.putBoolean("End Effector - Has Algae", getHasAlgae());
         SmartDashboard.putNumber("Supply Current EndEffector", getSupplyCurrent());
         SmartDashboard.putNumber("EndEffector Motor Velocity", m_motor.getVelocity().getValueAsDouble());
     }

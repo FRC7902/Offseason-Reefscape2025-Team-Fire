@@ -8,8 +8,6 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.EndEffectorConstants;
-import frc.robot.commands.EndEffectorCommands;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -73,18 +71,14 @@ public class IntakeCommand extends Command {
 
         // Algae mode
         // Debouncer to detect consistent current spike for longer than time (t)
-        boolean debounceState = m_debouncer.calculate(
-                2 < RobotContainer.m_endEffectorSubsystem.getSupplyCurrent()
-                        && RobotContainer.m_endEffectorSubsystem.getSupplyCurrent() < 3);
+        boolean algaeDetected = m_debouncer.calculate(
+                EndEffectorConstants.ALGAE_INTAKE_STALL_DETECTION_CURRENT_LOW < RobotContainer.m_endEffectorSubsystem.getSupplyCurrent()
+                        && RobotContainer.m_endEffectorSubsystem.getSupplyCurrent() < EndEffectorConstants.ALGAE_INTAKE_STALL_DETECTION_CURRENT_HIGH);
 
-        if (debounceState) {
-            RobotContainer.m_endEffectorSubsystem.setHasAlgae(debounceState);
-            return true;
+        if (algaeDetected) {
+            RobotContainer.m_endEffectorSubsystem.setHasAlgae(true);
         }
-        return false;
 
-        // TODO: Check supply current readings on AdvantageScope?
-        // TODO: Maybe filter current through LinearFilter.movingAverage(10)?
-        // TODO: Adjust stall detection current?
+        return algaeDetected;
     }
 }

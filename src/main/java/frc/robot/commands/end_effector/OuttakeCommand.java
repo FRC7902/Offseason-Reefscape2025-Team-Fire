@@ -26,7 +26,7 @@ public class OuttakeCommand extends Command {
     @Override
     public void initialize() {
         RobotContainer.m_endEffectorSubsystem.setSpeed(EndEffectorConstants.OUTTAKE_SPEED);
-        
+
     }
 
     // Called every time the scheduler runs while the command is scheduled.
