@@ -456,15 +456,17 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         // Scale the robot's drive speed based on the elevator position, between 10% and 100%
         RobotContainer.driveAngularVelocity.scaleTranslation(
+                // Scale between MIN_TRANSLATION_SPEED_SCALE and 1.0
                 Math.max(
-                        Math.min(1.0 - getElevatorPositionScale(), 1.0),
+                        Math.min(1.0 - getElevatorPositionScale(), 1.0), // Prevents applied scale > 1.0
                         SwerveConstants.MIN_TRANSLATION_SPEED_SCALE
                 )
         );
         // TODO: If needed, rotation can be scaled separately from translation, since rotation is less affected by a high center of gravity?
         RobotContainer.driveAngularVelocity.scaleRotation(
+                // Scale between MIN_TRANSLATION_SPEED_SCALE and 1.0
                 Math.max(
-                        Math.min(1.0 - getElevatorPositionScale(), 1.0),
+                        Math.min(1.0 - getElevatorPositionScale(), 1.0), // Prevents applied scale > 1.0
                         SwerveConstants.MIN_ROTATION_SPEED_SCALE
                 )
         );
