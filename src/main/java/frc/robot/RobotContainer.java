@@ -117,7 +117,9 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings() {
-        // FunnelSubsystem
+
+        m_swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
+
         m_funnelIndexerSubsystem.setDefaultCommand(
                 new ConditionalCommand(
                         new InstantCommand(),
@@ -125,56 +127,9 @@ public class RobotContainer {
                         m_endEffectorSubsystem::hasCoral
                 )
         );
-//        m_driverController.rightBumper().whileTrue(FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem));
 
-        // EndEffectorSubsystem
-        // Run intake at slow sleep if coral is not detected
-//        m_endEffectorSubsystem.setDefaultCommand(
-//                new ConditionalCommand(
-//                        new InstantCommand(),
-//                        new InstantCommand(
-//                                () ->
-//                                        m_endEffectorSubsystem.setSpeed(Constants.EndEffectorConstants.SLOW_INTAKE_SPEED),
-//                                m_endEffectorSubsystem
-//                        ),
-//                        m_endEffectorSubsystem::hasCoral
-//                )
-//        );
-
-//        m_endEffectorSubsystem.setDefaultCommand(
-//                new ConditionalCommand(
-//                        EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem)
-//                                .until(
-//                                        () -> m_elevatorSubsystem.getElevatorPositionEnum() != ElevatorPosition.ZERO
-//                                ),
-//                        new InstantCommand(),
-//                        () -> m_elevatorSubsystem.getElevatorPositionEnum() == ElevatorPosition.ZERO &&
-//                                !m_endEffectorSubsystem.hasCoral()
-//                )
-//        );
-
-
-//        m_driverController.leftTrigger().onTrue(
-//                new ParallelCommandGroup(
-//                        new MoveElevatorArmCommand(ElevatorPosition.ZERO),
-//                        new ConditionalCommand(
-//                                new InstantCommand(),
-//                                new InstantCommand(),
-//                                () -> m_elevatorSubsystem.getElevatorPositionEnum() == ElevatorPosition.ZERO
-//                        )
-//                )
-//                new ParallelCommandGroup(
-//                        EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem),
-//                        FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem)
-//                )
-//        );
+        // === Intake/Outtake controls ===
         m_driverController.rightTrigger().whileTrue(EndEffectorCommands.OuttakeEffector());
-
-        // Intake coral
-//        m_driverController.leftTrigger().whileTrue(
-//                new MoveElevatorArmCommand(ElevatorPosition.ZERO)
-//                        .andThen(EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem))
-//        );
 
         m_driverController.leftTrigger().whileTrue(
                 new ConditionalCommand(
@@ -206,8 +161,9 @@ public class RobotContainer {
                         m_endEffectorSubsystem::hasCoral
                 )
         );
+        // ===============================
 
-        // Elevator Setpoints
+        // === Elevator Setpoints ===
         m_driverController.y().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
         m_driverController.b().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
         m_driverController.x().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
@@ -218,15 +174,10 @@ public class RobotContainer {
 
         m_driverController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ZERO));
 //        m_driverController.leftStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
-//
-//        m_driverController.rightStick().onTrue(new M  oveElevatorArmCommand(ElevatorPosition.PROCESSOR));
+//        m_driverController.rightStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
+        // ==========================
 
-        m_swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
         m_driverController.start().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
-        // m_driverController.povUp().onTrue(new InstantCommand(() -> {m_endEffectorSubsystem.setSpeed(1);}));
-        // m_driverController.povUp().onFalse(new InstantCommand(() -> {m_endEffectorSubsystem.setSpeed(0);}));
-
-        m_driverController.povUp().onTrue(EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE));
 }
 
     /**
