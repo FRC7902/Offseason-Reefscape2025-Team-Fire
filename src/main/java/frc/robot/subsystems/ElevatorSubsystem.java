@@ -31,7 +31,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants;
+import frc.robot.Constants.*;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.RobotContainer;
 
@@ -265,7 +265,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             positionMeters = ElevatorConstants.MAX_HEIGHT_METERS;
         }
 
-        if (getArmPositionDegrees() < Constants.ArmConstants.SAFETY_ANGLE_UPWARD_DEGREES) {
+        if (getArmPositionDegrees() < ArmConstants.SAFETY_ANGLE_UPWARD_DEGREES) {
             positionMeters = currentPosMeters;
         }
 
@@ -291,6 +291,15 @@ public class ElevatorSubsystem extends SubsystemBase {
     public double getElevatorPositionMeters() {
         double positionRotations = m_leaderMotor.getPosition().getValueAsDouble();
         return positionRotations * ElevatorConstants.METERS_PER_MOTOR_ROTATION + (RobotBase.isSimulation() ? 0 : ElevatorConstants.MIN_HEIGHT_METERS);
+    }
+
+    /**
+     * Gets the current elevation position as a scale from 0 to 1, where 0 is the minimum height and 1 is the maximum height.
+     *
+     * @return The current elevator position as a scale from 0 to 1.
+     */
+    private double getElevatorPositionScale() {
+        return (getElevatorPositionMeters() - ElevatorConstants.MIN_HEIGHT_METERS) / (ElevatorConstants.MAX_HEIGHT_METERS - ElevatorConstants.MIN_HEIGHT_METERS);
     }
 
     /**
@@ -444,6 +453,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Elevator — At Setpoint", hasReachedSetpoint());
 
         updateTelemetry();
+
+        // Scale the robot's drive speed based on the elevator position, between 10% and 100%
+        RobotContainer.driveAngularVelocity.scaleTranslation(Math.max(1.0 - getElevatorPositionScale(), SwerveConstants.MIN_SPEED_SCALE));
+        // TODO: If needed, rotation can be scaled separately from translation, since rotation is less affected by a high center of gravity?
+        RobotContainer.driveAngularVelocity.scaleRotation(Math.max(1.0 - getElevatorPositionScale(), SwerveConstants.MIN_SPEED_SCALE));
     }
 
     @Override

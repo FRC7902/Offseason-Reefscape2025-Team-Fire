@@ -44,9 +44,9 @@ public class RobotContainer {
     public final static ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
-    private final CommandPS5Controller m_driverController = new CommandPS5Controller(
+    private final static CommandPS5Controller m_driverController = new CommandPS5Controller(
             OperatorConstants.DRIVER_CONTROLLER_PORT);
-    private final CommandPS5Controller m_operatorController = new CommandPS5Controller(
+    private final static CommandPS5Controller m_operatorController = new CommandPS5Controller(
             OperatorConstants.OPERATOR_CONTROLLER_PORT);
 
     public final static SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem(
@@ -60,7 +60,7 @@ public class RobotContainer {
         configureBindings();
     }
 
-    public SwerveInputStream driveAngularVelocity = SwerveInputStream
+    public static SwerveInputStream driveAngularVelocity = SwerveInputStream
             .of(m_swerveSubsystem.getSwerveDrive(), () -> m_driverController.getLeftY() * -1,
                     () -> m_driverController.getLeftX() * -1)
             .withControllerRotationAxis(() -> m_driverController.getRightX() * -1)
