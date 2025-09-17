@@ -298,7 +298,7 @@ public class ElevatorSubsystem extends SubsystemBase {
      *
      * @return The current elevator position as a scale from 0 to 1.
      */
-    private double getElevatorPositionScale() {
+    public double getElevatorPositionScale() {
         return (getElevatorPositionMeters() - ElevatorConstants.MIN_HEIGHT_METERS) / (ElevatorConstants.MAX_HEIGHT_METERS - ElevatorConstants.MIN_HEIGHT_METERS);
     }
 
@@ -453,23 +453,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Elevator — At Setpoint", hasReachedSetpoint());
 
         updateTelemetry();
-
-        // Scale the robot's drive speed based on the elevator position, between 10% and 100%
-        RobotContainer.driveAngularVelocity.scaleTranslation(
-                // Scale between MIN_TRANSLATION_SPEED_SCALE and 1.0
-                Math.max(
-                        Math.min(1.0 - getElevatorPositionScale(), 1.0), // Prevents applied scale > 1.0
-                        SwerveConstants.MIN_TRANSLATION_SPEED_SCALE
-                )
-        );
-        // TODO: If needed, rotation can be scaled separately from translation, since rotation is less affected by a high center of gravity?
-        RobotContainer.driveAngularVelocity.scaleRotation(
-                // Scale between MIN_TRANSLATION_SPEED_SCALE and 1.0
-                Math.max(
-                        Math.min(1.0 - getElevatorPositionScale(), 1.0), // Prevents applied scale > 1.0
-                        SwerveConstants.MIN_ROTATION_SPEED_SCALE
-                )
-        );
     }
 
     @Override

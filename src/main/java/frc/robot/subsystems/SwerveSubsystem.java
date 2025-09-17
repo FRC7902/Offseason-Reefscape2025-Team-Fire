@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -40,7 +41,9 @@ public class SwerveSubsystem extends SubsystemBase {
     /* Swerve drive object */
     private final SwerveDrive swerveDrive;
 
-    /** Creates a new SwerveSubsystem. */
+    /**
+     * Creates a new SwerveSubsystem.
+     */
     public SwerveSubsystem(File directory) {
 
         // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary
@@ -80,12 +83,38 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.swerveController.setMaximumChassisAngularVelocity(20);
     }
 
+    private void scaleSwerveInput() {
+        double scale = Math.min(1.0 - RobotContainer.m_elevatorSubsystem.getElevatorPositionScale(), 1.0); // Prevents applied scale > 1.0
+
+        if (RobotContainer.m_endEffectorSubsystem.getHasAlgae())
+            scale -= 0.15; // Further reduce speed if carrying algae
+
+        // Scale the robot's drive speed based on the elevator position, between 10% and 100%
+        RobotContainer.driveAngularVelocity.scaleTranslation(
+                // Scale between MIN_TRANSLATION_SPEED_SCALE and 1.0
+                Math.max(
+                        scale,
+                        SwerveConstants.MIN_TRANSLATION_SPEED_SCALE
+                )
+        );
+        // TODO: If needed, rotation can be scaled separately from translation, since rotation is less affected by a high center of gravity?
+        RobotContainer.driveAngularVelocity.scaleRotation(
+                // Scale between MIN_TRANSLATION_SPEED_SCALE and 1.0
+                Math.max(
+                        scale,
+                        SwerveConstants.MIN_ROTATION_SPEED_SCALE
+                )
+        );
+    }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
         SmartDashboard.putNumber("Gyro angle rotation (rad)", swerveDrive.getGyro().getRotation3d().getAngle());
 
         SmartDashboard.putString("Robo Pose2D", swerveDrive.getPose().toString());
+
+        scaleSwerveInput();
     }
 
     @Override
@@ -151,13 +180,13 @@ public class SwerveSubsystem extends SubsystemBase {
      * @return Drive command.
      */
     public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY,
-            DoubleSupplier angularRotationX) {
+                                DoubleSupplier angularRotationX) {
         return run(() -> {
             // Make the robot move
             swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
-                    translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
-                    translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()),
-                    0.8),
+                                    translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
+                                    translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()),
+                            0.8),
                     Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumChassisAngularVelocity(),
                     true, false);
         });
@@ -176,7 +205,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * @return Drive command.
      */
     public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY,
-            DoubleSupplier headingX, DoubleSupplier headingY) {
+                                DoubleSupplier headingX, DoubleSupplier headingY) {
         // swerveDrive.setHeadingCorrection(true); // Normally you would want heading
         // correction for this kind of control.
         return run(() -> {
@@ -218,8 +247,8 @@ public class SwerveSubsystem extends SubsystemBase {
      */
     public void drive(Translation2d translation, double rotation, boolean fieldRelative) {
         swerveDrive.drive(translation, rotation, fieldRelative, false); // Open loop is disabled
-                                                                        // since it shouldn't be
-                                                                        // used most of the time.
+        // since it shouldn't be
+        // used most of the time.
     }
 
     /**
@@ -317,7 +346,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * Checks if the alliance is red, defaults to false if alliance isn't available.
      *
      * @return true if the red alliance, false if blue. Defaults to false if none is
-     *         available.
+     * available.
      */
     private boolean isRedAlliance() {
         var alliance = DriverStation.getAlliance();
@@ -374,7 +403,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * @return {@link ChassisSpeeds} which can be sent to the Swerve Drive.
      */
     public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, double headingX,
-            double headingY) {
+                                         double headingY) {
         Translation2d scaledInputs = SwerveMath.cubeTranslation(new Translation2d(xInput, yInput));
         return swerveDrive.swerveController.getTargetSpeeds(scaledInputs.getX(),
                 scaledInputs.getY(), headingX, headingY, getHeading().getRadians(),
