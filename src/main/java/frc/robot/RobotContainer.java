@@ -223,8 +223,10 @@ public class RobotContainer {
 
         m_swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
         m_driverController.start().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
-        m_driverController.povUp().onTrue(new InstantCommand(() -> {m_endEffectorSubsystem.setSpeed(1);}));
-        m_driverController.povUp().onFalse(new InstantCommand(() -> {m_endEffectorSubsystem.setSpeed(0);}));
+        // m_driverController.povUp().onTrue(new InstantCommand(() -> {m_endEffectorSubsystem.setSpeed(1);}));
+        // m_driverController.povUp().onFalse(new InstantCommand(() -> {m_endEffectorSubsystem.setSpeed(0);}));
+
+        m_driverController.povUp().onTrue(EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE));
 }
 
     /**

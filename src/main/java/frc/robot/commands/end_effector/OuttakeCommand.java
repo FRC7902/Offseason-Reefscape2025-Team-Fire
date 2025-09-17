@@ -26,7 +26,7 @@ public class OuttakeCommand extends Command {
     @Override
     public void initialize() {
         RobotContainer.m_endEffectorSubsystem.setSpeed(EndEffectorConstants.OUTTAKE_SPEED);
-
+        
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -37,6 +37,7 @@ public class OuttakeCommand extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        RobotContainer.m_endEffectorSubsystem.setHasAlgae(false);
         RobotContainer.m_endEffectorSubsystem.stop();
     }
 

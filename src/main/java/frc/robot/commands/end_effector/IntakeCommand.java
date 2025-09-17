@@ -33,7 +33,7 @@ public class IntakeCommand extends Command {
         m_mode = mode;
 
         // TODO: Tune debouncer time
-        m_debouncer = new Debouncer(0.33, DebounceType.kRising);
+        m_debouncer = new Debouncer(0.5, DebounceType.kRising);
     }
 
     // Called when the command is initially scheduled.
@@ -74,8 +74,8 @@ public class IntakeCommand extends Command {
         // Algae mode
         // Debouncer to detect consistent current spike for longer than time (t)
         boolean debounceState = m_debouncer.calculate(
-            RobotContainer.m_endEffectorSubsystem.getSupplyCurrent() > EndEffectorConstants.ALGAE_INTAKE_STALL_DETECTION_CURRENT
-        );
+                2 < RobotContainer.m_endEffectorSubsystem.getSupplyCurrent()
+                        && RobotContainer.m_endEffectorSubsystem.getSupplyCurrent() < 3);
 
         if (debounceState) {
             RobotContainer.m_endEffectorSubsystem.setHasAlgae(debounceState);
