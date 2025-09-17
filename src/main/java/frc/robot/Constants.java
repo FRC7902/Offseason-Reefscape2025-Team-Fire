@@ -72,16 +72,16 @@ public final class Constants {
 
     public static class PhotonConstants {
         public static final String leftCamName = "left";
-        public static final Transform3d leftCamToRobotTsf = new Transform3d(0.207, 0.150, 0.567,
-                new Rotation3d(Math.toRadians(0), Math.toRadians(30), Math.toRadians(-4.333)));
-        public static final CameraProperties leftCamProp = new CameraProperties(leftCamName, leftCamToRobotTsf, 640,
-                480, Rotation2d.fromDegrees(100), 30, 0.25, 0.08);
+        // public static final Transform3d leftCamToRobotTsf = new Transform3d(0.207, 0.150, 0.567,
+        //         new Rotation3d(Math.toRadians(0), Math.toRadians(30), Math.toRadians(-4.333)));
+        // public static final CameraProperties leftCamProp = new CameraProperties(leftCamName, leftCamToRobotTsf, 640,
+        //         480, Rotation2d.fromDegrees(100), 30, 0.25, 0.08);
 
-        public static final String rightCamName = "right";
-        public static final Transform3d rightCamToRobotTsf = new Transform3d(0.207, -0.150, 0.567,
-                new Rotation3d(Math.toRadians(0), Math.toRadians(30), Math.toRadians(4.333)));
-        public static final CameraProperties rightCamProp = new CameraProperties(rightCamName, rightCamToRobotTsf, 640,
-                480, Rotation2d.fromDegrees(100), 30, 0.25, 0.08);
+        // public static final String rightCamName = "right";
+        // public static final Transform3d rightCamToRobotTsf = new Transform3d(0.207, -0.150, 0.567,
+        //         new Rotation3d(Math.toRadians(0), Math.toRadians(30), Math.toRadians(4.333)));
+        // public static final CameraProperties rightCamProp = new CameraProperties(rightCamName, rightCamToRobotTsf, 640,
+        //         480, Rotation2d.fromDegrees(100), 30, 0.25, 0.08);
 
         public static final String middleCamName = "middle";
         public static final Transform3d middleCamToRobotTsf = new Transform3d(0, 0, 0.35,

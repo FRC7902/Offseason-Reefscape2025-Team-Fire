@@ -16,10 +16,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.PhotonConstants;
 import frc.robot.commands.FunnelCommands;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.vision.PhotonSim;
+import frc.robot.subsystems.vision.PhotonSubsystem;
 import swervelib.SwerveInputStream;
 
 /**
@@ -44,6 +46,7 @@ public class RobotContainer {
             new File(Filesystem.getDeployDirectory(), "swerve"));
 
     public static PhotonSim m_cameraSim;
+    public final PhotonSubsystem m_middleCamera = new PhotonSubsystem(PhotonConstants.middleCamProp);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
