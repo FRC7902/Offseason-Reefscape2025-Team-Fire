@@ -14,6 +14,7 @@ import frc.robot.commands.EndEffectorCommands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.FunnelCommands;
+import frc.robot.commands.end_effector.IntakeCommand.IntakeMode;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -35,7 +36,7 @@ import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final FunnelSubsystem m_funnelIndexerSubsystem = new FunnelSubsystem();
-    private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
+    public final static EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
     public final static ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
     public final static ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
@@ -127,17 +128,19 @@ public class RobotContainer {
 //        m_driverController.rightBumper().whileTrue(FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem));
 
         // EndEffectorSubsystem
-        m_endEffectorSubsystem.setDefaultCommand(
-                new ConditionalCommand(
-                        new InstantCommand(),
-                        new InstantCommand(
-                                () ->
-                                        m_endEffectorSubsystem.setSpeed(Constants.EndEffectorConstants.SLOW_INTAKE_SPEED),
-                                m_endEffectorSubsystem
-                        ),
-                        m_endEffectorSubsystem::hasCoral
-                )
-        );
+        // Run intake at slow sleep if coral is not detected
+//        m_endEffectorSubsystem.setDefaultCommand(
+//                new ConditionalCommand(
+//                        new InstantCommand(),
+//                        new InstantCommand(
+//                                () ->
+//                                        m_endEffectorSubsystem.setSpeed(Constants.EndEffectorConstants.SLOW_INTAKE_SPEED),
+//                                m_endEffectorSubsystem
+//                        ),
+//                        m_endEffectorSubsystem::hasCoral
+//                )
+//        );
+
 //        m_endEffectorSubsystem.setDefaultCommand(
 //                new ConditionalCommand(
 //                        EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem)
@@ -165,7 +168,7 @@ public class RobotContainer {
 //                        FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem)
 //                )
 //        );
-        m_driverController.rightTrigger().whileTrue(EndEffectorCommands.OuttakeEffector(m_endEffectorSubsystem));
+        m_driverController.rightTrigger().whileTrue(EndEffectorCommands.OuttakeEffector());
 
         // Intake coral
 //        m_driverController.leftTrigger().whileTrue(
@@ -188,14 +191,14 @@ public class RobotContainer {
                                 ),
                                 // Intake coral until funnel no longer detects it (shallow beam break)
                                 new ParallelCommandGroup(
-                                        EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem),
+                                        EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
                                         FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem)
                                 ).until(
                                         () -> !m_funnelIndexerSubsystem.getHasCoral()
                                 ),
                                 // Run end effector intake, funnel intake, and move elevator + arm to level 1 simultaneously
                                 new ParallelCommandGroup(
-                                        EndEffectorCommands.IntakeEffector(m_endEffectorSubsystem),
+                                        EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
                                         FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem),
                                         new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1)
                                 )
@@ -216,11 +219,15 @@ public class RobotContainer {
         m_driverController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ZERO));
 //        m_driverController.leftStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
 //
-//        m_driverController.rightStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
+//        m_driverController.rightStick().onTrue(new M  oveElevatorArmCommand(ElevatorPosition.PROCESSOR));
 
         m_swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
         m_driverController.start().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
-    }
+        // m_driverController.povUp().onTrue(new InstantCommand(() -> {m_endEffectorSubsystem.setSpeed(1);}));
+        // m_driverController.povUp().onFalse(new InstantCommand(() -> {m_endEffectorSubsystem.setSpeed(0);}));
+
+        m_driverController.povUp().onTrue(EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE));
+}
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

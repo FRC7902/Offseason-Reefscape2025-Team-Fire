@@ -13,57 +13,77 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.EndEffectorConstants;
+import frc.robot.RobotContainer;
 
 public class EndEffectorSubsystem extends SubsystemBase {
 
-  private final TalonFX m_motor;
-  private final TalonFXConfiguration m_motorConfig;
-  private final MotorOutputConfigs m_motorOutputConfig;
+    private final TalonFX m_motor;
+    private final TalonFXConfiguration m_motorConfig;
+    private final MotorOutputConfigs m_motorOutputConfig;
+    private boolean hasAlgae;
 
-   private final DigitalInput m_coralBeamBreak;
-  // private final DigitalInput m_algaeProximitySensor;
+    private final DigitalInput m_coralBeamBreak;
+    // private final DigitalInput m_algaeProximitySensor;
 
 
-  /** Creates a new AlgaeCoralIndexerSubsystem. */
-  public EndEffectorSubsystem() {
-    m_motor = new TalonFX(EndEffectorConstants.MOTOR_CAN_ID);
+    /**
+     * Creates a new AlgaeCoralIndexerSubsystem.
+     */
+    public EndEffectorSubsystem() {
+        m_motor = new TalonFX(EndEffectorConstants.MOTOR_CAN_ID);
 
-    m_motorConfig = new TalonFXConfiguration();
-    m_motorOutputConfig = new MotorOutputConfigs();
-    
-     m_coralBeamBreak = new DigitalInput(EndEffectorConstants.CORAL_BEAM_BREAK_PORT_ID);
-    // m_algaeProximitySensor = new DigitalInput(EndEffectorConstants.ALGAE_PROXIMITY_SENSOR_PORT_ID);
-    
-    m_motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    m_motorConfig.CurrentLimits.StatorCurrentLimit = EndEffectorConstants.MOTOR_STATOR_CURRENT_LIMIT;
-    
-    m_motorOutputConfig.withNeutralMode(NeutralModeValue.Brake);
-    m_motorConfig.withMotorOutput(m_motorOutputConfig);
+        m_motorConfig = new TalonFXConfiguration();
+        m_motorOutputConfig = new MotorOutputConfigs();
 
-    m_motor.getConfigurator().apply(m_motorConfig);
+        m_coralBeamBreak = new DigitalInput(EndEffectorConstants.CORAL_BEAM_BREAK_PORT_ID);
+        // m_algaeProximitySensor = new DigitalInput(EndEffectorConstants.ALGAE_PROXIMITY_SENSOR_PORT_ID);
 
-  }
+        m_motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        m_motorConfig.CurrentLimits.StatorCurrentLimit = EndEffectorConstants.MOTOR_STATOR_CURRENT_LIMIT;
+        m_motorConfig.CurrentLimits.SupplyCurrentLimit = EndEffectorConstants.MOTOR_SUPPLY_CURRENT_LIMIT;
 
-  public boolean hasCoral() {
-     return !m_coralBeamBreak.get();
-  }
+        m_motorOutputConfig.withNeutralMode(NeutralModeValue.Brake);
+        m_motorConfig.withMotorOutput(m_motorOutputConfig);
 
-  public boolean hasAlgae() {
-    // return m_algaeProximitySensor.get();
-    return false;
-  }
+        m_motor.getConfigurator().apply(m_motorConfig);
 
-  public void stop() {
-    m_motor.stopMotor();
-  }
+    }
 
-  public void setSpeed(double speed) {
-    m_motor.set(speed);
-  }
+    public void setHasAlgae(boolean hasAlgae) {
+        this.hasAlgae = hasAlgae;
+    }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-      SmartDashboard.putBoolean("End Effector — Has Coral", hasCoral());
-  }
+    public boolean getHasAlgae() {
+        return hasAlgae;
+    }
+
+    public boolean hasCoral() {
+        return !m_coralBeamBreak.get();
+    }
+
+    /*public boolean hasAlgae() {
+        // return m_algaeProximitySensor.get();
+        return hasAlgae;
+    }*/
+
+    public void stop() {
+        m_motor.stopMotor();
+    }
+
+    public void setSpeed(double speed) {
+        m_motor.set(speed);
+    }
+
+    public double getSupplyCurrent() {
+        return m_motor.getSupplyCurrent().getValueAsDouble();
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        SmartDashboard.putBoolean("End Effector — Has Coral", hasCoral());
+        SmartDashboard.putBoolean("End Effector - Has Algae", getHasAlgae());
+        SmartDashboard.putNumber("Supply Current EndEffector", getSupplyCurrent());
+        SmartDashboard.putNumber("EndEffector Motor Velocity", m_motor.getVelocity().getValueAsDouble());
+    }
 }
