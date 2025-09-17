@@ -28,7 +28,8 @@ public final class Constants {
     public static class SwerveConstants {
         public static final double MAX_SPEED = Units.feetToMeters(15);
 
-        public static final double MIN_SPEED_SCALE = 0.1; // Minimum speed scaling factor for joystick input
+        public static final double MIN_TRANSLATION_SPEED_SCALE = 0.1; // Minimum speed scaling factor for joystick input
+        public static final double MIN_ROTATION_SPEED_SCALE = 0.1; // Minimum speed scaling factor for joystick input
     }
 
     public static class FunnelIndexerConstants {
