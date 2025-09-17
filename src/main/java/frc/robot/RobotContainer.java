@@ -219,11 +219,13 @@ public class RobotContainer {
         m_driverController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ZERO));
 //        m_driverController.leftStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
 //
-//        m_driverController.rightStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
+//        m_driverController.rightStick().onTrue(new M  oveElevatorArmCommand(ElevatorPosition.PROCESSOR));
 
         m_swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
         m_driverController.start().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
-    }
+        m_driverController.povUp().onTrue(new InstantCommand(() -> {m_endEffectorSubsystem.setSpeed(1);}));
+        m_driverController.povUp().onFalse(new InstantCommand(() -> {m_endEffectorSubsystem.setSpeed(0);}));
+}
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

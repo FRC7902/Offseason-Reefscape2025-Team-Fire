@@ -13,16 +13,19 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.EndEffectorConstants;
+import frc.robot.RobotContainer;
 
 public class EndEffectorSubsystem extends SubsystemBase {
 
     private final TalonFX m_motor;
     private final TalonFXConfiguration m_motorConfig;
     private final MotorOutputConfigs m_motorOutputConfig;
+    private boolean hasAlgae;
 
     private final DigitalInput m_coralBeamBreak;
     // private final DigitalInput m_algaeProximitySensor;
 
+    
 
     /**
      * Creates a new AlgaeCoralIndexerSubsystem.
@@ -46,15 +49,22 @@ public class EndEffectorSubsystem extends SubsystemBase {
         m_motor.getConfigurator().apply(m_motorConfig);
 
     }
-
+    // sets algae
+    public void setHasAlgae(boolean hasAlgae){
+        this.hasAlgae = hasAlgae;
+    }
+    // gets algae 
+    public boolean getHasAlgae (){
+        return hasAlgae;
+    }
     public boolean hasCoral() {
         return !m_coralBeamBreak.get();
     }
 
-    public boolean hasAlgae() {
+    /*public boolean hasAlgae() {
         // return m_algaeProximitySensor.get();
-        return false;
-    }
+        return hasAlgae;
+    }*/
 
     public void stop() {
         m_motor.stopMotor();
@@ -67,10 +77,12 @@ public class EndEffectorSubsystem extends SubsystemBase {
     public double getSupplyCurrent() {
         return m_motor.getSupplyCurrent().getValueAsDouble();
     }
-
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
         SmartDashboard.putBoolean("End Effector — Has Coral", hasCoral());
+        SmartDashboard.putBoolean("End Effector - Has Algae" , getHasAlgae());
+        SmartDashboard.putNumber("Supply Current EndEffector", getSupplyCurrent());
+        SmartDashboard.putNumber("EndEffector Motor Velocity", m_motor.getVelocity().getValueAsDouble());
     }
 }
