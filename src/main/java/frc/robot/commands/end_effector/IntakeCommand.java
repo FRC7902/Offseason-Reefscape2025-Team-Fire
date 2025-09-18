@@ -38,7 +38,7 @@ public class IntakeCommand extends Command {
     @Override
     public void initialize() {
         m_debouncer.calculate(false);
-
+        RobotContainer.m_endEffectorSubsystem.setHasAlgae(false);
         RobotContainer.m_endEffectorSubsystem.setSpeed(EndEffectorConstants.INTAKE_SPEED);
     }
 
