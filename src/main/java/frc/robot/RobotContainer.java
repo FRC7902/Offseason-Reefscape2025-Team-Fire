@@ -171,6 +171,14 @@ public class RobotContainer {
                 new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3), 
                 new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH), 
                 m_endEffectorSubsystem :: hasCoral));
+        m_driverController.y().onTrue(new ConditionalCommand(
+                new InstantCommand(), 
+                new MoveElevatorArmCommand(ElevatorPosition.BARGE), 
+                m_endEffectorSubsystem :: hasCoral));
+        m_driverController.a().onTrue(new ConditionalCommand(
+                new InstantCommand(), 
+                new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR), 
+                m_endEffectorSubsystem :: hasCoral));
         // ===============================
 
         // === Elevator Setpoints ===
