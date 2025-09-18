@@ -14,6 +14,7 @@ import frc.robot.commands.EndEffectorCommands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.FunnelCommands;
+import frc.robot.commands.end_effector.IntakeCommand;
 import frc.robot.commands.end_effector.IntakeCommand.IntakeMode;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
@@ -178,6 +179,14 @@ public class RobotContainer {
         // ==========================
 
         m_driverController.start().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
+        m_driverController.x().onTrue(new ConditionalCommand(
+                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2), 
+                new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW), 
+                m_endEffectorSubsystem :: hasCoral));
+        m_driverController.b().onTrue(new ConditionalCommand(
+                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3), 
+                new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH), 
+                m_endEffectorSubsystem :: hasCoral));
 }
 
     /**
