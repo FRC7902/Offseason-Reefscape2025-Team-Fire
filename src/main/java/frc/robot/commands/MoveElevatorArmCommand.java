@@ -55,6 +55,7 @@ public class MoveElevatorArmCommand extends Command {
     public boolean isFinished() {
         // TODO: Check if this condition is correct
         // return RobotContainer.m_elevatorSubsystem.hasReachedSetpoint() && RobotContainer.m_armSubsystem.hasReachedAngle();
-        return false;
+        return RobotContainer.m_elevatorSubsystem.getElevatorPositionEnum() == position
+                && RobotContainer.m_armSubsystem.getArmPositionEnum() == position;
     }
 }
