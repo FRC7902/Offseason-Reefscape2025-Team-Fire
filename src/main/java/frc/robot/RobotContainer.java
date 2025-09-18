@@ -162,12 +162,21 @@ public class RobotContainer {
                         m_endEffectorSubsystem::hasCoral
                 )
         );
+        // Elevator Setpoints Using Coral vs Algae mode
+        m_driverController.x().onTrue(new ConditionalCommand(
+                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2), 
+                new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW), 
+                m_endEffectorSubsystem :: hasCoral));
+        m_driverController.b().onTrue(new ConditionalCommand(
+                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3), 
+                new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH), 
+                m_endEffectorSubsystem :: hasCoral));
         // ===============================
 
         // === Elevator Setpoints ===
         m_driverController.y().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
-        m_driverController.b().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
-        m_driverController.x().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
+        //m_driverController.b().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
+        //m_driverController.x().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
         m_driverController.a().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
 
 //        m_driverController.rightBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH));
@@ -179,14 +188,7 @@ public class RobotContainer {
         // ==========================
 
         m_driverController.start().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
-        m_driverController.x().onTrue(new ConditionalCommand(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2), 
-                new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW), 
-                m_endEffectorSubsystem :: hasCoral));
-        m_driverController.b().onTrue(new ConditionalCommand(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3), 
-                new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH), 
-                m_endEffectorSubsystem :: hasCoral));
+        
 }
 
     /**
