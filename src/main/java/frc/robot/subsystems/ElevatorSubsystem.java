@@ -229,7 +229,9 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_leaderMotor.getMotorVoltage().setUpdateFrequency(50);
         m_leaderMotor.getTorqueCurrent().setUpdateFrequency(50);
     }
-
+    public void setElevatorPosition(double m_elevatorSetPointMeters) {
+        this.m_elevatorSetPointMeters = m_elevatorSetPointMeters;
+    }
     /**
      * Sets the elevator position based on the provided ElevatorPosition enum.
      *

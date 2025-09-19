@@ -9,6 +9,7 @@ import java.io.File;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.EndEffectorCommands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -163,24 +164,24 @@ public class RobotContainer {
         );
         // === Elevator Setpoints ===
         m_operatorController.x().onTrue(new ConditionalCommand(
-                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPositionEnum(ElevatorPosition.CORAL_L2)), 
-                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPositionEnum(ElevatorPosition.ALGAE_LOW)), 
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPosition(ElevatorConstants.L2_HEIGHT_METERS)), 
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPosition(ElevatorConstants.LOW_ALGAE_HEIGHT_METERS)), 
                 m_endEffectorSubsystem :: hasCoral));
         m_operatorController.b().onTrue(new ConditionalCommand(
-                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPositionEnum(ElevatorPosition.CORAL_L3)), 
-                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPositionEnum(ElevatorPosition.ALGAE_HIGH)), 
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPosition(ElevatorConstants.L3_HEIGHT_METERS)), 
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPosition(ElevatorConstants.HIGH_ALGAE_HEIGHT_METERS)), 
                 m_endEffectorSubsystem :: hasCoral));
         m_operatorController.y().onTrue(new ConditionalCommand(
                 new InstantCommand(), 
-                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPositionEnum(ElevatorPosition.BARGE)), 
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPosition(ElevatorConstants.BARGE_HEIGHT_METERS)), 
                 m_endEffectorSubsystem :: hasCoral));
         m_operatorController.a().onTrue(new ConditionalCommand(
                 new InstantCommand(), 
-                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPositionEnum(ElevatorPosition.PROCESSOR)), 
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPosition(ElevatorConstants.PROCESSOR_HEIGHT_METERS)), 
                 m_endEffectorSubsystem :: hasCoral));
         m_driverController.a().onTrue(new MoveElevatorArmCommand(m_elevatorSubsystem.getSetpoint(),m_armSubsystem.getArmPositionDegrees()));
         // ==========================
-        m_operatorController.x().onTrue(new ConditionalCommand(
+        /*m_operatorController.x().onTrue(new ConditionalCommand(
                 new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2), 
                 new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW), 
                 m_endEffectorSubsystem :: hasCoral));
@@ -196,7 +197,7 @@ public class RobotContainer {
                 new InstantCommand(), 
                 new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR), 
                 m_endEffectorSubsystem :: hasCoral));
-        m_driverController.start().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
+        m_driverController.start().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));*/
         
 }
 
