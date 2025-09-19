@@ -21,9 +21,7 @@ import com.ctre.phoenix6.sim.TalonFXSimState;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-
 import static edu.wpi.first.units.Units.Volts;
-
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -269,6 +267,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void setArmPositionEnum(ElevatorPosition position) {
         double degrees = switch (position) {
             case ZERO -> ArmConstants.ZERO_ANGLE_DEGREES;
+            case PREPARE_SCORE -> ArmConstants.PREPARE_SCORE_ANGLE_DEGREES;
             case CORAL_L1 -> ArmConstants.L1_ANGLE_DEGREES;
             case CORAL_L2 -> ArmConstants.L2_ANGLE_DEGREES;
             case CORAL_L3 -> ArmConstants.L3_ANGLE_DEGREES;
@@ -276,7 +275,8 @@ public class ArmSubsystem extends SubsystemBase {
             case PROCESSOR -> ArmConstants.PROCESSOR_ANGLE_DEGREES;
             case ALGAE_HIGH -> ArmConstants.HIGH_ALGAE_ANGLE_DEGREES;
             case ALGAE_LOW -> ArmConstants.LOW_ALGAE_ANGLE_DEGREES;
-            case BARGE -> ArmConstants.BARGE_ANGLE_DEGREES;
+            case BARGE_FRONT -> ArmConstants.BARGE_FRONT_ANGLE_DEGREES;
+            case BARGE_BACK -> ArmConstants.BARGE_BACK_ANGLE_DEGREES;
             default -> ArmConstants.MIN_ANGLE_DEGREES;
         };
         setArmPositionDegrees(degrees);
@@ -291,6 +291,8 @@ public class ArmSubsystem extends SubsystemBase {
         double positionDeg = getArmPositionDegrees();
         if (positionDeg == ArmConstants.ZERO_ANGLE_DEGREES) {
             return ElevatorPosition.ZERO;
+        } else if (positionDeg==ArmConstants.PREPARE_SCORE_ANGLE_DEGREES) {
+            return ElevatorPosition.PREPARE_SCORE;
         } else if (positionDeg == ArmConstants.L1_ANGLE_DEGREES) {
             return ElevatorPosition.CORAL_L1;
         } else if (positionDeg == ArmConstants.L2_ANGLE_DEGREES) {
@@ -305,8 +307,10 @@ public class ArmSubsystem extends SubsystemBase {
             return ElevatorPosition.ALGAE_HIGH;
         } else if (positionDeg == ArmConstants.LOW_ALGAE_ANGLE_DEGREES) {
             return ElevatorPosition.ALGAE_LOW;
-        } else if (positionDeg == ArmConstants.BARGE_ANGLE_DEGREES) {
-            return ElevatorPosition.BARGE;
+        } else if (positionDeg == ArmConstants.BARGE_FRONT_ANGLE_DEGREES) {
+            return ElevatorPosition.BARGE_FRONT;
+        } else if (positionDeg == ArmConstants.BARGE_BACK_ANGLE_DEGREES) {
+            return ElevatorPosition.BARGE_BACK;
         }
         return ElevatorPosition.UNKNOWN; // Default case
     }

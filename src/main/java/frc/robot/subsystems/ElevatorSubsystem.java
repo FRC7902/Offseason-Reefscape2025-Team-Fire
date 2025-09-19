@@ -16,9 +16,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-
 import static edu.wpi.first.units.Units.Volts;
-
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
@@ -42,6 +40,7 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     public enum ElevatorPosition {
         ZERO,
+        PREPARE_SCORE,
         CORAL_L1,
         CORAL_L2,
         CORAL_L3,
@@ -49,7 +48,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         PROCESSOR,
         ALGAE_HIGH,
         ALGAE_LOW,
-        BARGE,
+        BARGE_FRONT,
+        BARGE_BACK,
         UNKNOWN
     }
 
@@ -237,19 +237,31 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     public void setElevatorPositionEnum(ElevatorPosition positionEnum) {
         m_elevatorSetPointMeters = switch (positionEnum) {
-            case ZERO -> ElevatorConstants.MIN_HEIGHT_METERS;
-            case CORAL_L1 -> ElevatorConstants.L1_HEIGHT_METERS;
-            case CORAL_L2 -> ElevatorConstants.L2_HEIGHT_METERS;
-            case CORAL_L3 -> ElevatorConstants.L3_HEIGHT_METERS;
-            case CORAL_L4 -> ElevatorConstants.L4_HEIGHT_METERS;
-            case PROCESSOR -> ElevatorConstants.PROCESSOR_HEIGHT_METERS;
-            case ALGAE_HIGH -> ElevatorConstants.HIGH_ALGAE_HEIGHT_METERS;
-            case ALGAE_LOW -> ElevatorConstants.LOW_ALGAE_HEIGHT_METERS;
-            case BARGE -> ElevatorConstants.BARGE_HEIGHT_METERS;
+            case ZERO -> ElevatorConstants.ZERO_HEIGHT_PERCENT;
+            case PREPARE_SCORE -> ElevatorConstants.PREPARE_SCORE_HEIGHT_PERCENT;
+            case CORAL_L1 -> ElevatorConstants.L1_HEIGHT_PERCENT;
+            case CORAL_L2 -> ElevatorConstants.L2_HEIGHT_PERCENT;
+            case CORAL_L3 -> ElevatorConstants.L3_HEIGHT_PERCENT;
+            case CORAL_L4 -> ElevatorConstants.L4_HEIGHT_PERCENT;
+            case PROCESSOR -> ElevatorConstants.PROCESSOR_HEIGHT_PERCENT;
+            case ALGAE_HIGH -> ElevatorConstants.HIGH_ALGAE_HEIGHT_PERCENT;
+            case ALGAE_LOW -> ElevatorConstants.LOW_ALGAE_HEIGHT_PERCENT;
+            case BARGE_FRONT -> ElevatorConstants.BARGE_HEIGHT_PERCENT;
+            case BARGE_BACK -> ElevatorConstants.BARGE_HEIGHT_PERCENT;
             default -> ElevatorConstants.MIN_HEIGHT_METERS;
         };
 
-        setElevatorPositionMeters(m_elevatorSetPointMeters);
+        setElevatorPositionPercent(m_elevatorSetPointMeters);
+    }
+
+    /**
+     * Moves the elevator position in percentage of maximum height - minimum height
+     * 
+     * @param positionPercent
+     */
+    public void setElevatorPositionPercent(double positionPercent) {
+        double positionMeters = ((ElevatorConstants.MAX_HEIGHT_METERS - ElevatorConstants.MIN_HEIGHT_METERS) * (positionPercent / 100)) + ElevatorConstants.MIN_HEIGHT_METERS;
+        setElevatorPositionMeters(positionMeters);
     }
 
     /**
@@ -322,24 +334,26 @@ public class ElevatorSubsystem extends SubsystemBase {
 //            return ElevatorPosition.UNKNOWN;
 //        }
 
-        if (Math.abs(currentHeightMeters - ElevatorConstants.MIN_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
+        if (Math.abs(currentHeightMeters - ElevatorConstants.ZERO_HEIGHT_PERCENT) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.ZERO;
-        } else if (Math.abs(currentHeightMeters - ElevatorConstants.L1_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.PREPARE_SCORE_HEIGHT_PERCENT) < ElevatorConstants.TARGET_ERROR * 2) {
+            return ElevatorPosition.PREPARE_SCORE;
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.L1_HEIGHT_PERCENT) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.CORAL_L1;
-        } else if (Math.abs(currentHeightMeters - ElevatorConstants.L2_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.L2_HEIGHT_PERCENT) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.CORAL_L2;
-        } else if (Math.abs(currentHeightMeters - ElevatorConstants.L3_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.L3_HEIGHT_PERCENT) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.CORAL_L3;
-        } else if (Math.abs(currentHeightMeters - ElevatorConstants.L4_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.L4_HEIGHT_PERCENT) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.CORAL_L4;
-        } else if (Math.abs(currentHeightMeters - ElevatorConstants.PROCESSOR_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.PROCESSOR_HEIGHT_PERCENT) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.PROCESSOR;
-        } else if (Math.abs(currentHeightMeters - ElevatorConstants.HIGH_ALGAE_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.HIGH_ALGAE_HEIGHT_PERCENT) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.ALGAE_HIGH;
         } else if (Math.abs(currentHeightMeters - ElevatorConstants.MAX_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.ALGAE_LOW;
-        } else if (Math.abs(currentHeightMeters - ElevatorConstants.BARGE_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
-            return ElevatorPosition.BARGE;
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.BARGE_HEIGHT_PERCENT) < ElevatorConstants.TARGET_ERROR * 2) {
+            return ElevatorPosition.BARGE_FRONT;
         } else {
             return ElevatorPosition.UNKNOWN;
         }

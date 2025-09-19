@@ -99,18 +99,20 @@ public final class Constants {
         public static final double SAFETY_ANGLE_UPWARD_DEGREES = -40;
 
         // Arm Setpoints
-        public static final double ZERO_ANGLE_DEGREES = -85;
+        public static final double ZERO_ANGLE_DEGREES = -92;
+        public static final double PREPARE_SCORE_ANGLE_DEGREES = 45;
         public static final double PROCESSOR_ANGLE_DEGREES = -45;
 
-        public static final double L1_ANGLE_DEGREES = 25;
-        public static final double L2_ANGLE_DEGREES = 58.0;
-        public static final double L3_ANGLE_DEGREES = 79.6;
-        public static final double L4_ANGLE_DEGREES = 62.57;
+        public static final double L1_ANGLE_DEGREES = 45;
+        public static final double L2_ANGLE_DEGREES = 56;
+        public static final double L3_ANGLE_DEGREES = 75;
+        public static final double L4_ANGLE_DEGREES = 56;
 
         public static final double LOW_ALGAE_ANGLE_DEGREES = 0.0;
         public static final double HIGH_ALGAE_ANGLE_DEGREES = 0.0;
 
-        public static final double BARGE_ANGLE_DEGREES = 50.0;
+        public static final double BARGE_FRONT_ANGLE_DEGREES = 50.0;
+        public static final double BARGE_BACK_ANGLE_DEGREES = 100;
 
         public static final double TARGET_ERROR = 3;
     }
@@ -136,9 +138,9 @@ public final class Constants {
 
         // Elevator Dimensions
         public static final double HEIGHT_METERS = Units.inchesToMeters(42);
-        public static final double MIN_HEIGHT_METERS = Units.inchesToMeters(0);
+        public static final double MIN_HEIGHT_METERS = Units.inchesToMeters(22.75);
         public static final double ZERO_THRESHOLD = MIN_HEIGHT_METERS + 0.01;
-        public static final double MAX_HEIGHT_METERS = Units.inchesToMeters(49);
+        public static final double MAX_HEIGHT_METERS = Units.inchesToMeters(74);
         public static final double CARRIAGE_HEIGHT_METERS = Units.inchesToMeters(18.5);
 
         // Elevator safety
@@ -164,16 +166,18 @@ public final class Constants {
         public static double FF_A = 0;//0.02;
 
         // ===== Elevator Setpoints =====
-        public static final double PROCESSOR_HEIGHT_METERS = Units.inchesToMeters(22.5);
+        public static final double ZERO_HEIGHT_PERCENT = 0;
+        public static final double PREPARE_SCORE_HEIGHT_PERCENT = 0.98;
+        public static final double PROCESSOR_HEIGHT_PERCENT = 0;
 
-        public static final double L1_HEIGHT_METERS = 0.250; // TODO
-        public static final double L2_HEIGHT_METERS = 0.315;
-        public static final double L3_HEIGHT_METERS = 0.561;
-        public static final double L4_HEIGHT_METERS = 1.228;
+        public static final double L1_HEIGHT_PERCENT = 2.19;
+        public static final double L2_HEIGHT_PERCENT = 21.24;
+        public static final double L3_HEIGHT_PERCENT = 41.46;
+        public static final double L4_HEIGHT_PERCENT = 100;
 
-        public static final double LOW_ALGAE_HEIGHT_METERS = Units.inchesToMeters(28.5);
-        public static final double HIGH_ALGAE_HEIGHT_METERS = Units.inchesToMeters(44.25);
-        public static final double BARGE_HEIGHT_METERS = Units.inchesToMeters(47);
+        public static final double LOW_ALGAE_HEIGHT_PERCENT = 12.2;
+        public static final double HIGH_ALGAE_HEIGHT_PERCENT = 41.46;
+        public static final double BARGE_HEIGHT_PERCENT = 100;
         // ==============================
 
         // ===== Control Parameters =====
