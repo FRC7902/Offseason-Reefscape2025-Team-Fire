@@ -138,9 +138,9 @@ public final class Constants {
 
         // Elevator Dimensions
         public static final double HEIGHT_METERS = Units.inchesToMeters(42);
-        public static final double MIN_HEIGHT_METERS = Units.inchesToMeters(22.75);
+        public static final double MIN_HEIGHT_METERS = Units.inchesToMeters(21);
         public static final double ZERO_THRESHOLD = MIN_HEIGHT_METERS + 0.01;
-        public static final double MAX_HEIGHT_METERS = Units.inchesToMeters(73.5);
+        public static final double MAX_HEIGHT_METERS = Units.inchesToMeters(71);
         public static final double CARRIAGE_HEIGHT_METERS = Units.inchesToMeters(18.5);
 
         // Elevator safety

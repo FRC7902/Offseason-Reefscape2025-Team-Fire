@@ -217,7 +217,7 @@ public class RobotContainer {
                         new MoveElevatorCommand(ElevatorPosition.CORAL_L4)),
                         () -> {
                                 return m_elevatorSubsystem.goingDirection(m_elevatorSubsystem.getElevatorPositionMeters(),
-                                ElevatorConstants.L4_HEIGHT_PERCENT * ElevatorConstants.MAX_HEIGHT_METERS);
+                                (ElevatorConstants.L4_HEIGHT_PERCENT/100) * (ElevatorConstants.MAX_HEIGHT_METERS - ElevatorConstants.MIN_HEIGHT_METERS) + ElevatorConstants.MIN_HEIGHT_METERS);
                         }
                 ));
         m_driverController.x().onTrue(new ConditionalCommand(
@@ -229,7 +229,7 @@ public class RobotContainer {
                         new MoveElevatorCommand(ElevatorPosition.CORAL_L2)),
                         () -> {
                                 return m_elevatorSubsystem.goingDirection(m_elevatorSubsystem.getElevatorPositionMeters(),
-                                ElevatorConstants.L2_HEIGHT_PERCENT * ElevatorConstants.MAX_HEIGHT_METERS);
+                                (ElevatorConstants.L2_HEIGHT_PERCENT/100) * (ElevatorConstants.MAX_HEIGHT_METERS - ElevatorConstants.MIN_HEIGHT_METERS) + ElevatorConstants.MIN_HEIGHT_METERS);
                         }
                 ));
         m_driverController.a().onTrue(new ConditionalCommand(
@@ -241,7 +241,7 @@ public class RobotContainer {
                         new MoveElevatorCommand(ElevatorPosition.CORAL_L1)),
                         () -> {
                                 return m_elevatorSubsystem.goingDirection(m_elevatorSubsystem.getElevatorPositionMeters(),
-                                ElevatorConstants.L1_HEIGHT_PERCENT * ElevatorConstants.MAX_HEIGHT_METERS);
+                                (ElevatorConstants.L1_HEIGHT_PERCENT/100) * (ElevatorConstants.MAX_HEIGHT_METERS - ElevatorConstants.MIN_HEIGHT_METERS) + ElevatorConstants.MIN_HEIGHT_METERS);
                         }
                 ));
         m_driverController.b().onTrue(new ConditionalCommand(
@@ -252,7 +252,8 @@ public class RobotContainer {
                         new MoveArmCommand(ElevatorPosition.CORAL_L3), 
                         new MoveElevatorCommand(ElevatorPosition.CORAL_L3)),
                 () -> {
-                        return m_elevatorSubsystem.goingDirection(m_elevatorSubsystem.getElevatorPositionMeters(),ElevatorConstants.L3_HEIGHT_PERCENT * ElevatorConstants.MAX_HEIGHT_METERS);
+                        return m_elevatorSubsystem.goingDirection(m_elevatorSubsystem.getElevatorPositionMeters(),
+                        (ElevatorConstants.L3_HEIGHT_PERCENT/100) * (ElevatorConstants.MAX_HEIGHT_METERS - ElevatorConstants.MIN_HEIGHT_METERS) + ElevatorConstants.MIN_HEIGHT_METERS);
                 }
         ));
         /* 
