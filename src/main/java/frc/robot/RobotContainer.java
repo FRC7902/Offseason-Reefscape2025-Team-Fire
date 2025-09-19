@@ -9,6 +9,7 @@ import java.io.File;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.EndEffectorCommands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -41,11 +42,12 @@ public class RobotContainer {
     public final static ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
-    private final CommandXboxController m_driverController = new CommandXboxController(
+    private final CommandPS5Controller m_driverController = new CommandPS5Controller(
             OperatorConstants.DRIVER_CONTROLLER_PORT);
+    private final CommandPS5Controller m_operatorController = new CommandPS5Controller(
+            OperatorConstants.OPERATOR_CONTROLLER_PORT);
 
     public final SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem(
-            m_driverController,
             new File(Filesystem.getDeployDirectory(), "swerve"));
 
     /**
@@ -129,9 +131,9 @@ public class RobotContainer {
         );
 
         // === Intake/Outtake controls ===
-        m_driverController.rightTrigger().whileTrue(EndEffectorCommands.OuttakeEffector());
+        m_driverController.R2().whileTrue(EndEffectorCommands.OuttakeEffector());
 
-        m_driverController.leftTrigger().whileTrue(
+        m_driverController.L2().whileTrue(
                 new ConditionalCommand(
                         new InstantCommand(),
                         new SequentialCommandGroup(
@@ -163,22 +165,30 @@ public class RobotContainer {
         );
         // ===============================
 
+        m_driverController.options().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
+
         // === Elevator Setpoints ===
-        m_driverController.y().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
-        m_driverController.b().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
-        m_driverController.x().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
-        m_driverController.a().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
+        m_operatorController.triangle().onTrue(
+                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4)
+        );
+        m_operatorController.circle().onTrue(
+                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3)
+        );
+        m_operatorController.square().onTrue(
+                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2)
+        );
+        m_operatorController.cross().onTrue(
+                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1)
+        );
 
-//        m_driverController.rightBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH));
-//        m_driverController.leftBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));
-
-        m_driverController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ZERO));
-//        m_driverController.leftStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
-//        m_driverController.rightStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
+        m_operatorController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ZERO));
+        m_operatorController.povUp().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
+        m_operatorController.povLeft().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH));
+        m_operatorController.povRight().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));
         // ==========================
 
-        m_driverController.start().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
-}
+        m_operatorController.options().whileTrue(m_swerveSubsystem.centerModulesCommand());
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
