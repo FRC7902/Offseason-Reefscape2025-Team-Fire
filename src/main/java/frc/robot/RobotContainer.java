@@ -43,6 +43,8 @@ public class RobotContainer {
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController m_driverController = new CommandXboxController(
             OperatorConstants.DRIVER_CONTROLLER_PORT);
+    private final CommandXboxController m_operatorController = new CommandXboxController(
+            OperatorConstants.OPERATOR_CONTROLLER_PORT);
 
     public final SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem(
             m_driverController,
@@ -164,21 +166,27 @@ public class RobotContainer {
         // ===============================
 
         // === Elevator Setpoints ===
-        m_driverController.y().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
-        m_driverController.b().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
-        m_driverController.x().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
-        m_driverController.a().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
+        m_operatorController.y().onTrue(
+                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4)
+        );
+        m_operatorController.b().onTrue(
+                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3)
+        );
+        m_operatorController.x().onTrue(
+                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2)
+        );
+        m_operatorController.a().onTrue(
+                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1)
+        );
 
-//        m_driverController.rightBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH));
-//        m_driverController.leftBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));
-
-        m_driverController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ZERO));
-//        m_driverController.leftStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
-//        m_driverController.rightStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
+        m_operatorController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ZERO));
+        m_operatorController.povUp().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
+        m_operatorController.povLeft().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH));
+        m_operatorController.povRight().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));
         // ==========================
 
         m_driverController.start().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
-}
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
