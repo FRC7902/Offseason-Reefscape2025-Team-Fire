@@ -165,6 +165,8 @@ public class RobotContainer {
         );
         // ===============================
 
+        m_driverController.start().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
+
         // === Elevator Setpoints ===
         m_operatorController.y().onTrue(
                 new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4)
@@ -185,7 +187,7 @@ public class RobotContainer {
         m_operatorController.povRight().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));
         // ==========================
 
-        m_driverController.start().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
+        m_operatorController.back().whileTrue(m_swerveSubsystem.centerModulesCommand());
     }
 
     /**
