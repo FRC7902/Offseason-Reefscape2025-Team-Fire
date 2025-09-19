@@ -9,11 +9,13 @@ import java.io.File;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.EndEffectorCommands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.FunnelCommands;
+import frc.robot.commands.end_effector.IntakeCommand;
 import frc.robot.commands.end_effector.IntakeCommand.IntakeMode;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
@@ -41,9 +43,8 @@ public class RobotContainer {
     public final static ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
-    private final CommandXboxController m_driverController = new CommandXboxController(
-            OperatorConstants.DRIVER_CONTROLLER_PORT);
-
+    private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.DRIVER_CONTROLLER_PORT);
+    private final CommandXboxController m_operatorController = new CommandXboxController(OperatorConstants.OPERATOR_CONTROLLER_PORT);
     public final SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem(
             m_driverController,
             new File(Filesystem.getDeployDirectory(), "swerve"));
@@ -161,23 +162,43 @@ public class RobotContainer {
                         m_endEffectorSubsystem::hasCoral
                 )
         );
-        // ===============================
-
         // === Elevator Setpoints ===
-        m_driverController.y().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
-        m_driverController.b().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
-        m_driverController.x().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
-        m_driverController.a().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
-
-//        m_driverController.rightBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH));
-//        m_driverController.leftBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));
-
-        m_driverController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ZERO));
-//        m_driverController.leftStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
-//        m_driverController.rightStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
+        m_operatorController.x().onTrue(new ConditionalCommand(
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPosition(ElevatorConstants.L2_HEIGHT_METERS)), 
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPosition(ElevatorConstants.LOW_ALGAE_HEIGHT_METERS)), 
+                m_endEffectorSubsystem :: hasCoral));
+        m_operatorController.b().onTrue(new ConditionalCommand(
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPosition(ElevatorConstants.L3_HEIGHT_METERS)), 
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPosition(ElevatorConstants.HIGH_ALGAE_HEIGHT_METERS)), 
+                m_endEffectorSubsystem :: hasCoral));
+        m_operatorController.y().onTrue(new ConditionalCommand(
+                new InstantCommand(), 
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPosition(ElevatorConstants.BARGE_HEIGHT_METERS)), 
+                m_endEffectorSubsystem :: hasCoral));
+        m_operatorController.a().onTrue(new ConditionalCommand(
+                new InstantCommand(), 
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPosition(ElevatorConstants.PROCESSOR_HEIGHT_METERS)), 
+                m_endEffectorSubsystem :: hasCoral));
+        m_driverController.a().onTrue(new MoveElevatorArmCommand(m_elevatorSubsystem.getSetpoint(),m_armSubsystem.getArmPositionDegrees()));
         // ==========================
-
-        m_driverController.start().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
+        /*m_operatorController.x().onTrue(new ConditionalCommand(
+                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2), 
+                new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW), 
+                m_endEffectorSubsystem :: hasCoral));
+        m_operatorController.b().onTrue(new ConditionalCommand(
+                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3), 
+                new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH), 
+                m_endEffectorSubsystem :: hasCoral));
+        m_operatorController.y().onTrue(new ConditionalCommand(
+                new InstantCommand(), 
+                new MoveElevatorArmCommand(ElevatorPosition.BARGE), 
+                m_endEffectorSubsystem :: hasCoral));
+        m_operatorController.a().onTrue(new ConditionalCommand(
+                new InstantCommand(), 
+                new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR), 
+                m_endEffectorSubsystem :: hasCoral));
+        m_driverController.start().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));*/
+        
 }
 
     /**
