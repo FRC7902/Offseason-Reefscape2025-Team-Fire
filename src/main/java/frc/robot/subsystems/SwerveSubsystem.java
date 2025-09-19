@@ -41,7 +41,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private final SwerveDrive swerveDrive;
 
     /** Creates a new SwerveSubsystem. */
-    public SwerveSubsystem(CommandXboxController m_driverController, File directory) {
+    public SwerveSubsystem(File directory) {
 
         // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary
         // objects being created.
