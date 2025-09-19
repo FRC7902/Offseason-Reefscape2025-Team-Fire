@@ -150,6 +150,13 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     private double m_elevatorSetPointMeters = ElevatorConstants.MIN_HEIGHT_METERS;
 
+
+    public boolean goingDirection(double elevatorPosition, double newSetPoint){
+        if (elevatorPosition < newSetPoint){
+            return true; // true is going up
+        }
+        return false;
+    }
     /**
      * SysId routine object to determine S, V, and A constants
      */
@@ -432,7 +439,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         else {
             m_leaderMotor.setControl(m_motionMagicRequest);
         }
-
         if (ElevatorConstants.TUNING_MODE_ENABLED) {
             ElevatorConstants.PID_P = SmartDashboard.getNumber("Elevator P", ElevatorConstants.PID_P);
             ElevatorConstants.PID_I = SmartDashboard.getNumber("Elevator I", ElevatorConstants.PID_I);

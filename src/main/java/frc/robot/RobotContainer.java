@@ -9,16 +9,19 @@ import java.io.File;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.EndEffectorCommands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.FunnelCommands;
+import frc.robot.commands.MoveArmCommand;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 import frc.robot.commands.MoveElevatorArmCommand;
+import frc.robot.commands.MoveElevatorCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
@@ -205,15 +208,65 @@ public class RobotContainer {
         );
 
         // Elevator Setpoints
-        m_driverController.y().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
-        m_driverController.b().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
-        m_driverController.x().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
-        m_driverController.a().onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
+        m_driverController.y().onTrue(new ConditionalCommand(
+                new SequentialCommandGroup(
+                        new MoveElevatorCommand(ElevatorPosition.CORAL_L4), 
+                        new MoveArmCommand(ElevatorPosition.CORAL_L4)),
+                new SequentialCommandGroup(
+                        new MoveArmCommand(ElevatorPosition.CORAL_L4), 
+                        new MoveElevatorCommand(ElevatorPosition.CORAL_L4)),
+                        () -> {
+                                return m_elevatorSubsystem.goingDirection(m_elevatorSubsystem.getElevatorPositionMeters(),
+                                ElevatorConstants.L4_HEIGHT_PERCENT * ElevatorConstants.MAX_HEIGHT_METERS);
+                        }
+                ));
+        m_driverController.x().onTrue(new ConditionalCommand(
+                new SequentialCommandGroup(
+                        new MoveElevatorCommand(ElevatorPosition.CORAL_L2), 
+                        new MoveArmCommand(ElevatorPosition.CORAL_L2)),
+                new SequentialCommandGroup(
+                        new MoveArmCommand(ElevatorPosition.CORAL_L2), 
+                        new MoveElevatorCommand(ElevatorPosition.CORAL_L2)),
+                        () -> {
+                                return m_elevatorSubsystem.goingDirection(m_elevatorSubsystem.getElevatorPositionMeters(),
+                                ElevatorConstants.L2_HEIGHT_PERCENT * ElevatorConstants.MAX_HEIGHT_METERS);
+                        }
+                ));
+        m_driverController.a().onTrue(new ConditionalCommand(
+                 new SequentialCommandGroup(
+                        new MoveElevatorCommand(ElevatorPosition.CORAL_L1), 
+                        new MoveArmCommand(ElevatorPosition.CORAL_L1)),
+                new SequentialCommandGroup(
+                        new MoveArmCommand(ElevatorPosition.CORAL_L1), 
+                        new MoveElevatorCommand(ElevatorPosition.CORAL_L1)),
+                        () -> {
+                                return m_elevatorSubsystem.goingDirection(m_elevatorSubsystem.getElevatorPositionMeters(),
+                                ElevatorConstants.L1_HEIGHT_PERCENT * ElevatorConstants.MAX_HEIGHT_METERS);
+                        }
+                ));
+        m_driverController.b().onTrue(new ConditionalCommand(
+                new SequentialCommandGroup(
+                        new MoveElevatorCommand(ElevatorPosition.CORAL_L3), 
+                        new MoveArmCommand(ElevatorPosition.CORAL_L3)),
+                new SequentialCommandGroup(
+                        new MoveArmCommand(ElevatorPosition.CORAL_L3), 
+                        new MoveElevatorCommand(ElevatorPosition.CORAL_L3)),
+                () -> {
+                        return m_elevatorSubsystem.goingDirection(m_elevatorSubsystem.getElevatorPositionMeters(),ElevatorConstants.L3_HEIGHT_PERCENT * ElevatorConstants.MAX_HEIGHT_METERS);
+                }
+        ));
+        /* 
+        m_driverController.y().onTrue(new MoveElevatorCommand(ElevatorPosition.CORAL_L4));
+        m_driverController.b().onTrue(new MoveElevatorCommand(ElevatorPosition.CORAL_L3));
+        m_driverController.x().onTrue(new MoveElevatorCommand(ElevatorPosition.CORAL_L2));
+        m_driverController.a().onTrue(new MoveElevatorCommand(ElevatorPosition.CORAL_L1));*/
 
 //        m_driverController.rightBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH));
 //        m_driverController.leftBumper().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));
 
-        m_driverController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ZERO));
+        m_driverController.povDown().onTrue(new SequentialCommandGroup(
+                new MoveElevatorCommand(ElevatorPosition.ZERO), 
+                new MoveArmCommand(ElevatorPosition.ZERO)));
 //        m_driverController.leftStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
 //
 //        m_driverController.rightStick().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));

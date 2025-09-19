@@ -38,10 +38,10 @@ public class MoveElevatorArmCommand extends Command {
     public void execute() {
         if (isEnum) {
             RobotContainer.m_elevatorSubsystem.setElevatorPositionEnum(position);
-            RobotContainer.m_armSubsystem.setArmPositionEnum(position);
+            //RobotContainer.m_armSubsystem.setArmPositionEnum(position);
         } else {
             RobotContainer.m_elevatorSubsystem.setElevatorPositionMeters(positionMeters);
-            RobotContainer.m_armSubsystem.setArmPositionDegrees(angleDegrees);
+            //RobotContainer.m_armSubsystem.setArmPositionDegrees(angleDegrees);
         }
     }
 
@@ -54,7 +54,6 @@ public class MoveElevatorArmCommand extends Command {
     @Override
     public boolean isFinished() {
         // TODO: Check if this condition is correct
-        // return RobotContainer.m_elevatorSubsystem.hasReachedSetpoint() && RobotContainer.m_armSubsystem.hasReachedAngle();
-        return false;
+        return RobotContainer.m_elevatorSubsystem.hasReachedSetpoint() && RobotContainer.m_armSubsystem.hasReachedAngle();
     }
 }

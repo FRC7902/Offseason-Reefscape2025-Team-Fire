@@ -140,7 +140,7 @@ public final class Constants {
         public static final double HEIGHT_METERS = Units.inchesToMeters(42);
         public static final double MIN_HEIGHT_METERS = Units.inchesToMeters(22.75);
         public static final double ZERO_THRESHOLD = MIN_HEIGHT_METERS + 0.01;
-        public static final double MAX_HEIGHT_METERS = Units.inchesToMeters(74);
+        public static final double MAX_HEIGHT_METERS = Units.inchesToMeters(73.5);
         public static final double CARRIAGE_HEIGHT_METERS = Units.inchesToMeters(18.5);
 
         // Elevator safety
@@ -173,7 +173,7 @@ public final class Constants {
         public static final double L1_HEIGHT_PERCENT = 2.19;
         public static final double L2_HEIGHT_PERCENT = 21.24;
         public static final double L3_HEIGHT_PERCENT = 41.46;
-        public static final double L4_HEIGHT_PERCENT = 100;
+        public static final double L4_HEIGHT_PERCENT = 95;
 
         public static final double LOW_ALGAE_HEIGHT_PERCENT = 12.2;
         public static final double HIGH_ALGAE_HEIGHT_PERCENT = 41.46;
