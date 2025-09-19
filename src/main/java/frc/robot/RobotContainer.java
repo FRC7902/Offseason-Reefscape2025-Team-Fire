@@ -52,6 +52,27 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        if (Robot.isSimulation()) {
+                // m_cameraSim = new PhotonSim(m_swerveSubsystem, m_leftCamera, m_middleCamera, m_rightCamera);
+                //m_cameraSim = new PhotonSim(m_swerveSubsystem, m_middleCamera);
+          
+                  driveRobotOriented.driveToPose(m_swerveSubsystem::getNearestWaypoint,
+                          new ProfiledPIDController(5,
+                                  0,
+                                  0,
+                                  new TrapezoidProfile.Constraints(5, 2)),
+                          new ProfiledPIDController(5,
+                                  0,
+                                  0,
+                                  new TrapezoidProfile.Constraints(Units.degreesToRadians(360),
+                                          Units.degreesToRadians(180))));
+          
+                  m_driverController.start().whileTrue(Commands.runEnd(
+                          () -> driveRobotOriented.driveToPoseEnabled(true),
+                          () -> driveRobotOriented.driveToPoseEnabled(false)
+                  ));
+              }        
+        
         // Configure the trigger bindings
         configureBindings();
     }

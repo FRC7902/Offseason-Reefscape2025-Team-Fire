@@ -235,8 +235,6 @@ public class PhotonSubsystem extends SubsystemBase {
         SmartDashboard.putNumber(cameraName + " TAG AREA", aprilTagArea);
         SmartDashboard.putNumber(cameraName + " DETECTED TAGS", detectedTagsCount);
         SmartDashboard.putString(cameraName + " Detection Status", getDetectionStatus().toString());
-
-        SmartDashboard.putData(m_camera.);
     }
 
     @Override
