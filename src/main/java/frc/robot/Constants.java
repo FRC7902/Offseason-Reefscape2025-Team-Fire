@@ -29,8 +29,8 @@ public final class Constants {
         public static final double MAX_SPEED = Units.feetToMeters(15);
 
         // Speed scaling factors, should be between 0 and 1
-        public static final double MIN_TRANSLATION_SPEED_SCALE = 0.1; // Minimum speed scaling factor for joystick input
-        public static final double MIN_ROTATION_SPEED_SCALE = 0.1; // Minimum speed scaling factor for joystick input
+        public static final double MIN_TRANSLATION_SPEED_SCALE = 0.25; // Minimum speed scaling factor for joystick input
+        public static final double MIN_ROTATION_SPEED_SCALE = 0.25; // Minimum speed scaling factor for joystick input
     }
 
     public static class PathPlanner {
