@@ -116,6 +116,7 @@ public final class Constants {
 
         // Arm Setpoints
         public static final double ZERO_ANGLE_DEGREES = -90;
+        public static final double REST_ANGLE_DEGREES = 55;
         public static final double PROCESSOR_ANGLE_DEGREES = -45;
 
         public static final double L1_ANGLE_DEGREES = 25;
@@ -182,6 +183,7 @@ public final class Constants {
         // ===== Elevator Setpoints =====
         public static final double PROCESSOR_HEIGHT_METERS = Units.inchesToMeters(22.5);
 
+        public static final double REST_HEIGHT_METERS = ElevatorConstants.MIN_HEIGHT_METERS + 0.05;
         public static final double L1_HEIGHT_METERS = 0.250; // TODO
         public static final double L2_HEIGHT_METERS = 0.315;
         public static final double L3_HEIGHT_METERS = 0.561;
