@@ -155,7 +155,7 @@ public final class Constants {
         public static final double HEIGHT_METERS = Units.inchesToMeters(42);
         public static final double MIN_HEIGHT_METERS = Units.inchesToMeters(0);
         public static final double ZERO_THRESHOLD = MIN_HEIGHT_METERS + 0.01;
-        public static final double MAX_HEIGHT_METERS = 1.194;
+        public static final double MAX_HEIGHT_METERS = 1.2;
         public static final double CARRIAGE_HEIGHT_METERS = Units.inchesToMeters(18.5);
 
         // Elevator safety
@@ -190,7 +190,7 @@ public final class Constants {
         public static final double L4_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS;
 
         public static final double LOW_ALGAE_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS * 0.12195122;
-        public static final double HIGH_ALGAE_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS * 0.41463415;
+        public static final double HIGH_ALGAE_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS * 0.41463415 + 0.025;
         public static final double BARGE_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS;
         // ==============================
 

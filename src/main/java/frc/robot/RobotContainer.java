@@ -146,8 +146,8 @@ public class RobotContainer {
 
     private final Command selectIntakeCommand = new SelectCommand<>(
             Map.ofEntries(
-                    Map.entry(ElevatorPosition.ALGAE_LOW, EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE)),
-                    Map.entry(ElevatorPosition.ALGAE_HIGH, EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE)),
+                    Map.entry(ElevatorPosition.ALGAE_LOW, EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE).withTimeout(3)),
+                    Map.entry(ElevatorPosition.ALGAE_HIGH, EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE).withTimeout(3)),
                     Map.entry(ElevatorPosition.ZERO, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.CORAL_L1, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.CORAL_L2, coralHandoffCommand()),
@@ -225,14 +225,16 @@ public class RobotContainer {
                 new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1)
         );
 
-        m_operatorController.povDown().onTrue(
-                new ConditionalCommand(
-                        Commands.none(),
-                        new MoveElevatorArmCommand(ElevatorPosition.ZERO),
-                        m_endEffectorSubsystem::hasAlgae
-                )
-        );
-        m_operatorController.povUp().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
+        // m_operatorController.povDown().onTrue(
+        //         new ConditionalCommand(
+        //                 Commands.none(),
+        //                 new MoveElevatorArmCommand(ElevatorPosition.ZERO),
+        //                 m_endEffectorSubsystem::hasAlgae
+        //         )
+        // );
+
+        m_operatorController.povUp().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
+        m_operatorController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
         m_operatorController.povLeft().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH));
         m_operatorController.povRight().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));
         // ==========================
