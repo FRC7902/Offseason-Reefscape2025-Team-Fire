@@ -322,6 +322,6 @@ public class RobotContainer {
     public Command getAutonomousCommand()
     {
         // An example command will be run in autonomous
-        return m_swerveSubsystem.getAutonomousCommand("New Auto");
+        return m_swerveSubsystem.getAutonomousCommand("Leave");
     }
 }
