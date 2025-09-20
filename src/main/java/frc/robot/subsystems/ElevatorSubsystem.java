@@ -336,7 +336,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             return ElevatorPosition.PROCESSOR;
         } else if (Math.abs(currentHeightMeters - ElevatorConstants.HIGH_ALGAE_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.ALGAE_HIGH;
-        } else if (Math.abs(currentHeightMeters - ElevatorConstants.MAX_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.LOW_ALGAE_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.ALGAE_LOW;
         } else if (Math.abs(currentHeightMeters - ElevatorConstants.BARGE_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.BARGE;

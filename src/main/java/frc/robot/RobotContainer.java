@@ -105,58 +105,54 @@ public class RobotContainer {
                     0));
     Command driveFieldOrientedDirectAngleSim = m_swerveSubsystem.driveFieldOriented(driveDirectAngleSim);
 
-    private final Command coralHandoffCommand = new ConditionalCommand(
-            new SequentialCommandGroup(
-                    // Move elevator to pickup position
-                    new ParallelRaceGroup(
-                            new MoveElevatorArmCommand(ElevatorPosition.ZERO)
-                                    .until(
-                                            () -> m_elevatorSubsystem.getElevatorPositionEnum() == ElevatorPosition.ZERO
-                                                    && m_funnelIndexerSubsystem.getHasCoral()
-                                    ),
-                            FunnelCommands.IntakeCoral(m_funnelIndexerSubsystem)
-                    ),
-                    // Intake coral until funnel no longer detects it (shallow beam break)
-                    new ParallelCommandGroup(
-                            EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
-                            FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem)
-                    ).until(
-                            () -> !m_funnelIndexerSubsystem.getHasCoral()
-                    ),
-                    // Run end effector intake, funnel intake, and move elevator + arm to level 1 simultaneously
-                    new ParallelCommandGroup(
-                            EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
-                            FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem),
-                            new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1)
-                    )
-            ),
-            new InstantCommand(),
-            // Only run handoff if we don't already have coral and algae
-            () -> !m_endEffectorSubsystem.hasCoral()
-                    && !m_endEffectorSubsystem.getHasAlgae()
-    );
+    private Command coralHandoffCommand() {
+        return new ConditionalCommand(
+                new SequentialCommandGroup(
+                        // Move elevator to pickup position
+                        new ParallelRaceGroup(
+                                new MoveElevatorArmCommand(ElevatorPosition.ZERO)
+                                        .until(
+                                                () -> m_elevatorSubsystem.getElevatorPositionEnum() == ElevatorPosition.ZERO
+                                                        && m_funnelIndexerSubsystem.getHasCoral()
+                                        ),
+                                FunnelCommands.IntakeCoral(m_funnelIndexerSubsystem)
+                        ),
+                        // Intake coral until funnel no longer detects it (shallow beam break)
+                        new ParallelCommandGroup(
+                                EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
+                                FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem)
+                        ).until(
+                                () -> !m_funnelIndexerSubsystem.getHasCoral()
+                        ),
+                        // Run end effector intake, funnel intake, and move elevator + arm to level 1 simultaneously
+                        new ParallelCommandGroup(
+                                EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
+                                FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem),
+                                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1)
+                        )
+                ),
+                new InstantCommand(),
+                // Only run handoff if we don't already have coral and algae
+                () -> !m_endEffectorSubsystem.hasCoral()
+                        && !m_endEffectorSubsystem.getHasAlgae()
+        );
+    }
 
     private ElevatorPosition select() {
         return m_elevatorSubsystem.getElevatorPositionEnum();
     }
 
-    private final Command whileTrueSelectIntakeCommand = new SelectCommand<>(
+    private final Command selectIntakeCommand = new SelectCommand<>(
             Map.ofEntries(
                     Map.entry(ElevatorPosition.ALGAE_LOW, EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE)),
-                    Map.entry(ElevatorPosition.ALGAE_HIGH, EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE))
-            ),
-            this::select
-    );
-
-    private final Command onTrueSelectIntakeCommand = new SelectCommand<>(
-            Map.ofEntries(
-                    Map.entry(ElevatorPosition.ZERO, coralHandoffCommand),
-                    Map.entry(ElevatorPosition.CORAL_L1, coralHandoffCommand),
-                    Map.entry(ElevatorPosition.CORAL_L2, coralHandoffCommand),
-                    Map.entry(ElevatorPosition.CORAL_L3, coralHandoffCommand),
-                    Map.entry(ElevatorPosition.CORAL_L4, coralHandoffCommand),
-                    Map.entry(ElevatorPosition.BARGE, coralHandoffCommand),
-                    Map.entry(ElevatorPosition.PROCESSOR, coralHandoffCommand)
+                    Map.entry(ElevatorPosition.ALGAE_HIGH, EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE)),
+                    Map.entry(ElevatorPosition.ZERO, coralHandoffCommand()),
+                    Map.entry(ElevatorPosition.CORAL_L1, coralHandoffCommand()),
+                    Map.entry(ElevatorPosition.CORAL_L2, coralHandoffCommand()),
+                    Map.entry(ElevatorPosition.CORAL_L3, coralHandoffCommand()),
+                    Map.entry(ElevatorPosition.CORAL_L4, coralHandoffCommand()),
+                    Map.entry(ElevatorPosition.BARGE, coralHandoffCommand()),
+                    Map.entry(ElevatorPosition.PROCESSOR, coralHandoffCommand())
             ),
             this::select
     );
@@ -199,12 +195,12 @@ public class RobotContainer {
 
         // === Intake/Outtake controls ===
         m_driverController.R2().whileTrue(EndEffectorCommands.OuttakeEffector());
-        m_driverController.L2()
-                .onTrue(new ParallelCommandGroup(
-                        whileTrueSelectIntakeCommand
-                                .until(() -> !m_driverController.L2()
-                                        .getAsBoolean()),
-                        onTrueSelectIntakeCommand));
+        m_driverController.L2().whileTrue(
+                selectIntakeCommand
+                        .until(() -> !m_driverController.L2()
+                                .getAsBoolean()
+                        )
+        );
         // ===============================
 
         m_driverController.options().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
