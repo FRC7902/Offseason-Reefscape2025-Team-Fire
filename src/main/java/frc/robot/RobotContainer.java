@@ -130,7 +130,7 @@ public class RobotContainer {
                         new ParallelCommandGroup(
                                 EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
                                 FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem),
-                                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1)
+                                new MoveElevatorArmCommand(ElevatorPosition.REST)
                         )
                 ),
                 new InstantCommand(),
