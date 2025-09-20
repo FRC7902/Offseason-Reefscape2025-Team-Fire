@@ -12,7 +12,6 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -85,7 +84,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private void scaleSwerveInput() {
         double scale = Math.min(1.0 - RobotContainer.m_elevatorSubsystem.getElevatorPositionScale(), 1.0); // Prevents applied scale > 1.0
 
-        if (RobotContainer.m_endEffectorSubsystem.getHasAlgae())
+        if (RobotContainer.m_endEffectorSubsystem.hasAlgae())
             scale -= 0.15; // Further reduce speed if carrying algae
 
         // Scale the robot's drive speed based on the elevator position, between 10% and 100%

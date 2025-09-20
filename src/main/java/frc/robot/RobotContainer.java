@@ -136,7 +136,7 @@ public class RobotContainer {
                 new InstantCommand(),
                 // Only run handoff if we don't already have coral and algae
                 () -> !m_endEffectorSubsystem.hasCoral()
-                        && !m_endEffectorSubsystem.getHasAlgae()
+                        && !m_endEffectorSubsystem.hasAlgae()
         );
     }
 
@@ -225,7 +225,13 @@ public class RobotContainer {
                 new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1)
         );
 
-        m_operatorController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ZERO));
+        m_operatorController.povDown().onTrue(
+                new ConditionalCommand(
+                        Commands.none(),
+                        new MoveElevatorArmCommand(ElevatorPosition.ZERO),
+                        m_endEffectorSubsystem::hasAlgae
+                )
+        );
         m_operatorController.povUp().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
         m_operatorController.povLeft().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH));
         m_operatorController.povRight().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));

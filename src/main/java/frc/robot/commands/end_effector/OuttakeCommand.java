@@ -37,7 +37,6 @@ public class OuttakeCommand extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        RobotContainer.m_endEffectorSubsystem.setHasAlgae(false);
         RobotContainer.m_endEffectorSubsystem.stop();
     }
 
