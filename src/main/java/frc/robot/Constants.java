@@ -68,8 +68,8 @@ public final class Constants {
         public static final int CORAL_BEAM_BREAK_PORT_ID = 0;
         public static final int ALGAE_PROXIMITY_SENSOR_PORT_ID = -1;
 
-        public static final int MOTOR_STATOR_CURRENT_LIMIT = 40;
-        public static final int MOTOR_SUPPLY_CURRENT_LIMIT = 20;
+        public static final int MOTOR_STATOR_CURRENT_LIMIT = 80;
+        public static final int MOTOR_SUPPLY_CURRENT_LIMIT = 40;
 
         public static final double INTAKE_SPEED = 1;
 
@@ -78,8 +78,8 @@ public final class Constants {
 
         public static final double OUTTAKE_SPEED = -1;
 
-        public static final double ALGAE_INTAKE_STALL_DETECTION_CURRENT_LOW = 2;
-        public static final double ALGAE_INTAKE_STALL_DETECTION_CURRENT_HIGH = 3;
+        public static final double ALGAE_INTAKE_STALL_DETECTION_CURRENT_LOW = 11;
+        public static final double ALGAE_INTAKE_STALL_DETECTION_CURRENT_HIGH = 13;
     }
 
     public static class VisionConstants {
