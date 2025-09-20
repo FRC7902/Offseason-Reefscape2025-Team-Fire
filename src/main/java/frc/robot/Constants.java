@@ -56,8 +56,8 @@ public final class Constants {
         public static final int CORAL_BEAM_BREAK_PORT_ID = 0;
         public static final int ALGAE_PROXIMITY_SENSOR_PORT_ID = -1;
 
-        public static final int MOTOR_STATOR_CURRENT_LIMIT = 40;
-        public static final int MOTOR_SUPPLY_CURRENT_LIMIT = 20;
+        public static final int MOTOR_STATOR_CURRENT_LIMIT = 100;
+        public static final int MOTOR_SUPPLY_CURRENT_LIMIT = 50;
 
         public static final double INTAKE_SPEED = 1;
 
