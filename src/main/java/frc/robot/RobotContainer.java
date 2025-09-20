@@ -146,8 +146,8 @@ public class RobotContainer {
 
     private final Command selectIntakeCommand = new SelectCommand<>(
             Map.ofEntries(
-                    Map.entry(ElevatorPosition.ALGAE_LOW, EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE).withTimeout(3)),
-                    Map.entry(ElevatorPosition.ALGAE_HIGH, EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE).withTimeout(3)),
+                    Map.entry(ElevatorPosition.ALGAE_LOW, EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE)),
+                    Map.entry(ElevatorPosition.ALGAE_HIGH, EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE)),
                     Map.entry(ElevatorPosition.ZERO, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.CORAL_L1, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.CORAL_L2, coralHandoffCommand()),
