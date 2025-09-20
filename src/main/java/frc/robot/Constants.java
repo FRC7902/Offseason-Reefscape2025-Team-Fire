@@ -128,6 +128,7 @@ public final class Constants {
 
         // Arm Setpoints
         public static final double ZERO_ANGLE_DEGREES = -90;
+        public static final double REST_ANGLE_DEGREES = 55;
         public static final double PROCESSOR_ANGLE_DEGREES = -45.0;
 
         public static final double L1_ANGLE_DEGREES = 45.0;
@@ -166,7 +167,7 @@ public final class Constants {
         public static final double HEIGHT_METERS = Units.inchesToMeters(42);
         public static final double MIN_HEIGHT_METERS = Units.inchesToMeters(0);
         public static final double ZERO_THRESHOLD = MIN_HEIGHT_METERS + 0.01;
-        public static final double MAX_HEIGHT_METERS = 1.194;
+        public static final double MAX_HEIGHT_METERS = 1.2;
         public static final double CARRIAGE_HEIGHT_METERS = Units.inchesToMeters(18.5);
 
         // Elevator safety
@@ -194,13 +195,14 @@ public final class Constants {
         // ===== Elevator Setpoints =====
         public static final double PROCESSOR_HEIGHT_METERS = ElevatorConstants.MIN_HEIGHT_METERS;
 
+        public static final double REST_HEIGHT_METERS = ElevatorConstants.MIN_HEIGHT_METERS + 0.05;
         public static final double L1_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS * 0.02195122;
         public static final double L2_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS * 0.21219512;
         public static final double L3_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS * 0.41463415;
         public static final double L4_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS;
 
         public static final double LOW_ALGAE_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS * 0.12195122;
-        public static final double HIGH_ALGAE_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS * 0.41463415;
+        public static final double HIGH_ALGAE_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS * 0.41463415 + 0.025;
         public static final double BARGE_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS;
         // ==============================
 
