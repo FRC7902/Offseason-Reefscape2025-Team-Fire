@@ -19,6 +19,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.robot.subsystems.vision.CameraProperties;
+import java.util.Map;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -146,8 +147,21 @@ public final class Constants {
             BLUE_BACK,
             BLUE_BACK_RIGHT
         }
+        public enum LEFT_WAYPOINT_LOCATIONS {
+            RED_FRONT_LEFT,
+            RED_BACK_LEFT,
+            BLUE_FRONT_LEFT,
+            BLUE_BACK_LEFT
+        }
 
-        public static final java.util.Map<WAYPOINT_LOCATIONS, Pose2d> WAYPOINTS = java.util.Map.ofEntries(
+        public enum RIGHT_WAYPOINT_LOCATIONS {
+            RED_FRONT_RIGHT,
+            RED_BACK_RIGHT,
+            BLUE_FRONT_RIGHT,
+            BLUE_BACK_RIGHT
+        }
+
+        public static final Map<WAYPOINT_LOCATIONS, Pose2d> WAYPOINTS = java.util.Map.ofEntries(
                 Map.entry(WAYPOINT_LOCATIONS.RED_FRONT, new Pose2d(14.24, 3.99, new Rotation2d(Math.toRadians(0)))),
                 Map.entry(WAYPOINT_LOCATIONS.RED_FRONT_LEFT, new Pose2d(13.75, 3.03, new Rotation2d(Math.toRadians(300)))),
                 Map.entry(WAYPOINT_LOCATIONS.RED_BACK_LEFT, new Pose2d(12.39, 2.88, new Rotation2d(Math.toRadians(240)))),
@@ -160,6 +174,18 @@ public final class Constants {
                 Map.entry(WAYPOINT_LOCATIONS.BLUE_BACK_LEFT, new Pose2d(5.06, 4.99, new Rotation2d(Math.toRadians(240)))),
                 Map.entry(WAYPOINT_LOCATIONS.BLUE_BACK, new Pose2d(5.59, 4.01, new Rotation2d(Math.toRadians(180)))),
                 Map.entry(WAYPOINT_LOCATIONS.BLUE_BACK_RIGHT, new Pose2d(5.02, 3.07, new Rotation2d(Math.toRadians(120)))));
+        public static final Map<LEFT_WAYPOINT_LOCATIONS, Pose2d> LEFT_WAYPOINTS = Map.ofEntries(
+            Map.entry(LEFT_WAYPOINT_LOCATIONS.RED_FRONT_LEFT, new Pose2d(null, null,new Rotation2d(Math.toRadians(300)))),
+            Map.entry(LEFT_WAYPOINT_LOCATIONS.RED_BACK_LEFT,new Pose2d(null,null,new Rotation2d(Math.toRadians(240)))),
+            Map.entry(LEFT_WAYPOINT_LOCATIONS.BLUE_FRONT_LEFT,new Pose2d(null,null,new Rotation2d(Math.toRadians(300)))),
+            Map.entry(LEFT_WAYPOINT_LOCATIONS.BLUE_BACK_LEFT,new Pose2d(null,null,new Rotation2d(Math.toRadians(240))))
+        );
+        public static final Map<RIGHT_WAYPOINT_LOCATIONS, Pose2d> RIGHT_WAYPOINTS = Map.ofEntries(
+            Map.entry(RIGHT_WAYPOINT_LOCATIONS.RED_FRONT_RIGHT, new Pose2d(null, null,new Rotation2d(Math.toRadians(60)))),
+            Map.entry(RIGHT_WAYPOINT_LOCATIONS.RED_BACK_RIGHT, new Pose2d(null, null,new Rotation2d(Math.toRadians(120)))),
+            Map.entry(RIGHT_WAYPOINT_LOCATIONS.BLUE_FRONT_RIGHT, new Pose2d(null, null,new Rotation2d(Math.toRadians(60)))),
+            Map.entry(RIGHT_WAYPOINT_LOCATIONS.BLUE_BACK_RIGHT, new Pose2d(null, null,new Rotation2d(Math.toRadians(120))))
+        );
     }
 
     public static class PathPlannerConstants {

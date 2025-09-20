@@ -13,6 +13,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
@@ -20,6 +22,7 @@ import frc.robot.Constants.PhotonConstants;
 import frc.robot.commands.FunnelCommands;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.SwerveSubsystem.Branches;
 import frc.robot.subsystems.vision.PhotonSim;
 import frc.robot.subsystems.vision.PhotonSubsystem;
 import swervelib.SwerveInputStream;
@@ -38,7 +41,7 @@ public class RobotContainer {
     private final FunnelSubsystem m_funnelIndexerSubsystem = new FunnelSubsystem();
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
-    private static final CommandXboxController m_driverController = new CommandXboxController(
+    private static final CommandPS5Controller m_driverController = new CommandPS5Controller(
             OperatorConstants.DRIVER_CONTROLLER_PORT);
 
     public static final SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem(
@@ -66,11 +69,6 @@ public class RobotContainer {
                                   0,
                                   new TrapezoidProfile.Constraints(Units.degreesToRadians(360),
                                           Units.degreesToRadians(180))));
-          
-                  m_driverController.start().whileTrue(Commands.runEnd(
-                          () -> driveRobotOriented.driveToPoseEnabled(true),
-                          () -> driveRobotOriented.driveToPoseEnabled(false)
-                  ));
               }        
         
         // Configure the trigger bindings
@@ -138,30 +136,11 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings() {
+        // Swerve (Vision)
+        m_driverController.L2().onTrue(new InstantCommand(() -> m_swerveSubsystem.setBranch(Branches.Left)));
+        m_driverController.R2().onTrue(new InstantCommand(() -> m_swerveSubsystem.setBranch(Branches.Right)));
+        
 
-        // Swerve
-        m_swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
-
-        // Auto-Algin
-        driveAngularVelocity.driveToPose(m_swerveSubsystem::getNearestWaypoint,
-                new ProfiledPIDController(5,
-                        0,
-                        0,
-                        new TrapezoidProfile.Constraints(5, 2)),
-                new ProfiledPIDController(5,
-                        0,
-                        0,
-                        new TrapezoidProfile.Constraints(Units.degreesToRadians(360),
-                                Units.degreesToRadians(180))));
-
-        m_driverController.start().whileTrue(Commands.runEnd(
-                () -> driveAngularVelocity.driveToPoseEnabled(true),
-                () -> driveAngularVelocity.driveToPoseEnabled(false)
-        ));
-
-        // FunnelSubsystem
-        m_funnelIndexerSubsystem.setDefaultCommand(FunnelCommands.IntakeCoral(m_funnelIndexerSubsystem));
-        m_driverController.rightBumper().whileTrue(FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem));
     }
 
     /**

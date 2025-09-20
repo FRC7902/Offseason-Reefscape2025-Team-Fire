@@ -22,12 +22,14 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -40,9 +42,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /* Swerve drive object */
     private final SwerveDrive swerveDrive;
+    private Branches branchChoice;
 
     /** Creates a new SwerveSubsystem. */
-    public SwerveSubsystem(CommandXboxController m_driverController, File directory) {
+    public SwerveSubsystem(CommandPS5Controller m_driverController, File directory) {
 
         // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary
         // objects being created.
@@ -471,6 +474,21 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public Pose2d getNearestWaypoint() {
         Pose2d currPos = swerveDrive.getPose();
-        return currPos.nearest(List.copyOf(Constants.VisionConstants.WAYPOINTS.values()));
+        if (RobotContainer.m_swerveSubsystem.getBranch() == Branches.Left){
+            return currPos.nearest(List.copyOf(Constants.VisionConstants.LEFT_WAYPOINTS.values()));
+        }
+        else {
+            return currPos.nearest(List.copyOf(Constants.VisionConstants.RIGHT_WAYPOINTS.values()));
+        }
+    }
+    public enum Branches {
+        Left,
+        Right
+    }
+    public void setBranch(Branches branch){
+        branchChoice = branch;
+    }
+    public Branches getBranch(){
+        return branchChoice;
     }
 }
