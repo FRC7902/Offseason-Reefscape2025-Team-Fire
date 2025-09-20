@@ -9,22 +9,23 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.EndEffectorConstants;
-import frc.robot.RobotContainer;
 
 public class EndEffectorSubsystem extends SubsystemBase {
 
     private final TalonFX m_motor;
     private final TalonFXConfiguration m_motorConfig;
     private final MotorOutputConfigs m_motorOutputConfig;
-    private boolean hasAlgae;
+    private boolean m_hasAlgae;
 
     private final DigitalInput m_coralBeamBreak;
     // private final DigitalInput m_algaeProximitySensor;
 
+    private final Debouncer m_algaeDebouncer;
 
     /**
      * Creates a new AlgaeCoralIndexerSubsystem.
@@ -47,24 +48,17 @@ public class EndEffectorSubsystem extends SubsystemBase {
 
         m_motor.getConfigurator().apply(m_motorConfig);
 
+        m_algaeDebouncer = new Debouncer(0.5, Debouncer.DebounceType.kRising);
+        m_hasAlgae = false;
     }
 
-    public void setHasAlgae(boolean hasAlgae) {
-        this.hasAlgae = hasAlgae;
-    }
-
-    public boolean getHasAlgae() {
-        return hasAlgae;
+    public boolean hasAlgae() {
+        return m_hasAlgae;
     }
 
     public boolean hasCoral() {
         return !m_coralBeamBreak.get();
     }
-
-    /*public boolean hasAlgae() {
-        // return m_algaeProximitySensor.get();
-        return hasAlgae;
-    }*/
 
     public void stop() {
         m_motor.stopMotor();
@@ -82,8 +76,13 @@ public class EndEffectorSubsystem extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
         SmartDashboard.putBoolean("End Effector — Has Coral", hasCoral());
-        SmartDashboard.putBoolean("End Effector - Has Algae", getHasAlgae());
+        SmartDashboard.putBoolean("End Effector - Has Algae", getM_hasAlgae());
         SmartDashboard.putNumber("Supply Current EndEffector", getSupplyCurrent());
         SmartDashboard.putNumber("EndEffector Motor Velocity", m_motor.getVelocity().getValueAsDouble());
+
+        // Debouncer to detect consistent current spike (between low and high) for longer than time (t)
+        m_hasAlgae = m_algaeDebouncer.calculate(
+                EndEffectorConstants.ALGAE_INTAKE_STALL_DETECTION_CURRENT_LOW < getSupplyCurrent()
+                        && getSupplyCurrent() < EndEffectorConstants.ALGAE_INTAKE_STALL_DETECTION_CURRENT_HIGH);
     }
 }

@@ -20,8 +20,6 @@ public class IntakeCommand extends Command {
 
     private IntakeMode m_mode;
 
-    Debouncer m_debouncer;
-
     /**
      * Creates a new IntakeAlgaeCoralCommand.
      */
@@ -29,16 +27,11 @@ public class IntakeCommand extends Command {
         addRequirements(RobotContainer.m_endEffectorSubsystem);
 
         m_mode = mode;
-
-        // TODO: Tune debouncer time
-        m_debouncer = new Debouncer(0.5, DebounceType.kRising);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        m_debouncer.calculate(false);
-        RobotContainer.m_endEffectorSubsystem.setHasAlgae(false);
         RobotContainer.m_endEffectorSubsystem.setSpeed(EndEffectorConstants.INTAKE_SPEED);
     }
 
@@ -70,15 +63,6 @@ public class IntakeCommand extends Command {
         }
 
         // Algae mode
-        // Debouncer to detect consistent current spike for longer than time (t)
-        boolean algaeDetected = m_debouncer.calculate(
-                EndEffectorConstants.ALGAE_INTAKE_STALL_DETECTION_CURRENT_LOW < RobotContainer.m_endEffectorSubsystem.getSupplyCurrent()
-                        && RobotContainer.m_endEffectorSubsystem.getSupplyCurrent() < EndEffectorConstants.ALGAE_INTAKE_STALL_DETECTION_CURRENT_HIGH);
-
-        if (algaeDetected) {
-            RobotContainer.m_endEffectorSubsystem.setHasAlgae(true);
-        }
-
-        return algaeDetected;
+        return RobotContainer.m_endEffectorSubsystem.hasAlgae();
     }
 }
