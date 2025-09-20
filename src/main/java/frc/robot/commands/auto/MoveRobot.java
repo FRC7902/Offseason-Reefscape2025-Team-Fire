@@ -22,7 +22,9 @@ public class MoveRobot extends Command {
     @Override
     public void execute() {
         Translation2d moveRobot = new Translation2d(0, 0.5);
-        RobotContainer.m_swerveSubsystem.drive(moveRobot, 0, true);
+        RobotContainer.m_swerveSubsystem.drive(moveRobot, 0, false);
+        System.out.println("AAAAAA"
+        );
     }
 
     // Called once the command ends or is interrupted.

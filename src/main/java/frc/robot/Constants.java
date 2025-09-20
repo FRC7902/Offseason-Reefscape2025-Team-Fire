@@ -33,6 +33,18 @@ public final class Constants {
         public static final double MIN_ROTATION_SPEED_SCALE = 0.1; // Minimum speed scaling factor for joystick input
     }
 
+    public static class PathPlanner {
+        public static final double kPDrive = 1.95;
+        public static final double kIDrive = 0;
+        public static final double kDDrive = 0.01;
+
+        public static final double kPAngle = 2.6;
+        public static final double kIAngle = 0;
+        public static final double kDAngle = 0.01;
+
+    }
+
+
     public static class FunnelIndexerConstants {
         public static final int LEFT_MOTOR_CAN_ID = 34;
         public static final int RIGHT_MOTOR_CAN_ID = 33;
