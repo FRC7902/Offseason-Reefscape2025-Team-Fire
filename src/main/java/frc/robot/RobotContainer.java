@@ -204,6 +204,10 @@ public class RobotContainer {
         );
         // ===============================
 
+        // Strafe controls
+        m_driverController.povLeft().whileTrue(SwereCommands.StrafeLeft());
+        m_driverController.povRight().whileTrue(SwereCommands.StrafeRight());
+
         m_driverController.options().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
 
         // === Elevator Setpoints ===
@@ -227,8 +231,6 @@ public class RobotContainer {
         // ==========================
 
         m_operatorController.options().whileTrue(m_swerveSubsystem.centerModulesCommand());
-        m_driverController.povLeft().whileTrue(SwereCommands.StrafeLeft());
-        m_driverController.povRight().whileTrue(SwereCommands.StrafeRight());
     }
 
     /**
