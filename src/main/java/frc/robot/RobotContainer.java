@@ -135,7 +135,7 @@ public class RobotContainer {
                 new InstantCommand(),
                 // Only run handoff if we don't already have coral and algae
                 () -> !m_endEffectorSubsystem.hasCoral()
-                        && !m_endEffectorSubsystem.getM_hasAlgae()
+                        && !m_endEffectorSubsystem.hasAlgae()
         );
     }
 

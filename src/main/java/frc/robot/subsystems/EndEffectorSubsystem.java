@@ -76,7 +76,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
         SmartDashboard.putBoolean("End Effector — Has Coral", hasCoral());
-        SmartDashboard.putBoolean("End Effector - Has Algae", getM_hasAlgae());
+        SmartDashboard.putBoolean("End Effector - Has Algae", hasAlgae());
         SmartDashboard.putNumber("Supply Current EndEffector", getSupplyCurrent());
         SmartDashboard.putNumber("EndEffector Motor Velocity", m_motor.getVelocity().getValueAsDouble());
 
