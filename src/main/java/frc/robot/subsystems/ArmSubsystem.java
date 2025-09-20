@@ -269,6 +269,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void setArmPositionEnum(ElevatorPosition position) {
         double degrees = switch (position) {
             case ZERO -> ArmConstants.ZERO_ANGLE_DEGREES;
+            case REST -> ArmConstants.REST_ANGLE_DEGREES;
             case CORAL_L1 -> ArmConstants.L1_ANGLE_DEGREES;
             case CORAL_L2 -> ArmConstants.L2_ANGLE_DEGREES;
             case CORAL_L3 -> ArmConstants.L3_ANGLE_DEGREES;
@@ -291,6 +292,8 @@ public class ArmSubsystem extends SubsystemBase {
         double positionDeg = getArmPositionDegrees();
         if (positionDeg == ArmConstants.ZERO_ANGLE_DEGREES) {
             return ElevatorPosition.ZERO;
+        } else if (positionDeg == ArmConstants.REST_ANGLE_DEGREES) {
+            return ElevatorPosition.REST;
         } else if (positionDeg == ArmConstants.L1_ANGLE_DEGREES) {
             return ElevatorPosition.CORAL_L1;
         } else if (positionDeg == ArmConstants.L2_ANGLE_DEGREES) {

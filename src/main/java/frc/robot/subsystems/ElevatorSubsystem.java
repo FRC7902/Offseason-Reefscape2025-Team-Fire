@@ -42,6 +42,7 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     public enum ElevatorPosition {
         ZERO,
+        REST,
         CORAL_L1,
         CORAL_L2,
         CORAL_L3,
@@ -238,6 +239,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void setElevatorPositionEnum(ElevatorPosition positionEnum) {
         m_elevatorSetPointMeters = switch (positionEnum) {
             case ZERO -> ElevatorConstants.MIN_HEIGHT_METERS;
+            case REST -> ElevatorConstants.REST_HEIGHT_METERS;
             case CORAL_L1 -> ElevatorConstants.L1_HEIGHT_METERS;
             case CORAL_L2 -> ElevatorConstants.L2_HEIGHT_METERS;
             case CORAL_L3 -> ElevatorConstants.L3_HEIGHT_METERS;
@@ -309,30 +311,11 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     public ElevatorPosition getElevatorPositionEnum() {
         double currentHeightMeters = getElevatorPositionMeters();
-//        if (positionMeters < ElevatorConstants.kElevatorMinHeightMeters + 0.01) {
-//            return ElevatorPosition.ZERO;
-//        } else if (positionMeters < ElevatorConstants.kElevatorCoralLevel1Height + ElevatorConstants.kElevatorTargetError*2) {
-//            return ElevatorPosition.CORAL_L1;
-//        } else if (positionMeters < ElevatorConstants.kElevatorCoralLevel2Height + ElevatorConstants.kElevatorTargetError*2) {
-//            return ElevatorPosition.CORAL_L2;
-//        } else if (positionMeters < ElevatorConstants.kElevatorCoralLevel3Height + ElevatorConstants.kElevatorTargetError*2) {
-//            return ElevatorPosition.CORAL_L3;
-//        } else if (positionMeters < ElevatorConstants.kElevatorCoralLevel4Height + ElevatorConstants.kElevatorTargetError*2) {
-//            return ElevatorPosition.CORAL_L4;
-//        } else if (positionMeters < ElevatorConstants.kElevatorProcessorHeight + ElevatorConstants.kElevatorTargetError*2) {
-//            return ElevatorPosition.PROCESSOR;
-//        } else if (positionMeters < ElevatorConstants.kElevatorAlgaeHighHeight + ElevatorConstants.kElevatorTargetError*2) {
-//            return ElevatorPosition.ALGAE_HIGH;
-//        } else if (positionMeters < ElevatorConstants.kElevatorMaxHeightMeters + ElevatorConstants.kElevatorTargetError*2) {
-//            return ElevatorPosition.ALGAE_LOW;
-//        } else if (positionMeters < ElevatorConstants.kElevatorBargeHeight + ElevatorConstants.kElevatorTargetError*2) {
-//            return ElevatorPosition.BARGE;
-//        } else {
-//            return ElevatorPosition.UNKNOWN;
-//        }
 
         if (Math.abs(currentHeightMeters - ElevatorConstants.MIN_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.ZERO;
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.REST_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
+            return ElevatorPosition.REST;
         } else if (Math.abs(currentHeightMeters - ElevatorConstants.L1_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.CORAL_L1;
         } else if (Math.abs(currentHeightMeters - ElevatorConstants.L2_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
