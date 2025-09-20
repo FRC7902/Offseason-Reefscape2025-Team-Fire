@@ -33,6 +33,18 @@ public final class Constants {
         public static final double MIN_ROTATION_SPEED_SCALE = 0.1; // Minimum speed scaling factor for joystick input
     }
 
+    public static class PathPlanner {
+        public static final double kPDrive = 1.95;
+        public static final double kIDrive = 0;
+        public static final double kDDrive = 0.01;
+
+        public static final double kPAngle = 2.6;
+        public static final double kIAngle = 0;
+        public static final double kDAngle = 0.01;
+
+    }
+
+
     public static class FunnelIndexerConstants {
         public static final int LEFT_MOTOR_CAN_ID = 34;
         public static final int RIGHT_MOTOR_CAN_ID = 33;
@@ -117,12 +129,12 @@ public final class Constants {
         // Arm Setpoints
         public static final double ZERO_ANGLE_DEGREES = -90;
         public static final double REST_ANGLE_DEGREES = 55;
-        public static final double PROCESSOR_ANGLE_DEGREES = -45;
+        public static final double PROCESSOR_ANGLE_DEGREES = -45.0;
 
-        public static final double L1_ANGLE_DEGREES = 25;
-        public static final double L2_ANGLE_DEGREES = 58.0;
-        public static final double L3_ANGLE_DEGREES = 79.6;
-        public static final double L4_ANGLE_DEGREES = 62.57;
+        public static final double L1_ANGLE_DEGREES = 45.0;
+        public static final double L2_ANGLE_DEGREES = 56.0;
+        public static final double L3_ANGLE_DEGREES = 75.0;
+        public static final double L4_ANGLE_DEGREES = 56.0;
 
         public static final double LOW_ALGAE_ANGLE_DEGREES = 0.0;
         public static final double HIGH_ALGAE_ANGLE_DEGREES = 0.0;
@@ -155,7 +167,7 @@ public final class Constants {
         public static final double HEIGHT_METERS = Units.inchesToMeters(42);
         public static final double MIN_HEIGHT_METERS = Units.inchesToMeters(0);
         public static final double ZERO_THRESHOLD = MIN_HEIGHT_METERS + 0.01;
-        public static final double MAX_HEIGHT_METERS = Units.inchesToMeters(49);
+        public static final double MAX_HEIGHT_METERS = 1.2;
         public static final double CARRIAGE_HEIGHT_METERS = Units.inchesToMeters(18.5);
 
         // Elevator safety
@@ -181,17 +193,17 @@ public final class Constants {
         public static double FF_A = 0;//0.02;
 
         // ===== Elevator Setpoints =====
-        public static final double PROCESSOR_HEIGHT_METERS = Units.inchesToMeters(22.5);
+        public static final double PROCESSOR_HEIGHT_METERS = ElevatorConstants.MIN_HEIGHT_METERS;
 
         public static final double REST_HEIGHT_METERS = ElevatorConstants.MIN_HEIGHT_METERS + 0.05;
-        public static final double L1_HEIGHT_METERS = 0.250; // TODO
-        public static final double L2_HEIGHT_METERS = 0.315;
-        public static final double L3_HEIGHT_METERS = 0.561;
-        public static final double L4_HEIGHT_METERS = 1.228;
+        public static final double L1_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS * 0.02195122;
+        public static final double L2_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS * 0.21219512;
+        public static final double L3_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS * 0.41463415;
+        public static final double L4_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS;
 
-        public static final double LOW_ALGAE_HEIGHT_METERS = Units.inchesToMeters(28.5);
-        public static final double HIGH_ALGAE_HEIGHT_METERS = Units.inchesToMeters(44.25);
-        public static final double BARGE_HEIGHT_METERS = Units.inchesToMeters(47);
+        public static final double LOW_ALGAE_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS * 0.12195122;
+        public static final double HIGH_ALGAE_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS * 0.41463415 + 0.025;
+        public static final double BARGE_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS;
         // ==============================
 
         // ===== Control Parameters =====

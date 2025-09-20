@@ -7,16 +7,26 @@ package frc.robot;
 import java.io.File;
 import java.util.Map;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.events.EventTrigger;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.EndEffectorCommands;
+import frc.robot.commands.auto.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.FunnelCommands;
+import frc.robot.commands.end_effector.IntakeCommand;
+import frc.robot.commands.end_effector.OuttakeCommand;
 import frc.robot.commands.end_effector.IntakeCommand.IntakeMode;
+import frc.robot.commands.funnel_indexer.OuttakeCoralCommand;
 import frc.robot.commands.SwereCommands;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
@@ -49,6 +59,8 @@ public class RobotContainer {
     private final static CommandPS5Controller m_operatorController = new CommandPS5Controller(
             OperatorConstants.OPERATOR_CONTROLLER_PORT);
 
+    private final SendableChooser<Command> autoChooser;    
+
     public final static SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem(
             new File(Filesystem.getDeployDirectory(), "swerve"));
 
@@ -57,6 +69,8 @@ public class RobotContainer {
      */
     public RobotContainer() {
         // Configure the trigger bindings
+                autoChooser = AutoBuilder.buildAutoChooser("DEFAULT");
+
         configureBindings();
     }
 
@@ -225,19 +239,79 @@ public class RobotContainer {
                 new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1)
         );
 
-        m_operatorController.povDown().onTrue(
-                new ConditionalCommand(
-                        Commands.none(),
-                        new MoveElevatorArmCommand(ElevatorPosition.ZERO),
-                        m_endEffectorSubsystem::hasAlgae
-                )
-        );
-        m_operatorController.povUp().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
+        // m_operatorController.povDown().onTrue(
+        //         new ConditionalCommand(
+        //                 Commands.none(),
+        //                 new MoveElevatorArmCommand(ElevatorPosition.ZERO),
+        //                 m_endEffectorSubsystem::hasAlgae
+        //         )
+        // );
+
+        m_operatorController.povUp().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
+        m_operatorController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
         m_operatorController.povLeft().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH));
         m_operatorController.povRight().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));
         // ==========================
 
         m_operatorController.options().whileTrue(m_swerveSubsystem.centerModulesCommand());
+                SmartDashboard.putData("Auto Chooser", autoChooser);
+
+        new EventTrigger("ZeroPosition").onTrue(new MoveElevatorArmCommand(
+                ElevatorPosition.ZERO));
+        new EventTrigger("ElevatorL1").onTrue(new MoveElevatorArmCommand(
+                ElevatorPosition.CORAL_L1));
+        new EventTrigger("ElevatorL2").onTrue(new MoveElevatorArmCommand(
+                ElevatorPosition.CORAL_L2));
+        new EventTrigger("ElevatorL3").onTrue(new MoveElevatorArmCommand(
+                ElevatorPosition.CORAL_L3));
+                new EventTrigger("ElevatorL4").onTrue(new MoveElevatorArmCommand(
+                ElevatorPosition.CORAL_L4));        
+        new EventTrigger("lowalgae").onTrue(new MoveElevatorArmCommand(
+                ElevatorPosition.ALGAE_LOW));
+        new EventTrigger("highalgae").onTrue(new MoveElevatorArmCommand(
+                ElevatorPosition.ALGAE_HIGH));
+
+        new EventTrigger("ElevatorL1WithWait").onTrue(
+                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
+                        ElevatorPosition.CORAL_L1)));
+
+        new EventTrigger("ElevatorL2WithWait").onTrue(
+                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
+                        ElevatorPosition.CORAL_L2)));
+
+        new EventTrigger("ElevatorL3WithWait").onTrue(
+                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
+                        ElevatorPosition.CORAL_L3)));
+
+        new EventTrigger("ElevatorL4WithWait").onTrue(
+                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
+                        ElevatorPosition.CORAL_L1)));
+
+        new EventTrigger("highalgaeWithWait").onTrue(
+                new SequentialCommandGroup(
+                        new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH),
+                        new IntakeCommand(IntakeMode.ALGAE)));
+                        
+
+        new EventTrigger("lowalgaeWithWait").onTrue(
+                new SequentialCommandGroup(
+                        new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW),
+                        new IntakeCommand(IntakeMode.ALGAE)));
+
+        new EventTrigger("outtakecoral").onTrue(new OuttakeCoralCommand(m_funnelIndexerSubsystem));
+        new EventTrigger("outtakealgae").onTrue(new OuttakeCommand());
+
+
+        // new EventTrigger("coraloutakeoff").toggleOnFalse(new OuttakeCoralCommand());
+
+        // new EventTrigger("shoot note").and(new
+        // Trigger(exampleSubsystem::someCondition)).onTrue(Commands.print("shoot
+        // note");
+
+        // Point Towards Zone Triggers
+        // new PointTowardsZoneTrigger("Speaker").whileTrue(Commands.print("aiming at
+        // speaker"));                
+
     }
 
     /**
@@ -246,6 +320,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return null;
+        return autoChooser.getSelected();
+
     }
 }
