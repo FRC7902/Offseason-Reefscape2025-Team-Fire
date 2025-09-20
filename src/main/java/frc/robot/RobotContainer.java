@@ -118,6 +118,7 @@ public class RobotContainer {
                                         ),
                                 FunnelCommands.IntakeCoral(m_funnelIndexerSubsystem)
                         ),
+                        new WaitCommand(0.5),
                         // Intake coral until funnel no longer detects it (shallow beam break)
                         new ParallelCommandGroup(
                                 EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),

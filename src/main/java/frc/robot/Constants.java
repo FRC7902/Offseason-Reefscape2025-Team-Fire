@@ -115,7 +115,7 @@ public final class Constants {
         public static final double SAFETY_ANGLE_UPWARD_DEGREES = -40;
 
         // Arm Setpoints
-        public static final double ZERO_ANGLE_DEGREES = -85;
+        public static final double ZERO_ANGLE_DEGREES = -90;
         public static final double PROCESSOR_ANGLE_DEGREES = -45;
 
         public static final double L1_ANGLE_DEGREES = 25;
