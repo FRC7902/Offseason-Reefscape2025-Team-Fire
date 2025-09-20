@@ -195,6 +195,13 @@ public class RobotContainer {
                 )
         );
 
+        m_elevatorSubsystem.setDefaultCommand(
+                // if holding algae, go to rest position, else go to zero position
+                new ConditionalCommand(
+                        new InstantCommand(() -> m_elevatorSubsystem.setElevatorPositionEnum(ElevatorPosition.REST)), 
+                        new InstantCommand(() -> m_elevatorSubsystem.setElevatorPositionEnum(ElevatorPosition.ZERO)), 
+                        () -> m_endEffectorSubsystem.hasAlgae())
+        );
         // === Intake/Outtake controls ===
         m_driverController.R2().whileTrue(EndEffectorCommands.OuttakeEffector());
         m_driverController.L2().whileTrue(
