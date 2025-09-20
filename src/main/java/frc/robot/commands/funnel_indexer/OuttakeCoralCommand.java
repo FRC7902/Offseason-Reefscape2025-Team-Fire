@@ -14,7 +14,7 @@ public class OuttakeCoralCommand extends Command {
 
     @Override
     public void execute() {
-        m_funnelIndexerSubsystem.setIndexerSpeed(FunnelIndexerConstants.HALF_SPEED);
+        m_funnelIndexerSubsystem.setIndexerSpeed(FunnelIndexerConstants.OUTTAKE_SPEED);
     }
 
     @Override

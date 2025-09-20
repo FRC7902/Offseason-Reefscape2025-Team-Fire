@@ -36,6 +36,7 @@ public final class Constants {
 
         public static final double FULL_SPEED = 0.5;
         public static final double HALF_SPEED = 0.1;
+        public static final double OUTTAKE_SPEED = 0.25;
         public static final double REVERSE_SPEED = -0.1;
         public static final double STOP_SPEED = 0.0;
 
