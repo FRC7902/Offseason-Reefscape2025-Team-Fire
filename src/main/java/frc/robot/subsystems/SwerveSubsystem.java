@@ -86,6 +86,7 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.setChassisDiscretization(false, true, 0.03);
         swerveDrive.swerveController.addSlewRateLimiters(null, null, null);
         swerveDrive.swerveController.setMaximumChassisAngularVelocity(20);
+        setupPathPlanner();
     }
 
     private void scaleSwerveInput() {
@@ -103,13 +104,13 @@ public class SwerveSubsystem extends SubsystemBase {
                 )
         );
         // TODO: If needed, rotation can be scaled separately from translation, since rotation is less affected by a high center of gravity?
-        RobotContainer.driveAngularVelocity.scaleRotation(
-                // Scale between MIN_TRANSLATION_SPEED_SCALE and 1.0
-                Math.max(
-                        scale,
-                        SwerveConstants.MIN_ROTATION_SPEED_SCALE
-                )
-        );
+        // RobotContainer.driveAngularVelocity.scaleRotation(
+        //         // Scale between MIN_TRANSLATION_SPEED_SCALE and 1.0
+        //         Math.max(
+        //                 scale,
+        //                 SwerveConstants.MIN_ROTATION_SPEED_SCALE
+        //         )
+        // );
     }
 
 
@@ -148,7 +149,7 @@ public class SwerveSubsystem extends SubsystemBase {
                             // Translation PID constants
                             new PIDConstants(PathPlanner.kPAngle, PathPlanner.kIAngle,
                                     PathPlanner.kDAngle)
-                    // Rotation PID constants
+                            // Rotation PID constants
                     ), config,
                     // The robot configuration
                     () -> {
@@ -163,7 +164,7 @@ public class SwerveSubsystem extends SubsystemBase {
                         }
                         return false;
                     }, this
-            // Reference to this subsystem to set requirements
+                    // Reference to this subsystem to set requirements
             );
 
         } catch (Exception e) {

@@ -59,7 +59,7 @@ public class RobotContainer {
     private final static CommandPS5Controller m_operatorController = new CommandPS5Controller(
             OperatorConstants.OPERATOR_CONTROLLER_PORT);
 
-    private final SendableChooser<Command> autoChooser;    
+    private final SendableChooser<Command> autoChooser;
 
     public final static SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem(
             new File(Filesystem.getDeployDirectory(), "swerve"));
@@ -69,9 +69,55 @@ public class RobotContainer {
      */
     public RobotContainer() {
         // Configure the trigger bindings
-                autoChooser = AutoBuilder.buildAutoChooser("DEFAULT");
-
         configureBindings();
+        autoChooser = AutoBuilder.buildAutoChooser("DEFAULT");
+
+        new EventTrigger("ZeroPosition").onTrue(new MoveElevatorArmCommand(
+                ElevatorPosition.ZERO));
+        new EventTrigger("ElevatorL1").onTrue(new MoveElevatorArmCommand(
+                ElevatorPosition.CORAL_L1));
+        new EventTrigger("ElevatorL2").onTrue(new MoveElevatorArmCommand(
+                ElevatorPosition.CORAL_L2));
+        new EventTrigger("ElevatorL3").onTrue(new MoveElevatorArmCommand(
+                ElevatorPosition.CORAL_L3));
+        new EventTrigger("ElevatorL4").onTrue(new MoveElevatorArmCommand(
+                ElevatorPosition.CORAL_L4));
+        new EventTrigger("lowalgae").onTrue(new MoveElevatorArmCommand(
+                ElevatorPosition.ALGAE_LOW));
+        new EventTrigger("highalgae").onTrue(new MoveElevatorArmCommand(
+                ElevatorPosition.ALGAE_HIGH));
+
+        new EventTrigger("ElevatorL1WithWait").onTrue(
+                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
+                        ElevatorPosition.CORAL_L1)));
+
+        new EventTrigger("ElevatorL2WithWait").onTrue(
+                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
+                        ElevatorPosition.CORAL_L2)));
+
+        new EventTrigger("ElevatorL3WithWait").onTrue(
+                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
+                        ElevatorPosition.CORAL_L3)));
+
+        new EventTrigger("ElevatorL4WithWait").onTrue(
+                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
+                        ElevatorPosition.CORAL_L4)));
+
+        new EventTrigger("highalgaeWithWait").onTrue(
+                new SequentialCommandGroup(
+                        new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH),
+                        new IntakeCommand(IntakeMode.ALGAE)));
+
+
+        new EventTrigger("lowalgaeWithWait").onTrue(
+                new SequentialCommandGroup(
+                        new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW),
+                        new IntakeCommand(IntakeMode.ALGAE)));
+
+        new EventTrigger("outtakecoral").onTrue(new OuttakeCoralCommand(m_funnelIndexerSubsystem));
+        new EventTrigger("outtakealgae").onTrue(new OuttakeCommand());
+
+        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     public static SwerveInputStream driveAngularVelocity = SwerveInputStream
@@ -254,52 +300,6 @@ public class RobotContainer {
         // ==========================
 
         m_operatorController.options().whileTrue(m_swerveSubsystem.centerModulesCommand());
-                SmartDashboard.putData("Auto Chooser", autoChooser);
-
-        new EventTrigger("ZeroPosition").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.ZERO));
-        new EventTrigger("ElevatorL1").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.CORAL_L1));
-        new EventTrigger("ElevatorL2").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.CORAL_L2));
-        new EventTrigger("ElevatorL3").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.CORAL_L3));
-                new EventTrigger("ElevatorL4").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.CORAL_L4));        
-        new EventTrigger("lowalgae").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.ALGAE_LOW));
-        new EventTrigger("highalgae").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.ALGAE_HIGH));
-
-        new EventTrigger("ElevatorL1WithWait").onTrue(
-                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
-                        ElevatorPosition.CORAL_L1)));
-
-        new EventTrigger("ElevatorL2WithWait").onTrue(
-                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
-                        ElevatorPosition.CORAL_L2)));
-
-        new EventTrigger("ElevatorL3WithWait").onTrue(
-                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
-                        ElevatorPosition.CORAL_L3)));
-
-        new EventTrigger("ElevatorL4WithWait").onTrue(
-                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
-                        ElevatorPosition.CORAL_L1)));
-
-        new EventTrigger("highalgaeWithWait").onTrue(
-                new SequentialCommandGroup(
-                        new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH),
-                        new IntakeCommand(IntakeMode.ALGAE)));
-                        
-
-        new EventTrigger("lowalgaeWithWait").onTrue(
-                new SequentialCommandGroup(
-                        new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW),
-                        new IntakeCommand(IntakeMode.ALGAE)));
-
-        new EventTrigger("outtakecoral").onTrue(new OuttakeCoralCommand(m_funnelIndexerSubsystem));
-        new EventTrigger("outtakealgae").onTrue(new OuttakeCommand());
 
 
         // new EventTrigger("coraloutakeoff").toggleOnFalse(new OuttakeCoralCommand());
@@ -310,7 +310,7 @@ public class RobotContainer {
 
         // Point Towards Zone Triggers
         // new PointTowardsZoneTrigger("Speaker").whileTrue(Commands.print("aiming at
-        // speaker"));                
+        // speaker"));
 
     }
 

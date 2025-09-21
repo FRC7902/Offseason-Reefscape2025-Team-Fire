@@ -7,19 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle1"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Middle2"
+            "pathName": "NewBotMoveForward"
           }
         }
       ]

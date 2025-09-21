@@ -16,7 +16,9 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+
 import static edu.wpi.first.units.Units.Volts;
+
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
@@ -265,9 +267,11 @@ public class ElevatorSubsystem extends SubsystemBase {
             positionMeters = ElevatorConstants.MAX_HEIGHT_METERS;
         }
 
-        if (getArmPositionDegrees() < ArmConstants.SAFETY_ANGLE_UPWARD_DEGREES) {
-            positionMeters = currentPosMeters;
-        }
+        // if (getArmPositionDegrees() < ArmConstants.SAFETY_ANGLE_UPWARD_DEGREES) {
+        //     positionMeters = currentPosMeters;
+        // }
+
+        // upper line causing autonomous elevator failure
 
         m_elevatorSetPointMeters = positionMeters;
 
