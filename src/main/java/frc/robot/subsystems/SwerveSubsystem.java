@@ -104,13 +104,13 @@ public class SwerveSubsystem extends SubsystemBase {
                 )
         );
         // TODO: If needed, rotation can be scaled separately from translation, since rotation is less affected by a high center of gravity?
-        RobotContainer.driveAngularVelocity.scaleRotation(
-                // Scale between MIN_TRANSLATION_SPEED_SCALE and 1.0
-                Math.max(
-                        scale,
-                        SwerveConstants.MIN_ROTATION_SPEED_SCALE
-                )
-        );
+        // RobotContainer.driveAngularVelocity.scaleRotation(
+        //         // Scale between MIN_TRANSLATION_SPEED_SCALE and 1.0
+        //         Math.max(
+        //                 scale,
+        //                 SwerveConstants.MIN_ROTATION_SPEED_SCALE
+        //         )
+        // );
     }
 
 
