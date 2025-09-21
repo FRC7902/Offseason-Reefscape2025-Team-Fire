@@ -287,9 +287,9 @@ public final static SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem(
                 )
         );
 
-
-        m_driverController.square().whileTrue(new AutoAlign(m_swerveSubsystem, m_camera, 0));
-        m_driverController.circle().whileTrue(new AutoAlign(m_swerveSubsystem, m_camera, 1));
+        
+        m_driverController.L1().whileTrue(new AutoAlign(m_swerveSubsystem, m_camera, 0));
+        m_driverController.R1().whileTrue(new AutoAlign(m_swerveSubsystem, m_camera, 1));
 
         // === Intake/Outtake controls ===
         m_driverController.R2().whileTrue(EndEffectorCommands.OuttakeEffector());

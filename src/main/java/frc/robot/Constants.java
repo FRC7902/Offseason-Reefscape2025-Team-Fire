@@ -306,8 +306,8 @@ public final class Constants {
         //         480, Rotation2d.fromDegrees(100), 30, 0.25, 0.08);
 
         public static final String middleCamName = "middle";
-        public static final Transform3d middleCamToRobotTsf = new Transform3d(0, 0.095, 0.100,
-                new Rotation3d(Math.toRadians(0), Math.toRadians(25), Math.toRadians(0)));
+        public static final Transform3d middleCamToRobotTsf = new Transform3d(-0.271, 0.320, 0.198,
+                new Rotation3d(Math.toRadians(0), Math.toRadians(15), Math.toRadians(22)));
         public static final CameraProperties middleCamProp = new CameraProperties(middleCamName, middleCamToRobotTsf,
                 640, 480, Rotation2d.fromDegrees(100), 30, 0.25, 0.08);
 
