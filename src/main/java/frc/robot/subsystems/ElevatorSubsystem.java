@@ -16,7 +16,9 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+
 import static edu.wpi.first.units.Units.Volts;
+
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
@@ -248,9 +250,6 @@ public class ElevatorSubsystem extends SubsystemBase {
             case BARGE -> ElevatorConstants.BARGE_HEIGHT_METERS;
             default -> ElevatorConstants.MIN_HEIGHT_METERS;
         };
-
-
-        System.out.println(positionEnum.toString());
 
         setElevatorPositionMeters(m_elevatorSetPointMeters);
     }

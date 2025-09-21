@@ -149,7 +149,7 @@ public class SwerveSubsystem extends SubsystemBase {
                             // Translation PID constants
                             new PIDConstants(PathPlanner.kPAngle, PathPlanner.kIAngle,
                                     PathPlanner.kDAngle)
-                    // Rotation PID constants
+                            // Rotation PID constants
                     ), config,
                     // The robot configuration
                     () -> {
@@ -164,7 +164,7 @@ public class SwerveSubsystem extends SubsystemBase {
                         }
                         return false;
                     }, this
-            // Reference to this subsystem to set requirements
+                    // Reference to this subsystem to set requirements
             );
 
         } catch (Exception e) {
