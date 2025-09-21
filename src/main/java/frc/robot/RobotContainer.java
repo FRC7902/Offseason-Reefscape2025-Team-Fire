@@ -101,7 +101,7 @@
 
                 new EventTrigger("ElevatorL4WithWait").onTrue(
                         new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
-                                ElevatorPosition.CORAL_L1)));
+                                ElevatorPosition.CORAL_L4)));
 
                 new EventTrigger("highalgaeWithWait").onTrue(
                         new SequentialCommandGroup(

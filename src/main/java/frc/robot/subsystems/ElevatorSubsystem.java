@@ -249,6 +249,9 @@ public class ElevatorSubsystem extends SubsystemBase {
             default -> ElevatorConstants.MIN_HEIGHT_METERS;
         };
 
+
+        System.out.println(positionEnum.toString());
+
         setElevatorPositionMeters(m_elevatorSetPointMeters);
     }
 
