@@ -268,9 +268,11 @@ public class ElevatorSubsystem extends SubsystemBase {
             positionMeters = ElevatorConstants.MAX_HEIGHT_METERS;
         }
 
-        if (getArmPositionDegrees() < ArmConstants.SAFETY_ANGLE_UPWARD_DEGREES) {
-            positionMeters = currentPosMeters;
-        }
+        // if (getArmPositionDegrees() < ArmConstants.SAFETY_ANGLE_UPWARD_DEGREES) {
+        //     positionMeters = currentPosMeters;
+        // }
+
+        // upper line causing autonomous elevator failure
 
         m_elevatorSetPointMeters = positionMeters;
 
