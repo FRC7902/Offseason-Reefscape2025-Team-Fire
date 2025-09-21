@@ -10,7 +10,10 @@ import java.util.Map;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.events.EventTrigger;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.PhotonConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.EndEffectorCommands;
 import frc.robot.commands.auto.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -27,6 +32,7 @@ import frc.robot.commands.end_effector.IntakeCommand;
 import frc.robot.commands.end_effector.OuttakeCommand;
 import frc.robot.commands.end_effector.IntakeCommand.IntakeMode;
 import frc.robot.commands.funnel_indexer.OuttakeCoralCommand;
+import frc.robot.commands.vision.AutoAlign;
 import frc.robot.commands.SwereCommands;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
@@ -36,6 +42,9 @@ import frc.robot.commands.MoveElevatorArmCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
+import frc.robot.subsystems.vision.PhotonSim;
+import frc.robot.subsystems.vision.PhotonSubsystem;
+import frc.robot.subsystems.vision.ReefSide;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -59,10 +68,16 @@ public class RobotContainer {
     private final static CommandPS5Controller m_operatorController = new CommandPS5Controller(
             OperatorConstants.OPERATOR_CONTROLLER_PORT);
 
+
+public final static SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem(
+        new File(Filesystem.getDeployDirectory(), "swerve"));
+
+    public static PhotonSim m_cameraSim;
+
+    public static final PhotonSubsystem m_camera = new PhotonSubsystem(PhotonConstants.middleCamProp);
+
     private final SendableChooser<Command> autoChooser;
 
-    public final static SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem(
-            new File(Filesystem.getDeployDirectory(), "swerve"));
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -247,6 +262,23 @@ public class RobotContainer {
 
         m_swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
 
+        // Auto-Algin
+        driveAngularVelocity.driveToPose(m_swerveSubsystem::getNearestWaypoint,
+                new ProfiledPIDController(5,
+                        0,
+                        0,
+                        new TrapezoidProfile.Constraints(5, 2)),
+                new ProfiledPIDController(5,
+                        0,
+                        0,
+                        new TrapezoidProfile.Constraints(Units.degreesToRadians(360),
+                                Units.degreesToRadians(180))));
+
+        // m_driverController.start().whileTrue(Commands.runEnd(
+        //         () -> driveAngularVelocity.driveToPoseEnabled(true),
+        //         () -> driveAngularVelocity.driveToPoseEnabled(false)
+        // ));
+
         m_funnelIndexerSubsystem.setDefaultCommand(
                 new ConditionalCommand(
                         new InstantCommand(),
@@ -254,6 +286,10 @@ public class RobotContainer {
                         m_endEffectorSubsystem::hasCoral
                 )
         );
+
+
+        m_driverController.square().whileTrue(new AutoAlign(m_swerveSubsystem, m_camera, 0));
+        m_driverController.circle().whileTrue(new AutoAlign(m_swerveSubsystem, m_camera, 1));
 
         // === Intake/Outtake controls ===
         m_driverController.R2().whileTrue(EndEffectorCommands.OuttakeEffector());
