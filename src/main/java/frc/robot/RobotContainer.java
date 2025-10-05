@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
-import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.EndEffectorCommands;
 import frc.robot.commands.auto.*;
@@ -56,7 +55,7 @@ public class RobotContainer {
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final static CommandPS5Controller m_driverController = new CommandPS5Controller(
             OperatorConstants.DRIVER_CONTROLLER_PORT);
-    private final static CommandPS5Controller m_operatorController = new CommandPS5Controller(
+    private final static CommandXboxController m_operatorController = new CommandXboxController(
             OperatorConstants.OPERATOR_CONTROLLER_PORT);
 
     private final SendableChooser<Command> autoChooser;
@@ -178,7 +177,7 @@ public class RobotContainer {
                                         ),
                                 FunnelCommands.IntakeCoral(m_funnelIndexerSubsystem)
                         ),
-                        new WaitCommand(0.5),
+                        new WaitCommand(0.25),
                         // Intake coral until funnel no longer detects it (shallow beam break)
                         new ParallelCommandGroup(
                                 EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
@@ -195,8 +194,7 @@ public class RobotContainer {
                 ),
                 new InstantCommand(),
                 // Only run handoff if we don't already have coral and algae
-                () -> !m_endEffectorSubsystem.hasCoral()
-                        && !m_endEffectorSubsystem.hasAlgae()
+                () -> !m_endEffectorSubsystem.hasAlgae()
         );
     }
 
@@ -255,6 +253,8 @@ public class RobotContainer {
                 )
         );
 
+        m_endEffectorSubsystem.setDefaultCommand(EndEffectorCommands.HoldCoralCommand());
+
         // === Intake/Outtake controls ===
         m_driverController.R2().whileTrue(EndEffectorCommands.OuttakeEffector());
         m_driverController.L2().whileTrue(
@@ -272,16 +272,16 @@ public class RobotContainer {
         m_driverController.options().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
 
         // === Elevator Setpoints ===
-        m_operatorController.triangle().onTrue(
+        m_operatorController.y().onTrue(
                 new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4)
         );
-        m_operatorController.circle().onTrue(
+        m_operatorController.b().onTrue(
                 new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3)
         );
-        m_operatorController.square().onTrue(
+        m_operatorController.x().onTrue(
                 new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2)
         );
-        m_operatorController.cross().onTrue(
+        m_operatorController.a().onTrue(
                 new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1)
         );
 
@@ -299,7 +299,7 @@ public class RobotContainer {
         m_operatorController.povRight().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));
         // ==========================
 
-        m_operatorController.options().whileTrue(m_swerveSubsystem.centerModulesCommand());
+        m_operatorController.start().whileTrue(m_swerveSubsystem.centerModulesCommand());
 
 
         // new EventTrigger("coraloutakeoff").toggleOnFalse(new OuttakeCoralCommand());

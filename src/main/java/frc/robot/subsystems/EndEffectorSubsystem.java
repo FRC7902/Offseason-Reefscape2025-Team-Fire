@@ -21,6 +21,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
     private final TalonFXConfiguration m_motorConfig;
     private final MotorOutputConfigs m_motorOutputConfig;
     private boolean m_hasAlgae;
+    private boolean m_hasCoral;
 
     private final DigitalInput m_coralBeamBreak;
     // private final DigitalInput m_algaeProximitySensor;
@@ -50,13 +51,22 @@ public class EndEffectorSubsystem extends SubsystemBase {
 
         m_algaeDebouncer = new Debouncer(0.25, Debouncer.DebounceType.kRising);
         m_hasAlgae = false;
+        m_hasCoral = false;
     }
 
     public boolean hasAlgae() {
         return m_hasAlgae;
     }
 
+    public void setHasCoral(boolean hasCoral) {
+        m_hasCoral = hasCoral;
+    }
+
     public boolean hasCoral() {
+        return m_hasCoral;
+    }
+
+    public boolean isCoralBeamBreakBroken() {
         return !m_coralBeamBreak.get();
     }
 

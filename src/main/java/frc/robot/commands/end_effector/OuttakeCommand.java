@@ -7,7 +7,6 @@ package frc.robot.commands.end_effector;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.EndEffectorSubsystem;
 
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -38,6 +37,10 @@ public class OuttakeCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         RobotContainer.m_endEffectorSubsystem.stop();
+
+        if (!RobotContainer.m_endEffectorSubsystem.isCoralBeamBreakBroken()) {
+            RobotContainer.m_endEffectorSubsystem.setHasCoral(false);
+        }
     }
 
     // Returns true when the command should end.

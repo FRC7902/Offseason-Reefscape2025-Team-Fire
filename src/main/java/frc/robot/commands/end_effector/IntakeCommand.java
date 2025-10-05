@@ -45,7 +45,7 @@ public class IntakeCommand extends Command {
         // Applies a continuous holding speed to the game piece until the OuttakeCommand
         // is run, which then the motors will stop
         if (m_mode == IntakeMode.CORAL) {
-            RobotContainer.m_endEffectorSubsystem.setSpeed(EndEffectorConstants.CORAL_HOLD_SPEED);
+            RobotContainer.m_endEffectorSubsystem.setHasCoral(true);
         } else if (RobotContainer.m_endEffectorSubsystem.hasAlgae()){
             RobotContainer.m_endEffectorSubsystem.setSpeed(EndEffectorConstants.ALGAE_HOLD_SPEED);
         } else {
@@ -58,7 +58,7 @@ public class IntakeCommand extends Command {
     public boolean isFinished() {
         // Coral mode
         if (m_mode == IntakeMode.CORAL) {
-            return RobotContainer.m_endEffectorSubsystem.hasCoral();
+            return RobotContainer.m_endEffectorSubsystem.isCoralBeamBreakBroken();
         }
 
         // Algae mode
