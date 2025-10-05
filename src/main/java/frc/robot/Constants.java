@@ -196,14 +196,14 @@ public final class Constants {
         public static final double PROCESSOR_HEIGHT_METERS = ElevatorConstants.MIN_HEIGHT_METERS;
 
         public static final double REST_HEIGHT_METERS = ElevatorConstants.MIN_HEIGHT_METERS + 0.05;
-        public static final double L1_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS * 0.02195122 + 0.10;
-        public static final double L2_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS * 0.21219512 + 0.10;
-        public static final double L3_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS * 0.41463415 + 0.10;
-        public static final double L4_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS;
+        public static final double L1_HEIGHT_METERS = 0.12678049;
+        public static final double L2_HEIGHT_METERS = 0.15887805;
+        public static final double L3_HEIGHT_METERS = 0.40585366;
+        public static final double L4_HEIGHT_METERS = 1.22;
 
-        public static final double LOW_ALGAE_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS * 0.12195122;
-        public static final double HIGH_ALGAE_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS * 0.41463415 + 0.025;
-        public static final double BARGE_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS;
+        public static final double LOW_ALGAE_HEIGHT_METERS = 0.14878049;
+        public static final double HIGH_ALGAE_HEIGHT_METERS = 0.53085366;
+        public static final double BARGE_HEIGHT_METERS = 1.22;
         // ==============================
 
         // ===== Control Parameters =====
