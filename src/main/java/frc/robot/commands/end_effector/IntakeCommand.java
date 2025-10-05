@@ -4,9 +4,13 @@
 package frc.robot.commands.end_effector;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.EndEffectorConstants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.commands.MoveElevatorArmCommand;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class IntakeCommand extends Command {
@@ -22,7 +26,10 @@ public class IntakeCommand extends Command {
      * Creates a new IntakeAlgaeCoralCommand.
      */
     public IntakeCommand(IntakeMode mode) {
-        addRequirements(RobotContainer.m_endEffectorSubsystem);
+        addRequirements(
+        RobotContainer.m_endEffectorSubsystem, 
+        RobotContainer.m_elevatorSubsystem, 
+        RobotContainer.m_armSubsystem);
 
         m_mode = mode;
     }
@@ -51,6 +58,7 @@ public class IntakeCommand extends Command {
         } else {
             RobotContainer.m_endEffectorSubsystem.stop();
         }
+        CommandScheduler.getInstance().schedule(new MoveElevatorArmCommand(ElevatorPosition.ZERO));
     }
 
     // Returns true when the command should end.
@@ -58,12 +66,16 @@ public class IntakeCommand extends Command {
     public boolean isFinished() {
         // Coral mode
         if (m_mode == IntakeMode.CORAL) {
-            return RobotContainer.m_endEffectorSubsystem.hasCoral();
+            return RobotContainer.m_endEffectorSubsystem.hasCoral() 
+            && (RobotContainer.m_elevatorSubsystem.hasReachedSetpoint()
+            && RobotContainer.m_armSubsystem.hasReachedAngle());
         }
 
         // Algae mode
-        return RobotContainer.m_endEffectorSubsystem.hasAlgae()
+        return (RobotContainer.m_endEffectorSubsystem.hasAlgae()
                 || ((RobotContainer.m_elevatorSubsystem.getElevatorPositionEnum() != ElevatorSubsystem.ElevatorPosition.ALGAE_HIGH)
-                && (RobotContainer.m_elevatorSubsystem.getElevatorPositionEnum() != ElevatorSubsystem.ElevatorPosition.ALGAE_LOW));
+                && (RobotContainer.m_elevatorSubsystem.getElevatorPositionEnum() != ElevatorSubsystem.ElevatorPosition.ALGAE_LOW)))
+                && (RobotContainer.m_elevatorSubsystem.hasReachedSetpoint() 
+                && RobotContainer.m_armSubsystem.hasReachedAngle());
     }
 }
