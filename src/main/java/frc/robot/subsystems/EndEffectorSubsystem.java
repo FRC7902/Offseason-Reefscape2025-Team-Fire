@@ -49,7 +49,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
 
         m_motor.getConfigurator().apply(m_motorConfig);
 
-        m_algaeDebouncer = new Debouncer(0.25, Debouncer.DebounceType.kRising);
+        m_algaeDebouncer = new Debouncer(0.05, Debouncer.DebounceType.kRising);
         m_hasAlgae = false;
         m_hasCoral = false;
     }
