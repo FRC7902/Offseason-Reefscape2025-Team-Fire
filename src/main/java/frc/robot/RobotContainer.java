@@ -257,11 +257,14 @@ public class RobotContainer {
 
         // === Intake/Outtake controls ===
         m_driverController.R2().whileTrue(EndEffectorCommands.OuttakeEffector());
-        m_driverController.L2().whileTrue(
+        m_driverController.L2().whileTrue(new ParallelCommandGroup(
                 selectIntakeCommand
                         .until(() -> !m_driverController.L2()
                                 .getAsBoolean()
-                        )
+                        ), 
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPositionEnum(ElevatorPosition.ZERO)),
+                new InstantCommand(() -> m_armSubsystem.setArmPositionEnum(ElevatorPosition.ZERO))
+        )  
         );
         // ===============================
 
