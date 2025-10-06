@@ -561,7 +561,7 @@ public class SwerveSubsystem extends SubsystemBase {
         m_fastDriveRampRateMode = !m_fastDriveRampRateMode;
         if (m_fastDriveRampRateMode) {
             for (SwerveModule module : getSwerveDrive().getModules()) {
-                module.getDriveMotor().setLoopRampRate(0.1);
+                module.getDriveMotor().setLoopRampRate(SwerveConstants.FAST_DRIVE_RAMP_RATE);
             }
         } else {
             for (SwerveModule module : getSwerveDrive().getModules()) {
