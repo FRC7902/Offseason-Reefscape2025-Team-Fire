@@ -2,12 +2,11 @@ package frc.robot.commands.funnel_indexer;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FunnelIndexerConstants;
-import frc.robot.subsystems.FunnelSubsystem;
+import frc.robot.RobotContainer;
 
 import java.util.Map;
 
 public class IntakeCoralCommand extends Command {
-    private final FunnelSubsystem m_funnelIndexerSubsystem;
 
     // Enum representing the state of the beam breaks
     enum BeamBreakState {
@@ -36,9 +35,8 @@ public class IntakeCoralCommand extends Command {
     /**
      * Creates a new CorrectCoralPositionCommand.
      */
-    public IntakeCoralCommand(FunnelSubsystem funnelIndexerSubsystem) {
-        this.m_funnelIndexerSubsystem = funnelIndexerSubsystem;
-        addRequirements(funnelIndexerSubsystem);
+    public IntakeCoralCommand() {
+        addRequirements(RobotContainer.m_funnelIndexerSubsystem);
     }
 
     // Called when the command is initially scheduled.
@@ -52,8 +50,8 @@ public class IntakeCoralCommand extends Command {
      * @return An enum representing which beam breaks are broken.
      */
     private BeamBreakState getBeamBreakState() {
-        boolean shallow = m_funnelIndexerSubsystem.isShallowBeamBreakBroken();
-        boolean deep = m_funnelIndexerSubsystem.isDeepBeamBreakBroken();
+        boolean shallow = RobotContainer.m_funnelIndexerSubsystem.isShallowBeamBreakBroken();
+        boolean deep = RobotContainer.m_funnelIndexerSubsystem.isDeepBeamBreakBroken();
         if (!shallow && !deep) return BeamBreakState.NONE_BROKEN;
         if (shallow && deep) return BeamBreakState.BOTH_BROKEN;
 
@@ -70,20 +68,20 @@ public class IntakeCoralCommand extends Command {
 
         // Get the speed based on whether we have coral or not
         double speed;
-        if (m_funnelIndexerSubsystem.getHasCoral()) {
+        if (RobotContainer.m_funnelIndexerSubsystem.getHasCoral()) {
             speed = HAS_CORAL_SPEED_MAP.get(state);
         } else {
             speed = SPEED_MAP.get(state);
         }
 
         // Set the indexer speed
-        m_funnelIndexerSubsystem.setIndexerSpeed(speed);
+        RobotContainer.m_funnelIndexerSubsystem.setIndexerSpeed(speed);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_funnelIndexerSubsystem.stop();
+        RobotContainer.m_funnelIndexerSubsystem.stop();
     }
 
     // Returns true when the command should end.
