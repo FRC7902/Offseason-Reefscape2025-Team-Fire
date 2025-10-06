@@ -35,6 +35,7 @@ import frc.robot.commands.MoveElevatorArmCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
+import swervelib.SwerveModule;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -268,6 +269,7 @@ public class RobotContainer {
         m_driverController.povRight().whileTrue(SwereCommands.StrafeRight());
 
         m_driverController.options().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
+        m_driverController.create().onTrue(new InstantCommand(m_swerveSubsystem::toggleFastDriveRampRateMode));
 
         // === Elevator Setpoints ===
         m_operatorController.y().onTrue(
