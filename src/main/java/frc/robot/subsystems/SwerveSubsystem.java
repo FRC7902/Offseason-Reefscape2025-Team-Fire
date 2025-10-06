@@ -36,6 +36,7 @@ import frc.robot.RobotContainer;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
+import swervelib.SwerveModule;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
@@ -45,6 +46,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /* Swerve drive object */
     private final SwerveDrive swerveDrive;
+
+    private boolean m_fastDriveRampRateMode = false;
 
     /**
      * Creates a new SwerveSubsystem.
@@ -63,6 +66,7 @@ public class SwerveSubsystem extends SubsystemBase {
         } catch (Exception error) {
             throw new RuntimeException(error);
         }
+
         if (Robot.isSimulation()) {
             // Set these values to false so that simulation works
             swerveDrive.setHeadingCorrection(false);
@@ -86,6 +90,7 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.setChassisDiscretization(false, true, 0.03);
         swerveDrive.swerveController.addSlewRateLimiters(null, null, null);
         swerveDrive.swerveController.setMaximumChassisAngularVelocity(20);
+
         setupPathPlanner();
     }
 
@@ -550,6 +555,19 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.drive(
                 new Translation2d(0, strafePower * Math.abs(speedMultiplier) * swerveDrive.getMaximumChassisVelocity()),
                 0, false, false);
+    }
+
+    public void toggleFastDriveRampRateMode() {
+        m_fastDriveRampRateMode = !m_fastDriveRampRateMode;
+        if (m_fastDriveRampRateMode) {
+            for (SwerveModule module : getSwerveDrive().getModules()) {
+                module.getDriveMotor().setLoopRampRate(0.1);
+            }
+        } else {
+            for (SwerveModule module : getSwerveDrive().getModules()) {
+                module.getDriveMotor().setLoopRampRate(getSwerveDrive().swerveDriveConfiguration.physicalCharacteristics.driveMotorRampRate);
+            }
+        }
     }
 
     @Override

@@ -31,6 +31,8 @@ public final class Constants {
         // Speed scaling factors, should be between 0 and 1
         public static final double MIN_TRANSLATION_SPEED_SCALE = 0.175; // Minimum speed scaling factor for joystick input
         public static final double MIN_ROTATION_SPEED_SCALE = 0.25; // Minimum speed scaling factor for joystick input
+
+        public static final double FAST_DRIVE_RAMP_RATE = 0.25;
     }
 
     public static class PathPlanner {
