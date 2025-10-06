@@ -177,20 +177,6 @@ public class SwerveSubsystem extends SubsystemBase {
         PathfindingCommand.warmupCommand().schedule();
     }
 
-    @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
-        SmartDashboard.putNumber("Gyro angle rotation (rad)", swerveDrive.getGyro().getRotation3d().getAngle());
-
-        SmartDashboard.putString("Robo Pose2D", swerveDrive.getPose().toString());
-
-        scaleSwerveInput();
-    }
-
-    @Override
-    public void simulationPeriodic() {
-    }
-
     /**
      * Command to characterize the robot drive motors using SysId
      *
@@ -564,5 +550,18 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.drive(
                 new Translation2d(0, strafePower * Math.abs(speedMultiplier) * swerveDrive.getMaximumChassisVelocity()),
                 0, false, false);
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        SmartDashboard.putNumber("Gyro angle rotation (rad)", swerveDrive.getGyro().getRotation3d().getAngle());
+        SmartDashboard.putString("Robo Pose2D", swerveDrive.getPose().toString());
+
+        scaleSwerveInput();
+    }
+
+    @Override
+    public void simulationPeriodic() {
     }
 }
