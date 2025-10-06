@@ -165,6 +165,8 @@ public class RobotContainer {
                     0));
     Command driveFieldOrientedDirectAngleSim = m_swerveSubsystem.driveFieldOriented(driveDirectAngleSim);
 
+    private Command
+
     private Command coralHandoffCommand() {
         return new ConditionalCommand(
                 new SequentialCommandGroup(
@@ -173,11 +175,11 @@ public class RobotContainer {
                                 new MoveElevatorArmCommand(ElevatorPosition.ZERO)
                                         .until(
                                                 () -> m_elevatorSubsystem.getElevatorPositionEnum() == ElevatorPosition.ZERO
+                                                        && m_armSubsystem.getArmPositionEnum() == ElevatorPosition.ZERO
                                                         && m_funnelIndexerSubsystem.getHasCoral()
                                         ),
                                 FunnelCommands.IntakeCoral(m_funnelIndexerSubsystem)
                         ),
-                        new WaitCommand(0.25),
                         // Intake coral until funnel no longer detects it (shallow beam break)
                         new ParallelCommandGroup(
                                 EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
