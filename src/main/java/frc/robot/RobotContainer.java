@@ -10,6 +10,8 @@ import java.util.Map;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.events.EventTrigger;
 
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -75,6 +77,8 @@ public class RobotContainer {
                 ElevatorPosition.ZERO));
         new EventTrigger("ElevatorL1").onTrue(new MoveElevatorArmCommand(
                 ElevatorPosition.CORAL_L1));
+        NamedCommands.registerCommand("ELVATORL1", (new MoveElevatorArmCommand(
+                ElevatorPosition.CORAL_L1)));
         new EventTrigger("ElevatorL2").onTrue(new MoveElevatorArmCommand(
                 ElevatorPosition.CORAL_L2));
         new EventTrigger("ElevatorL3").onTrue(new MoveElevatorArmCommand(
@@ -223,7 +227,8 @@ public class RobotContainer {
             Map.entry(ElevatorPosition.CORAL_L3, EndEffectorCommands.OuttakeEffector()),
             Map.entry(ElevatorPosition.CORAL_L4, EndEffectorCommands.OuttakeEffector()),
             Map.entry(ElevatorPosition.BARGE, EndEffectorCommands.OuttakeEffector()),
-            Map.entry(ElevatorPosition.PROCESSOR, EndEffectorCommands.OuttakeEffector())
+            Map.entry(ElevatorPosition.PROCESSOR, EndEffectorCommands.OuttakeEffector()),
+            Map.entry(ElevatorPosition.REST, EndEffectorCommands.OuttakeEffector())
     ),
             this::select);
 
