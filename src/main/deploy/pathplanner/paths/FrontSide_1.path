@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.332983719675166,
+        "x": 8.332983719675163,
         "y": 5.108382054379112
       },
       "isLocked": false,
@@ -20,52 +20,18 @@
         "y": 4.112497430098684
       },
       "prevControl": {
-        "x": 7.435484243138589,
-        "y": 3.4629607341941435
-      },
-      "nextControl": {
-        "x": 6.585722592002465,
-        "y": 4.5973978142989305
-      },
-      "isLocked": false,
-      "linkedName": "FrontSide_2"
-    },
-    {
-      "anchor": {
-        "x": 6.178641550164473,
-        "y": 3.6574581748560853
-      },
-      "prevControl": {
-        "x": 6.371977796052631,
-        "y": 4.302338288959705
+        "x": 7.435746416423119,
+        "y": 3.462600807408685
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "FrontSide_3"
+      "linkedName": "FrontSide_2"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 0.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "score algae",
-      "waypointRelativePos": 0.949071476660682,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "Score L4 coral",
-      "waypointRelativePos": 2.0,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -76,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 176.39948642166743
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": null,

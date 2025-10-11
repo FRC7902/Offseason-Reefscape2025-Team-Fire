@@ -3,7 +3,9 @@
   "robotLength": 0.864,
   "holonomicMode": true,
   "pathFolders": [
-    "Example Paths"
+    "Example Paths",
+    "New Folder",
+    "RightSide"
   ],
   "autoFolders": [
     "Example Routines"

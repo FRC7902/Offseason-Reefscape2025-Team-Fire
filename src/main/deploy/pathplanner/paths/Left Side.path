@@ -12,7 +12,7 @@
         "y": 5.805200549930166
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "LeftSide_1"
     },
     {
       "anchor": {
@@ -28,7 +28,7 @@
         "y": 6.700111386199536
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "LeftSide_2"
     },
     {
       "anchor": {
@@ -44,7 +44,7 @@
         "y": 6.082750123705845
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "LeftSide_3"
     },
     {
       "anchor": {
@@ -52,12 +52,12 @@
         "y": 5.407430167597766
       },
       "prevControl": {
-        "x": 5.720163215839195,
-        "y": 6.563394665524392
+        "x": 5.720171851728428,
+        "y": 6.563390019895148
       },
       "nextControl": {
-        "x": 4.979888143374922,
-        "y": 5.187264451437731
+        "x": 4.979886498578095,
+        "y": 5.187265336247162
       },
       "isLocked": false,
       "linkedName": null

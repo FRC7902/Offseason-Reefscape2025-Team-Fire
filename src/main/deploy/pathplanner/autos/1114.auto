@@ -7,7 +7,49 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1114"
+            "pathName": "1114_1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score L4 coral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1114_2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1114_3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score L4 coral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1114_4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1114_5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score L4 coral"
           }
         }
       ]

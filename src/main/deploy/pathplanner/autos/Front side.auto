@@ -7,13 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Front side"
+            "pathName": "FrontSide_1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Brake"
+            "name": "score algae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FrontSide_2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score algae"
           }
         }
       ]
