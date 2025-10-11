@@ -7,7 +7,73 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Side"
+            "pathName": "RightSide_1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score L4 coral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightSide_2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightSide_3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score L4 coral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightSide_4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Obtain coral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightSide_5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score L4 coral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightSide_6"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightSide_7"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score L4 coral"
           }
         }
       ]
