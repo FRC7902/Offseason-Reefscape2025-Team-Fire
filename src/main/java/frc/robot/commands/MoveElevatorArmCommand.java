@@ -55,8 +55,6 @@ public class MoveElevatorArmCommand extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        // TODO: Check if this condition is correct
-        // return RobotContainer.m_elevatorSubsystem.hasReachedSetpoint() && RobotContainer.m_armSubsystem.hasReachedAngle();
-        return false;
+        return RobotContainer.m_elevatorSubsystem.hasReachedSetpoint() && RobotContainer.m_armSubsystem.hasReachedAngle();
     }
 }
