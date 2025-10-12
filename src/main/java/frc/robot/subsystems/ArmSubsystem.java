@@ -75,13 +75,11 @@ public class ArmSubsystem extends SubsystemBase {
      * Arm simulation ligament
      */
     private final MechanismLigament2d m_armLigament = RobotContainer.m_elevatorSubsystem.getMechanism2d().getRoot(
-            "ElevatorCarriage", 0, 0
-    ).append(new MechanismLigament2d(
-                    "Arm",
-                    ArmConstants.LENGTH_METERS,
-                    266
-            )
-    );
+            "ElevatorCarriage", 0, 0).append(
+                    new MechanismLigament2d(
+                            "Arm",
+                            ArmConstants.LENGTH_METERS,
+                            266));
     /**
      * Motor voltage request object
      */
@@ -95,14 +93,11 @@ public class ArmSubsystem extends SubsystemBase {
                     null,
                     Volts.of(4),
                     null,
-                    (state) -> SignalLogger.writeString("state", state.toString())
-            ),
+                    (state) -> SignalLogger.writeString("state", state.toString())),
             new SysIdRoutine.Mechanism(
                     (volts) -> m_armMotor.setControl(m_voltageRequest.withOutput(volts.in(Volts))),
                     null,
-                    this
-            )
-    );
+                    this));
 
     /**
      * Arm simulation ligament
@@ -111,9 +106,7 @@ public class ArmSubsystem extends SubsystemBase {
             new MechanismLigament2d(
                     "CoralIndexer",
                     Units.inchesToMeters(13),
-                    (-180) + 62.552
-            )
-    );
+                    (-180) + 62.552));
 
     public ArmSubsystem() {
         if (ArmConstants.TUNING_MODE_ENABLED) {
@@ -160,8 +153,7 @@ public class ArmSubsystem extends SubsystemBase {
                 Units.degreesToRadians(ArmConstants.MIN_ANGLE_DEGREES),
                 Units.degreesToRadians(ArmConstants.MAX_ANGLE_DEGREES),
                 true,
-                Units.degreesToRadians(0)
-        );
+                Units.degreesToRadians(0));
     }
 
     @Override
@@ -179,7 +171,8 @@ public class ArmSubsystem extends SubsystemBase {
             ArmConstants.FF_G = SmartDashboard.getNumber("Arm G", ArmConstants.FF_G);
 
             // Reapply config if any constants have changed
-            if (previousP != ArmConstants.PID_P || previousI != ArmConstants.PID_I || previousD != ArmConstants.PID_D || previousG != ArmConstants.FF_G) {
+            if (previousP != ArmConstants.PID_P || previousI != ArmConstants.PID_I || previousD != ArmConstants.PID_D
+                    || previousG != ArmConstants.FF_G) {
                 m_armMotorConfig.Slot0.kP = ElevatorConstants.PID_P;
                 m_armMotorConfig.Slot0.kI = ElevatorConstants.PID_I;
                 m_armMotorConfig.Slot0.kD = ElevatorConstants.PID_D;
@@ -189,7 +182,8 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
         SmartDashboard.putNumber("Arm Position (rotations)", getArmPositionDegrees() / 360);
-        SmartDashboard.putNumber("Arm position setpoint (rotations)", m_armMotor.getClosedLoopReference().getValueAsDouble());
+        SmartDashboard.putNumber("Arm position setpoint (rotations)",
+                m_armMotor.getClosedLoopReference().getValueAsDouble());
 
         SmartDashboard.putNumber("Arm — Position (Degrees)", getArmPositionDegrees());
         SmartDashboard.putNumber("Arm — Setpoint (Degrees)", getArmSetpointDegrees());
@@ -238,9 +232,12 @@ public class ArmSubsystem extends SubsystemBase {
             targetPosition = ArmConstants.MAX_ANGLE_DEGREES;
         }
 
-        if ((getElevatorPositionMeters() < ElevatorConstants.SAFETY_POSITION_METERS || getElevatorSetpointMeters() < ElevatorConstants.SAFETY_POSITION_METERS) && targetPosition > ArmConstants.SAFETY_ANGLE_DOWNWARD_DEGREES) {
+        if ((getElevatorPositionMeters() < ElevatorConstants.SAFETY_POSITION_METERS
+                || getElevatorSetpointMeters() < ElevatorConstants.SAFETY_POSITION_METERS)
+                && targetPosition > ArmConstants.SAFETY_ANGLE_DOWNWARD_DEGREES) {
             targetPosition = ArmConstants.SAFETY_ANGLE_DOWNWARD_DEGREES;
-        } else if ((getElevatorPositionMeters() > 0.0598 || getElevatorSetpointMeters() > 0.0598) && targetPosition < ArmConstants.SAFETY_ANGLE_UPWARD_DEGREES) {
+        } else if ((getElevatorPositionMeters() > 0.0598 || getElevatorSetpointMeters() > 0.0598)
+                && targetPosition < ArmConstants.SAFETY_ANGLE_UPWARD_DEGREES) {
             targetPosition = ArmConstants.SAFETY_ANGLE_UPWARD_DEGREES;
         }
 
@@ -291,25 +288,25 @@ public class ArmSubsystem extends SubsystemBase {
      */
     public ElevatorPosition getArmPositionEnum() {
         double positionDeg = getArmPositionDegrees();
-        if (positionDeg == ArmConstants.ZERO_ANGLE_DEGREES) {
+        if (Math.abs(positionDeg - ArmConstants.ZERO_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.ZERO;
-        } else if (positionDeg == ArmConstants.REST_ANGLE_DEGREES) {
+        } else if (Math.abs(positionDeg - ArmConstants.REST_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.REST;
-        } else if (positionDeg == ArmConstants.L1_ANGLE_DEGREES) {
+        } else if (Math.abs(positionDeg - ArmConstants.L1_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.CORAL_L1;
-        } else if (positionDeg == ArmConstants.L2_ANGLE_DEGREES) {
+        } else if (Math.abs(positionDeg - ArmConstants.L2_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.CORAL_L2;
-        } else if (positionDeg == ArmConstants.L3_ANGLE_DEGREES) {
+        } else if (Math.abs(positionDeg - ArmConstants.L3_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.CORAL_L3;
-        } else if (positionDeg == ArmConstants.L4_ANGLE_DEGREES) {
+        } else if (Math.abs(positionDeg - ArmConstants.L4_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.CORAL_L4;
-        } else if (positionDeg == ArmConstants.PROCESSOR_ANGLE_DEGREES) {
+        } else if (Math.abs(positionDeg - ArmConstants.PROCESSOR_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.PROCESSOR;
-        } else if (positionDeg == ArmConstants.HIGH_ALGAE_ANGLE_DEGREES) {
+        } else if (Math.abs(positionDeg - ArmConstants.HIGH_ALGAE_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.ALGAE_HIGH;
-        } else if (positionDeg == ArmConstants.LOW_ALGAE_ANGLE_DEGREES) {
+        } else if (Math.abs(positionDeg - ArmConstants.LOW_ALGAE_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.ALGAE_LOW;
-        } else if (positionDeg == ArmConstants.BARGE_ANGLE_DEGREES) {
+        } else if (Math.abs(positionDeg - ArmConstants.BARGE_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.BARGE;
         }
         return ElevatorPosition.UNKNOWN; // Default case
