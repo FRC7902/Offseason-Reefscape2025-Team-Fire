@@ -257,8 +257,8 @@ public class RobotContainer {
         m_endEffectorSubsystem.setDefaultCommand(EndEffectorCommands.HoldCoralCommand());
 
         // === Auto Align Controls ===
-        m_driverController.L1().onTrue(new AutoAlignToReef(true).withTimeout(3));
-	m_driverController.R1().onTrue(new AutoAlignToReef(false).withTimeout(3));
+        m_driverController.L1().whileTrue(new AutoAlignToReef(true).withTimeout(3));
+        m_driverController.R1().whileTrue(new AutoAlignToReef(false).withTimeout(3));
         // === Intake/Outtake controls ===
         m_driverController.R2().whileTrue(EndEffectorCommands.OuttakeEffector());
         m_driverController.L2().whileTrue(
