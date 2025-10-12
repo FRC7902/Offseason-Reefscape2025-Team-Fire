@@ -85,7 +85,19 @@ public final class Constants {
     }
 
     public static class VisionConstants {
+        public static final double X_REEF_ALIGNMENT_P = 3.3;
+	    public static final double Y_REEF_ALIGNMENT_P = 3.3;
+	    public static final double ROT_REEF_ALIGNMENT_P = 0.058;
 
+        public static final double ROT_SETPOINT_REEF_ALIGNMENT = 0;  // Rotation
+	    public static final double ROT_TOLERANCE_REEF_ALIGNMENT = 1;
+	    public static final double X_SETPOINT_REEF_ALIGNMENT = -0.34;  // Vertical pose
+	    public static final double X_TOLERANCE_REEF_ALIGNMENT = 0.02;
+	    public static final double Y_SETPOINT_REEF_ALIGNMENT = 0.16;  // Horizontal pose
+	    public static final double Y_TOLERANCE_REEF_ALIGNMENT = 0.02;
+
+        public static final double DONT_SEE_TAG_WAIT_TIME = 1;
+	    public static final double POSE_VALIDATION_TIME = 0.3;
     }
 
     public static class PathPlannerConstants {
