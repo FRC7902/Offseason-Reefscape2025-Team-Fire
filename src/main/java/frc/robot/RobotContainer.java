@@ -165,8 +165,6 @@ public class RobotContainer {
                     0));
     Command driveFieldOrientedDirectAngleSim = m_swerveSubsystem.driveFieldOriented(driveDirectAngleSim);
 
-    private Command
-
     private Command coralHandoffCommand() {
         return new ConditionalCommand(
                 new SequentialCommandGroup(
