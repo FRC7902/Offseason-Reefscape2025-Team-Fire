@@ -26,6 +26,7 @@ import frc.robot.commands.end_effector.IntakeCommand;
 import frc.robot.commands.end_effector.OuttakeCommand;
 import frc.robot.commands.end_effector.IntakeCommand.IntakeMode;
 import frc.robot.commands.funnel_indexer.OuttakeCoralCommand;
+import frc.robot.commands.vision.AutoAlignToReef;
 import frc.robot.commands.SwereCommands;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
@@ -255,6 +256,9 @@ public class RobotContainer {
 
         m_endEffectorSubsystem.setDefaultCommand(EndEffectorCommands.HoldCoralCommand());
 
+        // === Auto Align Controls ===
+        m_driverController.L1().onTrue(new AutoAlignToReef(true).withTimeout(3));
+	m_driverController.R1().onTrue(new AutoAlignToReef(false).withTimeout(3));
         // === Intake/Outtake controls ===
         m_driverController.R2().whileTrue(EndEffectorCommands.OuttakeEffector());
         m_driverController.L2().whileTrue(
