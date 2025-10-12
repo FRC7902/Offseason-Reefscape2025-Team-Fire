@@ -136,8 +136,8 @@ public class RobotContainer {
     Command driveRobotOrientedAngularVelocity = m_swerveSubsystem.driveFieldOriented(driveRobotOriented);
 
     SwerveInputStream driveAngularVelocitySim = SwerveInputStream.of(m_swerveSubsystem.getSwerveDrive(),
-            () -> -m_driverController.getLeftY(),
-            () -> -m_driverController.getLeftX())
+                    () -> -m_driverController.getLeftY(),
+                    () -> -m_driverController.getLeftX())
             .withControllerRotationAxis(() -> m_driverController.getRawAxis(
                     2))
             .deadband(OperatorConstants.DEADBAND)
@@ -146,12 +146,12 @@ public class RobotContainer {
     // Derive the heading axis with math!
     SwerveInputStream driveDirectAngleSim = driveAngularVelocitySim.copy()
             .withControllerHeadingAxis(() -> Math.sin(
-                    m_driverController.getRawAxis(
-                            2) *
-                            Math.PI)
-                    *
-                    (Math.PI *
-                            2),
+                            m_driverController.getRawAxis(
+                                    2) *
+                                    Math.PI)
+                            *
+                            (Math.PI *
+                                    2),
                     () -> Math.cos(
                             m_driverController.getRawAxis(
                                     2) *
@@ -215,7 +215,6 @@ public class RobotContainer {
                     Map.entry(ElevatorPosition.CORAL_L4, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.BARGE, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.PROCESSOR, coralHandoffCommand())
-
             ),
             this::select);
 
