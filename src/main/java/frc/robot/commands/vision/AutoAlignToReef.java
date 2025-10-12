@@ -64,7 +64,7 @@ public class AutoAlignToReef extends Command {
       SmartDashboard.putNumber("x", postions[2]);
 
       double xSpeed = xController.calculate(postions[2]);
-      SmartDashboard.putNumber("xspee", xSpeed);
+      SmartDashboard.putNumber("xspeed", xSpeed);
       double ySpeed = -yController.calculate(postions[0]);
       double rotValue = -rotController.calculate(postions[4]);
 
