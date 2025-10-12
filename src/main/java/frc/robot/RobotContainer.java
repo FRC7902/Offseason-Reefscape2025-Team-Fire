@@ -7,24 +7,19 @@ package frc.robot;
 import java.io.File;
 import java.util.Map;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.events.EventTrigger;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.EndEffectorCommands;
-import frc.robot.commands.auto.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.FunnelCommands;
 import frc.robot.commands.end_effector.IntakeCommand;
-import frc.robot.commands.end_effector.OuttakeCommand;
 import frc.robot.commands.end_effector.IntakeCommand.IntakeMode;
+import frc.robot.commands.end_effector.OuttakeCommand;
+import frc.robot.commands.funnel_indexer.IntakeCoralCommand;
 import frc.robot.commands.funnel_indexer.OuttakeCoralCommand;
 import frc.robot.commands.SwereCommands;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -55,10 +50,8 @@ public class RobotContainer {
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final static CommandPS5Controller m_driverController = new CommandPS5Controller(
             OperatorConstants.DRIVER_CONTROLLER_PORT);
-    private final static CommandXboxController m_operatorController = new CommandXboxController(
+    private final static CommandPS5Controller m_operatorController = new CommandPS5Controller(
             OperatorConstants.OPERATOR_CONTROLLER_PORT);
-
-    private final SendableChooser<Command> autoChooser;
 
     public final static SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem(
             new File(Filesystem.getDeployDirectory(), "swerve"));
@@ -69,54 +62,6 @@ public class RobotContainer {
     public RobotContainer() {
         // Configure the trigger bindings
         configureBindings();
-        autoChooser = AutoBuilder.buildAutoChooser("DEFAULT");
-
-        new EventTrigger("ZeroPosition").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.ZERO));
-        new EventTrigger("ElevatorL1").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.CORAL_L1));
-        new EventTrigger("ElevatorL2").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.CORAL_L2));
-        new EventTrigger("ElevatorL3").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.CORAL_L3));
-        new EventTrigger("ElevatorL4").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.CORAL_L4));
-        new EventTrigger("lowalgae").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.ALGAE_LOW));
-        new EventTrigger("highalgae").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.ALGAE_HIGH));
-
-        new EventTrigger("ElevatorL1WithWait").onTrue(
-                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
-                        ElevatorPosition.CORAL_L1)));
-
-        new EventTrigger("ElevatorL2WithWait").onTrue(
-                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
-                        ElevatorPosition.CORAL_L2)));
-
-        new EventTrigger("ElevatorL3WithWait").onTrue(
-                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
-                        ElevatorPosition.CORAL_L3)));
-
-        new EventTrigger("ElevatorL4WithWait").onTrue(
-                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
-                        ElevatorPosition.CORAL_L4)));
-
-        new EventTrigger("highalgaeWithWait").onTrue(
-                new SequentialCommandGroup(
-                        new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH),
-                        new IntakeCommand(IntakeMode.ALGAE)));
-
-
-        new EventTrigger("lowalgaeWithWait").onTrue(
-                new SequentialCommandGroup(
-                        new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW),
-                        new IntakeCommand(IntakeMode.ALGAE)));
-
-        new EventTrigger("outtakecoral").onTrue(new OuttakeCoralCommand(m_funnelIndexerSubsystem));
-        new EventTrigger("outtakealgae").onTrue(new OuttakeCommand());
-
-        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     public static SwerveInputStream driveAngularVelocity = SwerveInputStream
@@ -177,7 +122,7 @@ public class RobotContainer {
                                         ),
                                 FunnelCommands.IntakeCoral(m_funnelIndexerSubsystem)
                         ),
-                        new WaitCommand(0.25),
+                        new WaitCommand(0.5),
                         // Intake coral until funnel no longer detects it (shallow beam break)
                         new ParallelCommandGroup(
                                 EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
@@ -189,12 +134,13 @@ public class RobotContainer {
                         new ParallelCommandGroup(
                                 EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
                                 FunnelCommands.OuttakeCoral(m_funnelIndexerSubsystem),
-                                new MoveElevatorArmCommand(ElevatorPosition.REST)
+                                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1)
                         )
                 ),
                 new InstantCommand(),
                 // Only run handoff if we don't already have coral and algae
-                () -> !m_endEffectorSubsystem.hasAlgae()
+                () -> !m_endEffectorSubsystem.hasCoral()
+                        && !m_endEffectorSubsystem.hasAlgae()
         );
     }
 
@@ -253,8 +199,6 @@ public class RobotContainer {
                 )
         );
 
-        m_endEffectorSubsystem.setDefaultCommand(EndEffectorCommands.HoldCoralCommand());
-
         // === Intake/Outtake controls ===
         m_driverController.R2().whileTrue(EndEffectorCommands.OuttakeEffector());
         m_driverController.L2().whileTrue(
@@ -272,46 +216,34 @@ public class RobotContainer {
         m_driverController.options().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
 
         // === Elevator Setpoints ===
-        m_operatorController.y().onTrue(
+        m_operatorController.cross().onTrue(
+                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4).unless(()-> m_elevatorSubsystem.getElevatorPositionEnum() == ElevatorPosition.ZERO)
+        );
+        
+        m_operatorController.circle().onTrue(
+                Commands.deadline(
+                        new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3),
+                        new IntakeCommand(IntakeMode.CORAL)
+                ).withTimeout(10.0)
+        );
+        m_operatorController.square().onTrue(
+                new SequentialCommandGroup(
+                        new IntakeCoralCommand(m_funnelIndexerSubsystem).withTimeout(5),
+                        new OuttakeCoralCommand(m_funnelIndexerSubsystem).withTimeout(5),
+                        new IntakeCommand(IntakeMode.CORAL).withTimeout(5),
+                        new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2).withTimeout(5),
+                        new OuttakeCommand().withTimeout(5)
+                ).withTimeout(10.0)
+        );
+        m_operatorController.triangle().onTrue(
                 new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4)
         );
-        m_operatorController.b().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3)
-        );
-        m_operatorController.x().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2)
-        );
-        m_operatorController.a().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1)
-        );
-
-        // m_operatorController.povDown().onTrue(
-        //         new ConditionalCommand(
-        //                 Commands.none(),
-        //                 new MoveElevatorArmCommand(ElevatorPosition.ZERO),
-        //                 m_endEffectorSubsystem::hasAlgae
-        //         )
-        // );
-
-        m_operatorController.povUp().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
-        m_operatorController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
+        m_operatorController.povUp().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
         m_operatorController.povLeft().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH));
         m_operatorController.povRight().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));
         // ==========================
 
-        m_operatorController.start().whileTrue(m_swerveSubsystem.centerModulesCommand());
-
-
-        // new EventTrigger("coraloutakeoff").toggleOnFalse(new OuttakeCoralCommand());
-
-        // new EventTrigger("shoot note").and(new
-        // Trigger(exampleSubsystem::someCondition)).onTrue(Commands.print("shoot
-        // note");
-
-        // Point Towards Zone Triggers
-        // new PointTowardsZoneTrigger("Speaker").whileTrue(Commands.print("aiming at
-        // speaker"));
-
+        m_operatorController.options().whileTrue(m_swerveSubsystem.centerModulesCommand());
     }
 
     /**
@@ -320,7 +252,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return autoChooser.getSelected();
-
+        return null;
     }
 }
