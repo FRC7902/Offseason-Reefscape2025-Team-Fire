@@ -195,6 +195,7 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Arm — Setpoint (Degrees)", getArmSetpointDegrees());
 
         SmartDashboard.putBoolean("Arm — Reached Angle", hasReachedAngle());
+        SmartDashboard.putString("Arm — Position Enum", getArmPositionEnum().toString());
 
         updateTelemetry();
     }
