@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.138587731811698,
-        "y": 7.4298858773181164
+        "x": 7.018318965517241,
+        "y": 4.008189655172415
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.39493580599144,
-        "y": 4.777175463623394
+        "x": 6.768318965517241,
+        "y": 4.008189655172415
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.165263908701854,
-        "y": 4.168544935805992
+        "x": 5.992887931034483,
+        "y": 4.008189655172415
       },
       "prevControl": {
-        "x": 2.8552068473609125,
-        "y": 6.258559201141227
+        "x": 5.742887931034483,
+        "y": 4.008189655172415
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,20 +33,20 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "ElevatorL2",
-      "waypointRelativePos": 0.49810066476732695,
+      "name": "ELV_L4",
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
-      "name": "coraloutakeon",
+      "name": "END_EFFECTOR_OUTTAKE",
       "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
       "command": null
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 5.0,
+    "maxVelocity": 0.5,
     "maxAcceleration": 2.75,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -58,10 +58,10 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "No vision",
+  "folder": "Testing",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 0.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

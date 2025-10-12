@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.Map;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.events.EventTrigger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -69,53 +70,19 @@ public class RobotContainer {
     public RobotContainer() {
         // Configure the trigger bindings
         configureBindings();
+
+        NamedCommands.registerCommand("L1", new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
+        // NamedCommands.registerCommand("Outtake_Effector", EndEffectorCommands.OuttakeEffector());
+
+        new EventTrigger("ELV_L1").onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
+        new EventTrigger("ELV_L2").onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
+        new EventTrigger("ELV_L3").onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
+        new EventTrigger("ELV_L4").onTrue(new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
+        new EventTrigger("END_EFFECTOR_INTAKE").onTrue(selectIntakeCommand);
+        new EventTrigger("END_EFFECTOR_OUTTAKE").onTrue(m_selectOuttakeCommand);
+        new EventTrigger("CORAL_HAND_OFF").onTrue(coralHandoffCommand());
+        
         autoChooser = AutoBuilder.buildAutoChooser("DEFAULT");
-
-        new EventTrigger("ZeroPosition").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.ZERO));
-        new EventTrigger("ElevatorL1").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.CORAL_L1));
-        new EventTrigger("ElevatorL2").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.CORAL_L2));
-        new EventTrigger("ElevatorL3").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.CORAL_L3));
-        new EventTrigger("ElevatorL4").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.CORAL_L4));
-        new EventTrigger("lowalgae").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.ALGAE_LOW));
-        new EventTrigger("highalgae").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.ALGAE_HIGH));
-
-        new EventTrigger("ElevatorL1WithWait").onTrue(
-                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
-                        ElevatorPosition.CORAL_L1)));
-
-        new EventTrigger("ElevatorL2WithWait").onTrue(
-                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
-                        ElevatorPosition.CORAL_L2)));
-
-        new EventTrigger("ElevatorL3WithWait").onTrue(
-                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
-                        ElevatorPosition.CORAL_L3)));
-
-        new EventTrigger("ElevatorL4WithWait").onTrue(
-                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
-                        ElevatorPosition.CORAL_L4)));
-
-        new EventTrigger("highalgaeWithWait").onTrue(
-                new SequentialCommandGroup(
-                        new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH),
-                        new IntakeCommand(IntakeMode.ALGAE)));
-
-
-        new EventTrigger("lowalgaeWithWait").onTrue(
-                new SequentialCommandGroup(
-                        new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW),
-                        new IntakeCommand(IntakeMode.ALGAE)));
-
-        new EventTrigger("outtakecoral").onTrue(new OuttakeCoralCommand(m_funnelIndexerSubsystem));
-        new EventTrigger("outtakealgae").onTrue(new OuttakeCommand());
-
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
@@ -212,7 +179,8 @@ public class RobotContainer {
                     Map.entry(ElevatorPosition.CORAL_L3, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.CORAL_L4, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.BARGE, coralHandoffCommand()),
-                    Map.entry(ElevatorPosition.PROCESSOR, coralHandoffCommand())
+                    Map.entry(ElevatorPosition.PROCESSOR, coralHandoffCommand()),
+                    Map.entry(ElevatorPosition.REST, coralHandoffCommand())
             ),
             this::select
     );
