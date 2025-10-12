@@ -218,13 +218,15 @@ public class RobotContainer {
             ),
             this::select);
 
-    private final Command m_selectOuttakeCommand = new SelectCommand<>(Map.ofEntries(
-            Map.entry(ElevatorPosition.CORAL_L1, EndEffectorCommands.OuttakeEffector()),
-            Map.entry(ElevatorPosition.CORAL_L2, EndEffectorCommands.OuttakeEffector()),
-            Map.entry(ElevatorPosition.CORAL_L3, EndEffectorCommands.OuttakeEffector()),
-            Map.entry(ElevatorPosition.CORAL_L4, EndEffectorCommands.OuttakeEffector()),
-            Map.entry(ElevatorPosition.BARGE, EndEffectorCommands.OuttakeEffector()),
-            Map.entry(ElevatorPosition.PROCESSOR, EndEffectorCommands.OuttakeEffector())),
+    private final Command m_selectOuttakeCommand = new SelectCommand<>(
+            Map.ofEntries(
+                    Map.entry(ElevatorPosition.CORAL_L1, EndEffectorCommands.OuttakeEffector()),
+                    Map.entry(ElevatorPosition.CORAL_L2, EndEffectorCommands.OuttakeEffector()),
+                    Map.entry(ElevatorPosition.CORAL_L3, EndEffectorCommands.OuttakeEffector()),
+                    Map.entry(ElevatorPosition.CORAL_L4, EndEffectorCommands.OuttakeEffector()),
+                    Map.entry(ElevatorPosition.BARGE, EndEffectorCommands.OuttakeEffector()),
+                    Map.entry(ElevatorPosition.PROCESSOR, EndEffectorCommands.OuttakeEffector())
+            ),
             this::select);
 
     /**
@@ -256,7 +258,11 @@ public class RobotContainer {
         m_endEffectorSubsystem.setDefaultCommand(EndEffectorCommands.HoldCoralCommand());
 
         // === Intake/Outtake controls ===
-        m_driverController.R2().whileTrue(EndEffectorCommands.OuttakeEffector());
+        m_driverController.R2().whileTrue(
+                m_selectOuttakeCommand
+                        .until(() -> !m_driverController.R2()
+                                .getAsBoolean())
+        );
         m_driverController.L2().whileTrue(
                 selectIntakeCommand
                         .until(() -> !m_driverController.L2()
