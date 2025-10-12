@@ -169,14 +169,9 @@ public class RobotContainer {
         return new ConditionalCommand(
                 new SequentialCommandGroup(
                         // Move elevator to pickup position
-                        new ParallelRaceGroup(
-                                new MoveElevatorArmCommand(ElevatorPosition.ZERO)
-                                        .until(
-                                                () -> m_elevatorSubsystem.getElevatorPositionEnum() == ElevatorPosition.ZERO
-                                                        && m_armSubsystem.getArmPositionEnum() == ElevatorPosition.ZERO
-                                                        && m_funnelIndexerSubsystem.getHasCoral()
-                                        ),
-                                FunnelCommands.IntakeCoral(m_funnelIndexerSubsystem)
+                        new ParallelCommandGroup(
+                                new MoveElevatorArmCommand(ElevatorPosition.ZERO),
+                                FunnelCommands.IntakeCoral(m_funnelIndexerSubsystem).until(m_funnelIndexerSubsystem::getHasCoral)
                         ),
                         // Intake coral until funnel no longer detects it (shallow beam break)
                         new ParallelCommandGroup(
