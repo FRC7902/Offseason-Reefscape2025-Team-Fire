@@ -107,7 +107,6 @@ public class RobotContainer {
                         new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH),
                         new IntakeCommand(IntakeMode.ALGAE)));
 
-
         new EventTrigger("lowalgaeWithWait").onTrue(
                 new SequentialCommandGroup(
                         new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW),
@@ -136,8 +135,8 @@ public class RobotContainer {
     Command driveRobotOrientedAngularVelocity = m_swerveSubsystem.driveFieldOriented(driveRobotOriented);
 
     SwerveInputStream driveAngularVelocitySim = SwerveInputStream.of(m_swerveSubsystem.getSwerveDrive(),
-                    () -> -m_driverController.getLeftY(),
-                    () -> -m_driverController.getLeftX())
+            () -> -m_driverController.getLeftY(),
+            () -> -m_driverController.getLeftX())
             .withControllerRotationAxis(() -> m_driverController.getRawAxis(
                     2))
             .deadband(OperatorConstants.DEADBAND)
@@ -146,12 +145,12 @@ public class RobotContainer {
     // Derive the heading axis with math!
     SwerveInputStream driveDirectAngleSim = driveAngularVelocitySim.copy()
             .withControllerHeadingAxis(() -> Math.sin(
-                            m_driverController.getRawAxis(
-                                    2) *
-                                    Math.PI)
-                            *
-                            (Math.PI *
-                                    2),
+                    m_driverController.getRawAxis(
+                            2) *
+                            Math.PI)
+                    *
+                    (Math.PI *
+                            2),
                     () -> Math.cos(
                             m_driverController.getRawAxis(
                                     2) *
@@ -196,8 +195,7 @@ public class RobotContainer {
                 ),
                 new InstantCommand(),
                 // Only run handoff if we don't already have coral and algae
-                () -> !m_endEffectorSubsystem.hasAlgae()
-        );
+                () -> !m_endEffectorSubsystem.hasAlgae());
     }
 
     private ElevatorPosition select() {
@@ -209,15 +207,16 @@ public class RobotContainer {
                     Map.entry(ElevatorPosition.ALGAE_LOW, EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE)),
                     Map.entry(ElevatorPosition.ALGAE_HIGH, EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE)),
                     Map.entry(ElevatorPosition.ZERO, coralHandoffCommand()),
+                    Map.entry(ElevatorPosition.REST, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.CORAL_L1, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.CORAL_L2, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.CORAL_L3, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.CORAL_L4, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.BARGE, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.PROCESSOR, coralHandoffCommand())
+
             ),
-            this::select
-    );
+            this::select);
 
     private final Command m_selectOuttakeCommand = new SelectCommand<>(Map.ofEntries(
             Map.entry(ElevatorPosition.CORAL_L1, EndEffectorCommands.OuttakeEffector()),
@@ -225,8 +224,7 @@ public class RobotContainer {
             Map.entry(ElevatorPosition.CORAL_L3, EndEffectorCommands.OuttakeEffector()),
             Map.entry(ElevatorPosition.CORAL_L4, EndEffectorCommands.OuttakeEffector()),
             Map.entry(ElevatorPosition.BARGE, EndEffectorCommands.OuttakeEffector()),
-            Map.entry(ElevatorPosition.PROCESSOR, EndEffectorCommands.OuttakeEffector())
-    ),
+            Map.entry(ElevatorPosition.PROCESSOR, EndEffectorCommands.OuttakeEffector())),
             this::select);
 
     /**
@@ -262,9 +260,7 @@ public class RobotContainer {
         m_driverController.L2().whileTrue(
                 selectIntakeCommand
                         .until(() -> !m_driverController.L2()
-                                .getAsBoolean()
-                        )
-        );
+                                .getAsBoolean()));
         // ===============================
 
         // Strafe controls
@@ -275,24 +271,20 @@ public class RobotContainer {
 
         // === Elevator Setpoints ===
         m_operatorController.y().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4)
-        );
+                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
         m_operatorController.b().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3)
-        );
+                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
         m_operatorController.x().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2)
-        );
+                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
         m_operatorController.a().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1)
-        );
+                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
 
         // m_operatorController.povDown().onTrue(
-        //         new ConditionalCommand(
-        //                 Commands.none(),
-        //                 new MoveElevatorArmCommand(ElevatorPosition.ZERO),
-        //                 m_endEffectorSubsystem::hasAlgae
-        //         )
+        // new ConditionalCommand(
+        // Commands.none(),
+        // new MoveElevatorArmCommand(ElevatorPosition.ZERO),
+        // m_endEffectorSubsystem::hasAlgae
+        // )
         // );
 
         m_operatorController.povUp().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
@@ -302,7 +294,6 @@ public class RobotContainer {
         // ==========================
 
         m_operatorController.start().whileTrue(m_swerveSubsystem.centerModulesCommand());
-
 
         // new EventTrigger("coraloutakeoff").toggleOnFalse(new OuttakeCoralCommand());
 
