@@ -16,8 +16,14 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AutoAlignToReef extends Command {
+
+    public enum ReefBranchSide {
+        LEFT,
+        RIGHT
+    }
+
     private PIDController xController, yController, rotController;
-    private boolean isRightScore;
+    private ReefBranchSide m_side;
     private Timer dontSeeTagTimer, stopTimer;
     private SwerveSubsystem drivebase;
     private double tagID = -1;
@@ -25,12 +31,12 @@ public class AutoAlignToReef extends Command {
     /**
      * Creates a new AutoAlignToReef.
      */
-    public AutoAlignToReef(boolean isRightScore) {
+    public AutoAlignToReef(ReefBranchSide side) {
         // Use addRequirements() here to declare subsystem dependencies.
         xController = new PIDController(Constants.VisionConstants.X_REEF_ALIGNMENT_P, 0.0, 0);  // Vertical movement
         yController = new PIDController(Constants.VisionConstants.Y_REEF_ALIGNMENT_P, 0.0, 0);  // Horitontal movement
         rotController = new PIDController(Constants.VisionConstants.ROT_REEF_ALIGNMENT_P, 0, 0);  // Rotation
-        this.isRightScore = isRightScore;
+        m_side = side;
         this.drivebase = RobotContainer.m_swerveSubsystem;
         addRequirements(RobotContainer.m_swerveSubsystem);
     }
@@ -49,7 +55,11 @@ public class AutoAlignToReef extends Command {
         xController.setSetpoint(Constants.VisionConstants.X_SETPOINT_REEF_ALIGNMENT);
         xController.setTolerance(Constants.VisionConstants.X_TOLERANCE_REEF_ALIGNMENT);
 
-        yController.setSetpoint(isRightScore ? Constants.VisionConstants.Y_SETPOINT_REEF_ALIGNMENT : -Constants.VisionConstants.Y_SETPOINT_REEF_ALIGNMENT);
+        yController.setSetpoint(
+                m_side == ReefBranchSide.RIGHT ?
+                        Constants.VisionConstants.Y_SETPOINT_REEF_ALIGNMENT :
+                        -Constants.VisionConstants.Y_SETPOINT_REEF_ALIGNMENT
+        );
         yController.setTolerance(Constants.VisionConstants.Y_TOLERANCE_REEF_ALIGNMENT);
 
         tagID = LimelightHelpers.getFiducialID("");

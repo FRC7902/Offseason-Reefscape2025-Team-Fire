@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.EndEffectorCommands;
-import frc.robot.commands.auto.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.FunnelCommands;
@@ -36,7 +35,6 @@ import frc.robot.commands.MoveElevatorArmCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
-import swervelib.SwerveModule;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -214,8 +212,8 @@ public class RobotContainer {
         m_endEffectorSubsystem.setDefaultCommand(EndEffectorCommands.HoldCoralCommand());
 
         // === Auto Align Controls ===
-        m_driverController.L1().whileTrue(new AutoAlignToReef(true));
-        m_driverController.R1().whileTrue(new AutoAlignToReef(false));
+        m_driverController.L1().whileTrue(new AutoAlignToReef(AutoAlignToReef.ReefBranchSide.LEFT));
+        m_driverController.R1().whileTrue(new AutoAlignToReef(AutoAlignToReef.ReefBranchSide.RIGHT));
         // === Intake/Outtake controls ===
         m_driverController.R2().whileTrue(EndEffectorCommands.OuttakeEffector());
         m_driverController.L2().whileTrue(
