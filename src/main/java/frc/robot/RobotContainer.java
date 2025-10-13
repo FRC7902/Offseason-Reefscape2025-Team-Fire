@@ -24,7 +24,6 @@ import frc.robot.commands.end_effector.IntakeCommand;
 import frc.robot.commands.end_effector.OuttakeCommand;
 import frc.robot.commands.end_effector.IntakeCommand.IntakeMode;
 import frc.robot.commands.funnel_indexer.OuttakeCoralCommand;
-import frc.robot.commands.vision.AutoAlignToReef;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
