@@ -17,21 +17,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.EndEffectorCommands;
+import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.FunnelCommands;
 import frc.robot.commands.end_effector.IntakeCommand;
 import frc.robot.commands.end_effector.OuttakeCommand;
 import frc.robot.commands.end_effector.IntakeCommand.IntakeMode;
 import frc.robot.commands.funnel_indexer.OuttakeCoralCommand;
 import frc.robot.commands.vision.AutoAlignToReef;
-import frc.robot.commands.SwereCommands;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
-import frc.robot.commands.MoveElevatorArmCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
@@ -212,8 +209,8 @@ public class RobotContainer {
         m_endEffectorSubsystem.setDefaultCommand(EndEffectorCommands.HoldCoralCommand());
 
         // === Auto Align Controls ===
-        m_driverController.L1().whileTrue(new AutoAlignToReef(AutoAlignToReef.ReefBranchSide.LEFT));
-        m_driverController.R1().whileTrue(new AutoAlignToReef(AutoAlignToReef.ReefBranchSide.RIGHT));
+        m_driverController.L1().whileTrue(AutoAlignCommands.AutoAlignLeft());
+        m_driverController.R1().whileTrue(AutoAlignCommands.AutoAlignRight());
         // === Intake/Outtake controls ===
         m_driverController.R2().whileTrue(EndEffectorCommands.OuttakeEffector());
         m_driverController.L2().whileTrue(
