@@ -54,6 +54,9 @@ public class RobotContainer {
     public final static ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
     public final static ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
+    public final static SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem(
+            new File(Filesystem.getDeployDirectory(), "swerve"));
+
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final static CommandPS5Controller m_driverController = new CommandPS5Controller(
             OperatorConstants.DRIVER_CONTROLLER_PORT);
@@ -61,9 +64,6 @@ public class RobotContainer {
             OperatorConstants.OPERATOR_CONTROLLER_PORT);
 
     private final SendableChooser<Command> autoChooser;
-
-    public final static SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem(
-            new File(Filesystem.getDeployDirectory(), "swerve"));
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
