@@ -14,8 +14,6 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.vision.LimelightHelpers;
 import frc.robot.subsystems.SwerveSubsystem;
 
-import edu.wpi.first.wpilibj2.command.Command;
-
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AutoAlignToReef extends Command {
   private PIDController xController, yController, rotController;
@@ -60,13 +58,20 @@ public class AutoAlignToReef extends Command {
     if (LimelightHelpers.getTV("") && LimelightHelpers.getFiducialID("") == tagID) {
       this.dontSeeTagTimer.reset();
 
-      double[] postions = LimelightHelpers.getBotPose_TargetSpace("");
-      SmartDashboard.putNumber("x", postions[2]);
+      double[] positions = LimelightHelpers.getBotPose_TargetSpace("");
 
-      double xSpeed = xController.calculate(postions[2]);
-      SmartDashboard.putNumber("xspeed", xSpeed);
-      double ySpeed = -yController.calculate(postions[0]);
-      double rotValue = -rotController.calculate(postions[4]);
+      SmartDashboard.putNumber("AutoAlign - target x", positions[2]);
+      SmartDashboard.putNumber("AutoAlign - target y", positions[0]);
+      SmartDashboard.putNumber("AutoAlign - target rot", positions[4]);
+
+      SmartDashboard.putNumber("AutoAlign - x", positions[2]);
+
+      double xSpeed = xController.calculate(positions[2]);
+      SmartDashboard.putNumber("AutoAlign - xSpeed", xSpeed);
+      double ySpeed = -yController.calculate(positions[0]);
+      SmartDashboard.putNumber("AutoAlign - ySpeed", ySpeed);
+      double rotValue = -rotController.calculate(positions[4]);
+      SmartDashboard.putNumber("AutoAlign - rotValue", rotValue);
 
       drivebase.drive(new Translation2d(xSpeed, ySpeed), rotValue, false);
 
