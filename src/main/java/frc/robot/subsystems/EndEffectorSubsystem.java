@@ -95,5 +95,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
         m_hasAlgae = m_algaeDebouncer.calculate(
                 EndEffectorConstants.ALGAE_INTAKE_STALL_DETECTION_CURRENT_LOW < getSupplyCurrent()
                         && getSupplyCurrent() < EndEffectorConstants.ALGAE_INTAKE_STALL_DETECTION_CURRENT_HIGH);
+
+        if (!hasCoral() && isCoralBeamBreakBroken()) setHasCoral(true);
     }
 }
