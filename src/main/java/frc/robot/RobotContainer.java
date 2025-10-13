@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.EndEffectorCommands;
 import frc.robot.commands.auto.*;
@@ -25,6 +26,7 @@ import frc.robot.commands.FunnelCommands;
 import frc.robot.commands.end_effector.IntakeCommand;
 import frc.robot.commands.end_effector.OuttakeCommand;
 import frc.robot.commands.end_effector.IntakeCommand.IntakeMode;
+import frc.robot.commands.funnel_indexer.IntakeCoralCommand;
 import frc.robot.commands.funnel_indexer.OuttakeCoralCommand;
 import frc.robot.commands.SwereCommands;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -305,6 +307,32 @@ public class RobotContainer {
         // Point Towards Zone Triggers
         // new PointTowardsZoneTrigger("Speaker").whileTrue(Commands.print("aiming at
         // speaker"));
+
+        m_operatorController.x().onTrue(
+                new ScheduleCommand(
+                        // Task 1: End effector intake + elevator to L3 until elevator reaches L3
+                        new ParallelCommandGroup(
+                        new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3),
+                        new IntakeCommand(IntakeMode.CORAL)
+                        ).until(() -> m_elevatorSubsystem.getElevatorPositionEnum() == ElevatorPosition.CORAL_L3)
+                        .andThen(
+                        // Wait 10 seconds after Task 1
+                        Commands.waitSeconds(10)
+                        ).andThen(
+                        // Task 2: Funnel + end effector + elevator sequence
+                        new SequentialCommandGroup(
+                                new IntakeCoralCommand().withTimeout(5),
+                                new OuttakeCoralCommand().withTimeout(5),
+                                new IntakeCommand(IntakeMode.CORAL).withTimeout(5),
+                                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2).withTimeout(5),
+                                new OuttakeCommand().withTimeout(5)
+                        )
+                        ).andThen(
+                        // Wait 10 seconds after Task 2
+                        Commands.waitSeconds(10)
+                        )
+                )
+        );
 
     }
 
