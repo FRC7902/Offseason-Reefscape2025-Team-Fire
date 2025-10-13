@@ -63,15 +63,17 @@ public class AutoAlignToReef extends Command {
 
             double[] positions = LimelightHelpers.getBotPose_TargetSpace("");
 
-            SmartDashboard.putNumber("AutoAlign - target x", positions[2]);
-            SmartDashboard.putNumber("AutoAlign - target y", positions[0]);
-            SmartDashboard.putNumber("AutoAlign - target rot", positions[4]);
+            SmartDashboard.putNumber("AutoAlign - setpoint x", xController.getSetpoint());
+            SmartDashboard.putNumber("AutoAlign - setpoint y", yController.getSetpoint());
+            SmartDashboard.putNumber("AutoAlign - setpoint rot", rotController.getSetpoint());
 
-            SmartDashboard.putNumber("AutoAlign - x", positions[2]);
+            SmartDashboard.putNumber("AutoAlign - botPose x", positions[2]);
+            SmartDashboard.putNumber("AutoAlign - botPose y", positions[0]);
+            SmartDashboard.putNumber("AutoAlign - botPose rot", positions[4]);
 
-            double xSpeed = xController.calculate(positions[2]);
+            double xSpeed = -xController.calculate(positions[2]);
             SmartDashboard.putNumber("AutoAlign - xSpeed", xSpeed);
-            double ySpeed = -yController.calculate(positions[0]);
+            double ySpeed = yController.calculate(positions[0]);
             SmartDashboard.putNumber("AutoAlign - ySpeed", ySpeed);
             double rotValue = -rotController.calculate(positions[4]);
             SmartDashboard.putNumber("AutoAlign - rotValue", rotValue);
