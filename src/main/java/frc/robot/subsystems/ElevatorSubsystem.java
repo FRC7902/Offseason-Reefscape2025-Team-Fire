@@ -435,7 +435,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Follower Motor Pos", m_followerMotor.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("Closed loop error metres", m_leaderMotor.getClosedLoopError().getValueAsDouble() * ElevatorConstants.METERS_PER_MOTOR_ROTATION);
 
-        SmartDashboard.putBoolean("Elevator — At Setpoint", hasReachedSetpoint());
+        SmartDashboard.putBoolean("Elevator - At Setpoint", hasReachedSetpoint());
 
         updateTelemetry();
     }

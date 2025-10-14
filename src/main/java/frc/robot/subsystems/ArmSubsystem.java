@@ -185,11 +185,11 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Arm position setpoint (rotations)",
                 m_armMotor.getClosedLoopReference().getValueAsDouble());
 
-        SmartDashboard.putNumber("Arm — Position (Degrees)", getArmPositionDegrees());
-        SmartDashboard.putNumber("Arm — Setpoint (Degrees)", getArmSetpointDegrees());
+        SmartDashboard.putNumber("Arm - Position (Degrees)", getArmPositionDegrees());
+        SmartDashboard.putNumber("Arm - Setpoint (Degrees)", getArmSetpointDegrees());
 
-        SmartDashboard.putBoolean("Arm — Reached Angle", hasReachedAngle());
-        SmartDashboard.putString("Arm — Position Enum", getArmPositionEnum().toString());
+        SmartDashboard.putBoolean("Arm - Reached Angle", hasReachedAngle());
+        SmartDashboard.putString("Arm - Position Enum", getArmPositionEnum().toString());
 
         updateTelemetry();
     }

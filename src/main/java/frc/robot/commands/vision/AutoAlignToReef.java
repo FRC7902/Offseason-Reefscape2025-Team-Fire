@@ -78,9 +78,7 @@ public class AutoAlignToReef extends Command {
             double[] positions = LimelightHelpers.getBotPose_TargetSpace("");
 
             double xSpeed = -m_xController.calculate(positions[2]);
-
             double ySpeed = m_yController.calculate(positions[0]);
-
             double rotValue = -m_rotController.calculate(positions[4]);
 
             // Error values
