@@ -34,7 +34,7 @@ public class AutoAlignToReef extends Command {
     public AutoAlignToReef(ReefBranchSide side) {
         // Use addRequirements() here to declare subsystem dependencies.
         xController = new PIDController(Constants.VisionConstants.X_REEF_ALIGNMENT_P, 0.0, 0);  // Vertical movement
-        yController = new PIDController(Constants.VisionConstants.Y_REEF_ALIGNMENT_P, 0.0, 0);  // Horitontal movement
+        yController = new PIDController(Constants.VisionConstants.Y_REEF_ALIGNMENT_P, 0.0, 0);  // Horizontal movement
         rotController = new PIDController(Constants.VisionConstants.ROT_REEF_ALIGNMENT_P, 0, 0);  // Rotation
         m_side = side;
         this.drivebase = RobotContainer.m_swerveSubsystem;
