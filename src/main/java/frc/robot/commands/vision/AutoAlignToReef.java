@@ -39,6 +39,10 @@ public class AutoAlignToReef extends Command {
         m_side = side;
         this.m_drivebase = RobotContainer.m_swerveSubsystem;
         addRequirements(RobotContainer.m_swerveSubsystem);
+
+        SmartDashboard.putNumber("AutoAlign - error x", 0);
+        SmartDashboard.putNumber("AutoAlign - error y", 0);
+        SmartDashboard.putNumber("AutoAlign - error rot", 0);
     }
 
     // Called when the command is initially scheduled.
@@ -73,20 +77,20 @@ public class AutoAlignToReef extends Command {
 
             double[] positions = LimelightHelpers.getBotPose_TargetSpace("");
 
-            SmartDashboard.putNumber("AutoAlign - setpoint x", m_xController.getSetpoint());
-            SmartDashboard.putNumber("AutoAlign - setpoint y", m_yController.getSetpoint());
-            SmartDashboard.putNumber("AutoAlign - setpoint rot", m_rotController.getSetpoint());
-
-            SmartDashboard.putNumber("AutoAlign - botPose x", positions[2]);
-            SmartDashboard.putNumber("AutoAlign - botPose y", positions[0]);
-            SmartDashboard.putNumber("AutoAlign - botPose rot", positions[4]);
-
             double xSpeed = -m_xController.calculate(positions[2]);
-            SmartDashboard.putNumber("AutoAlign - xSpeed", xSpeed);
+
             double ySpeed = m_yController.calculate(positions[0]);
-            SmartDashboard.putNumber("AutoAlign - ySpeed", ySpeed);
+
             double rotValue = -m_rotController.calculate(positions[4]);
-            SmartDashboard.putNumber("AutoAlign - rotValue", rotValue);
+
+            // Error values
+            SmartDashboard.putNumber("AutoAlign - error x", positions[2] - m_xController.getSetpoint());
+            SmartDashboard.putNumber("AutoAlign - error y", positions[0] - m_yController.getSetpoint());
+            SmartDashboard.putNumber("AutoAlign - error rot", positions[4] - m_rotController.getSetpoint());
+
+//            SmartDashboard.putNumber("AutoAlign - xSpeed", xSpeed);
+//            SmartDashboard.putNumber("AutoAlign - ySpeed", ySpeed);
+//            SmartDashboard.putNumber("AutoAlign - rotValue", rotValue);
 
             m_drivebase.drive(new Translation2d(xSpeed, ySpeed), rotValue, false);
 
