@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.end_effector.IntakeCommand;
 import frc.robot.commands.end_effector.OuttakeCommand;
 import frc.robot.commands.end_effector.IntakeCommand.IntakeMode;
+import frc.robot.commands.funnel_indexer.IntakeCoralCommand;
 import frc.robot.commands.funnel_indexer.OuttakeCoralCommand;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
@@ -235,6 +236,23 @@ public class RobotContainer {
         m_operatorController.a().onTrue(
                 new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
 
+        m_operatorController.b().onTrue(
+                Commands.sequence(
+                        // 
+                        Commands.deadline(
+                                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3),
+                                new IntakeCommand(IntakeMode.CORAL)
+                        ),
+                        Commands.waitSeconds(10),
+                        new IntakeCoralCommand().withTimeout(5),
+                        new OuttakeCommand().withTimeout(5),
+                        new IntakeCommand(IntakeMode.ALGAE),
+                        new MoveElevatorArmCommand(null),
+                        Commands.waitSeconds(5),
+                        new OuttakeCommand().withTimeout(5),
+                        Commands.waitSeconds(10)
+                )
+        );
         // m_operatorController.povDown().onTrue(
         // new ConditionalCommand(
         // Commands.none(),
