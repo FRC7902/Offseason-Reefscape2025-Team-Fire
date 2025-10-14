@@ -22,96 +22,96 @@ public class AutoAlignToReef extends Command {
         RIGHT
     }
 
-    private PIDController xController, yController, rotController;
+    private final PIDController m_xController, m_yController, m_rotController;
     private ReefBranchSide m_side;
-    private Timer dontSeeTagTimer, stopTimer;
-    private SwerveSubsystem drivebase;
-    private double tagID = -1;
+    private Timer m_dontSeeTagTimer, m_stopTimer;
+    private SwerveSubsystem m_drivebase;
+    private double m_tagID = -1;
 
     /**
      * Creates a new AutoAlignToReef.
      */
     public AutoAlignToReef(ReefBranchSide side) {
         // Use addRequirements() here to declare subsystem dependencies.
-        xController = new PIDController(Constants.VisionConstants.X_REEF_ALIGNMENT_P, 0.0, 0);  // Vertical movement
-        yController = new PIDController(Constants.VisionConstants.Y_REEF_ALIGNMENT_P, 0.0, 0);  // Horizontal movement
-        rotController = new PIDController(Constants.VisionConstants.ROT_REEF_ALIGNMENT_P, 0, 0);  // Rotation
+        m_xController = new PIDController(Constants.VisionConstants.X_REEF_ALIGNMENT_P, 0.0, 0);  // Vertical movement
+        m_yController = new PIDController(Constants.VisionConstants.Y_REEF_ALIGNMENT_P, 0.0, 0);  // Horizontal movement
+        m_rotController = new PIDController(Constants.VisionConstants.ROT_REEF_ALIGNMENT_P, 0, 0);  // Rotation
         m_side = side;
-        this.drivebase = RobotContainer.m_swerveSubsystem;
+        this.m_drivebase = RobotContainer.m_swerveSubsystem;
         addRequirements(RobotContainer.m_swerveSubsystem);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        this.stopTimer = new Timer();
-        this.stopTimer.start();
-        this.dontSeeTagTimer = new Timer();
-        this.dontSeeTagTimer.start();
+        this.m_stopTimer = new Timer();
+        this.m_stopTimer.start();
+        this.m_dontSeeTagTimer = new Timer();
+        this.m_dontSeeTagTimer.start();
 
-        rotController.setSetpoint(Constants.VisionConstants.ROT_SETPOINT_REEF_ALIGNMENT);
-        rotController.setTolerance(Constants.VisionConstants.ROT_TOLERANCE_REEF_ALIGNMENT);
+        m_rotController.setSetpoint(Constants.VisionConstants.ROT_SETPOINT_REEF_ALIGNMENT);
+        m_rotController.setTolerance(Constants.VisionConstants.ROT_TOLERANCE_REEF_ALIGNMENT);
 
-        xController.setSetpoint(Constants.VisionConstants.X_SETPOINT_REEF_ALIGNMENT);
-        xController.setTolerance(Constants.VisionConstants.X_TOLERANCE_REEF_ALIGNMENT);
+        m_xController.setSetpoint(Constants.VisionConstants.X_SETPOINT_REEF_ALIGNMENT);
+        m_xController.setTolerance(Constants.VisionConstants.X_TOLERANCE_REEF_ALIGNMENT);
 
-        yController.setSetpoint(
+        m_yController.setSetpoint(
                 m_side == ReefBranchSide.RIGHT ?
                         Constants.VisionConstants.Y_SETPOINT_REEF_ALIGNMENT :
                         -Constants.VisionConstants.Y_SETPOINT_REEF_ALIGNMENT
         );
-        yController.setTolerance(Constants.VisionConstants.Y_TOLERANCE_REEF_ALIGNMENT);
+        m_yController.setTolerance(Constants.VisionConstants.Y_TOLERANCE_REEF_ALIGNMENT);
 
-        tagID = LimelightHelpers.getFiducialID("");
+        m_tagID = LimelightHelpers.getFiducialID("");
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (LimelightHelpers.getTV("") && LimelightHelpers.getFiducialID("") == tagID) {
-            this.dontSeeTagTimer.reset();
+        if (LimelightHelpers.getTV("") && LimelightHelpers.getFiducialID("") == m_tagID) {
+            this.m_dontSeeTagTimer.reset();
 
             double[] positions = LimelightHelpers.getBotPose_TargetSpace("");
 
-            SmartDashboard.putNumber("AutoAlign - setpoint x", xController.getSetpoint());
-            SmartDashboard.putNumber("AutoAlign - setpoint y", yController.getSetpoint());
-            SmartDashboard.putNumber("AutoAlign - setpoint rot", rotController.getSetpoint());
+            SmartDashboard.putNumber("AutoAlign - setpoint x", m_xController.getSetpoint());
+            SmartDashboard.putNumber("AutoAlign - setpoint y", m_yController.getSetpoint());
+            SmartDashboard.putNumber("AutoAlign - setpoint rot", m_rotController.getSetpoint());
 
             SmartDashboard.putNumber("AutoAlign - botPose x", positions[2]);
             SmartDashboard.putNumber("AutoAlign - botPose y", positions[0]);
             SmartDashboard.putNumber("AutoAlign - botPose rot", positions[4]);
 
-            double xSpeed = -xController.calculate(positions[2]);
+            double xSpeed = -m_xController.calculate(positions[2]);
             SmartDashboard.putNumber("AutoAlign - xSpeed", xSpeed);
-            double ySpeed = yController.calculate(positions[0]);
+            double ySpeed = m_yController.calculate(positions[0]);
             SmartDashboard.putNumber("AutoAlign - ySpeed", ySpeed);
-            double rotValue = -rotController.calculate(positions[4]);
+            double rotValue = -m_rotController.calculate(positions[4]);
             SmartDashboard.putNumber("AutoAlign - rotValue", rotValue);
 
-            drivebase.drive(new Translation2d(xSpeed, ySpeed), rotValue, false);
+            m_drivebase.drive(new Translation2d(xSpeed, ySpeed), rotValue, false);
 
-            if (!rotController.atSetpoint() ||
-                    !yController.atSetpoint() ||
-                    !xController.atSetpoint()) {
-                stopTimer.reset();
+            if (!m_rotController.atSetpoint() ||
+                    !m_yController.atSetpoint() ||
+                    !m_xController.atSetpoint()) {
+                m_stopTimer.reset();
             }
         } else {
-            drivebase.drive(new Translation2d(), 0, false);
+            m_drivebase.drive(new Translation2d(), 0, false);
         }
 
-        SmartDashboard.putNumber("poseValidTimer", stopTimer.get());
+        SmartDashboard.putNumber("poseValidTimer", m_stopTimer.get());
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        drivebase.drive(new Translation2d(), 0, false);
+        m_drivebase.drive(new Translation2d(), 0, false);
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return this.dontSeeTagTimer.hasElapsed(Constants.VisionConstants.DONT_SEE_TAG_WAIT_TIME) ||
-                stopTimer.hasElapsed(Constants.VisionConstants.POSE_VALIDATION_TIME);
+        return this.m_dontSeeTagTimer.hasElapsed(Constants.VisionConstants.DONT_SEE_TAG_WAIT_TIME) ||
+                m_stopTimer.hasElapsed(Constants.VisionConstants.POSE_VALIDATION_TIME);
     }
 }
