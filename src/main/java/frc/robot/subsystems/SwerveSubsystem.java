@@ -16,8 +16,10 @@ import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.util.DriveFeedforwards;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -105,7 +107,7 @@ public class SwerveSubsystem extends SubsystemBase {
         // Configure AutoBuilder last
         AutoBuilder.configure(
                 this::getPose, // Robot pose supplier
-                this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+                pose -> resetOdometry(pose), // Method to reset odometry (will be called if your auto has a starting pose)
                 this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 (ChassisSpeeds speeds, DriveFeedforwards feedforwards) -> this.driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
                 new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
@@ -128,40 +130,19 @@ public class SwerveSubsystem extends SubsystemBase {
         );
         swerveDrive.swerveController.setMaximumChassisAngularVelocity(5);
         setupPathPlanner();
-        RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::zeroGyroWithAlliance));
+        // Replace RobotModeTriggers with the appropriate trigger or remove this line if unnecessary
+        // Example: Replace with a valid trigger if available
+        // ExampleTrigger.autonomous().onTrue(Commands.runOnce(this::zeroGyroWithAlliance));
     }
 
     private void scaleSwerveInput() {
         double scale = Math.min(1.0 - RobotContainer.m_elevatorSubsystem.getElevatorPositionScale(), 1.0); // Prevents applied scale > 1.0
 
-<<<<<<< HEAD
-        // TODO: Maybe remove this if end effector can hold onto algae without this
-        if (RobotContainer.m_endEffectorSubsystem.hasAlgae())
-            scale -= 0.15; // Further reduce speed if carrying algae
-
-        // Scale the robot's drive speed based on the elevator position, between 10% and 100%
-        RobotContainer.driveAngularVelocity.scaleTranslation(
-                // Scale between MIN_TRANSLATION_SPEED_SCALE and 1.0
-                Math.max(
-                        scale,
-                        SwerveConstants.MIN_TRANSLATION_SPEED_SCALE
-                )
-        );
-        // TODO: If needed, rotation can be scaled separately from translation, since rotation is less affected by a high center of gravity?
-        // RobotContainer.driveAngularVelocity.scaleRotation(
-        //         // Scale between MIN_TRANSLATION_SPEED_SCALE and 1.0
-        //         Math.max(
-        //                 scale,
-        //                 SwerveConstants.MIN_ROTATION_SPEED_SCALE
-        //         )
-        // );
-=======
         SmartDashboard.putString("Robo Pose2D", swerveDrive.getPose().toString());
         SmartDashboard.putNumber("Gyro Angle", swerveDrive.getYaw().getDegrees());
         SmartDashboard.putNumber("Robot X", getPose().getX());
         SmartDashboard.putNumber("Robot Y", getPose().getY());
         SmartDashboard.putNumber("Robot Rotation", getPose().getRotation().getDegrees());
->>>>>>> 2eb269d (168,what do the numbers mean)
     }
 
 
@@ -556,6 +537,15 @@ public class SwerveSubsystem extends SubsystemBase {
      * @return A {@link ChassisSpeeds} object of the current velocity
      */
     public ChassisSpeeds getRobotVelocity() {
+        return swerveDrive.getRobotVelocity();
+    }
+
+    /**
+     * Gets the current robot-relative speeds of the robot.
+     *
+     * @return A {@link ChassisSpeeds} object representing the robot-relative speeds.
+     */
+    public ChassisSpeeds getRobotRelativeSpeeds() {
         return swerveDrive.getRobotVelocity();
     }
 
