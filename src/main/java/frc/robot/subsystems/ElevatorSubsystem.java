@@ -170,14 +170,14 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public ElevatorSubsystem() {
         if (RobotBase.isSimulation()) {
-            SmartDashboard.putData("ElevatorSimulation", m_mech2d);
+            SmartDashboard.putData("Elevator - Simulation", m_mech2d);
         }
 
         if (ElevatorConstants.TUNING_MODE_ENABLED) {
-            SmartDashboard.putNumber("Elevator P", ElevatorConstants.PID_P);
-            SmartDashboard.putNumber("Elevator I", ElevatorConstants.PID_I);
-            SmartDashboard.putNumber("Elevator D", ElevatorConstants.PID_D);
-            SmartDashboard.putNumber("Elevator G", ElevatorConstants.FF_G);
+            SmartDashboard.putNumber("Elevator - PID_P", ElevatorConstants.PID_P);
+            SmartDashboard.putNumber("Elevator - PID_I", ElevatorConstants.PID_I);
+            SmartDashboard.putNumber("Elevator - PID_D", ElevatorConstants.PID_D);
+            SmartDashboard.putNumber("Elevator - FF_G", ElevatorConstants.FF_G);
         }
 
         // Set motor configuration
@@ -414,10 +414,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
 
         if (ElevatorConstants.TUNING_MODE_ENABLED) {
-            ElevatorConstants.PID_P = SmartDashboard.getNumber("Elevator P", ElevatorConstants.PID_P);
-            ElevatorConstants.PID_I = SmartDashboard.getNumber("Elevator I", ElevatorConstants.PID_I);
-            ElevatorConstants.PID_D = SmartDashboard.getNumber("Elevator D", ElevatorConstants.PID_D);
-            ElevatorConstants.FF_G = SmartDashboard.getNumber("Elevator G", ElevatorConstants.FF_G);
+            ElevatorConstants.PID_P = SmartDashboard.getNumber("Elevator - PID_P", ElevatorConstants.PID_P);
+            ElevatorConstants.PID_I = SmartDashboard.getNumber("Elevator - PID_I", ElevatorConstants.PID_I);
+            ElevatorConstants.PID_D = SmartDashboard.getNumber("Elevator - PID_D", ElevatorConstants.PID_D);
+            ElevatorConstants.FF_G = SmartDashboard.getNumber("Elevator - FF_G", ElevatorConstants.FF_G);
 
             m_motorConfig.Slot0.kP = ElevatorConstants.PID_P;
             m_motorConfig.Slot0.kI = ElevatorConstants.PID_I;
@@ -427,13 +427,13 @@ public class ElevatorSubsystem extends SubsystemBase {
             m_leaderMotor.getConfigurator().apply(m_motorConfig);
         }
 
-        SmartDashboard.putNumber("Elevator Position (m)", getElevatorPositionMeters());
-        SmartDashboard.putNumber("Elevator Setpoint (m)", m_elevatorSetPointMeters);
-        SmartDashboard.putString("Elevator Position Enum", getElevatorPositionEnum().toString());
-        SmartDashboard.putNumber("Elevator Stator Current", m_leaderMotor.getStatorCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Leader Motor Pos", m_leaderMotor.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Follower Motor Pos", m_followerMotor.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Closed loop error metres", m_leaderMotor.getClosedLoopError().getValueAsDouble() * ElevatorConstants.METERS_PER_MOTOR_ROTATION);
+        SmartDashboard.putNumber("Elevator - Position (m)", getElevatorPositionMeters());
+        SmartDashboard.putNumber("Elevator - Setpoint (m)", m_elevatorSetPointMeters);
+        SmartDashboard.putString("Elevator - Position Enum", getElevatorPositionEnum().toString());
+        SmartDashboard.putNumber("Elevator - Stator Current", m_leaderMotor.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Elevator - Leader Motor Pos", m_leaderMotor.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Elevator - Follower Motor Pos", m_followerMotor.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Elevator - Closed loop error (m)", m_leaderMotor.getClosedLoopError().getValueAsDouble() * ElevatorConstants.METERS_PER_MOTOR_ROTATION);
 
         SmartDashboard.putBoolean("Elevator - At Setpoint", hasReachedSetpoint());
 

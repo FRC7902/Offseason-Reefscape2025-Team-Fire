@@ -543,9 +543,9 @@ public class SwerveSubsystem extends SubsystemBase {
                     controller.headingCalculate(swerveDrive.getOdometryHeading().unaryMinus().getRadians(),
                             new Rotation2d(Math.toRadians(angleDegrees)).getRadians()),
                     swerveDrive.getPose().getRotation()));
-            SmartDashboard.putNumber("Odom Heading (rad)", swerveDrive.getOdometryHeading().unaryMinus().getRadians());
-            SmartDashboard.putNumber("Target Heading (rad)", Math.toRadians(angleDegrees));
-            SmartDashboard.putNumber("Error (rad)", Math.abs(new Rotation2d(Math.toRadians(angleDegrees))
+            SmartDashboard.putNumber("Swerve - Odom Heading (rad)", swerveDrive.getOdometryHeading().unaryMinus().getRadians());
+            SmartDashboard.putNumber("Swerve - Target Heading (rad)", Math.toRadians(angleDegrees));
+            SmartDashboard.putNumber("Swerve - Error (rad)", Math.abs(new Rotation2d(Math.toRadians(angleDegrees))
                     .minus(swerveDrive.getOdometryHeading().unaryMinus()).getRadians()));
         }).until(() -> (Math.abs(new Rotation2d(Math.toRadians(angleDegrees))
                 .minus(swerveDrive.getOdometryHeading().unaryMinus()).getDegrees()) < toleranceDegrees)
@@ -573,8 +573,8 @@ public class SwerveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        SmartDashboard.putNumber("Gyro angle rotation (rad)", swerveDrive.getGyro().getRotation3d().getAngle());
-        SmartDashboard.putString("Robo Pose2D", swerveDrive.getPose().toString());
+        SmartDashboard.putNumber("Swerve - Gyro angle rotation (rad)", swerveDrive.getGyro().getRotation3d().getAngle());
+        SmartDashboard.putString("Swerve - Robo Pose2D", swerveDrive.getPose().toString());
 
         scaleSwerveInput();
     }
