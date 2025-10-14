@@ -91,6 +91,12 @@ public class AutoAlignToReef extends Command {
 //            SmartDashboard.putNumber("AutoAlign - ySpeed", ySpeed);
 //            SmartDashboard.putNumber("AutoAlign - rotValue", rotValue);
 
+            // Prevent translational movement if rotational error is large
+            if (Math.abs(m_rotController.getError()) > VisionConstants.AUTO_ALIGN_ROT_TOLERANCE) {
+                xSpeed = 0;
+                ySpeed = 0;
+            }
+
             m_drivebase.drive(new Translation2d(xSpeed, ySpeed), rotValue, false);
 
             if (!m_rotController.atSetpoint() ||
