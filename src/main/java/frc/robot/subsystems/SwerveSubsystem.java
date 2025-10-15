@@ -104,30 +104,6 @@ public class SwerveSubsystem extends SubsystemBase {
             throw new IllegalStateException("Failed to initialize RobotConfig");
         }
 
-        // Configure AutoBuilder last
-        AutoBuilder.configure(
-                this::getPose, // Robot pose supplier
-                pose -> resetOdometry(pose), // Method to reset odometry (will be called if your auto has a starting pose)
-                this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                (ChassisSpeeds speeds, DriveFeedforwards feedforwards) -> this.driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
-                new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
-                ),
-                config, // The robot configuration
-                () -> {
-                // Boolean supplier that controls when the path will be mirrored for the red alliance
-                // This will flip the path being followed to the red side of the field.
-                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-                var alliance = DriverStation.getAlliance();
-                if (alliance.isPresent()) {
-                    return alliance.get() == DriverStation.Alliance.Red;
-                }
-                return false;
-                },
-                this // Reference to this subsystem to set requirements
-        );
         swerveDrive.swerveController.setMaximumChassisAngularVelocity(5);
         setupPathPlanner();
         // Replace RobotModeTriggers with the appropriate trigger or remove this line if unnecessary
@@ -138,11 +114,15 @@ public class SwerveSubsystem extends SubsystemBase {
     private void scaleSwerveInput() {
         double scale = Math.min(1.0 - RobotContainer.m_elevatorSubsystem.getElevatorPositionScale(), 1.0); // Prevents applied scale > 1.0
 
-        SmartDashboard.putString("Robo Pose2D", swerveDrive.getPose().toString());
-        SmartDashboard.putNumber("Gyro Angle", swerveDrive.getYaw().getDegrees());
-        SmartDashboard.putNumber("Robot X", getPose().getX());
-        SmartDashboard.putNumber("Robot Y", getPose().getY());
-        SmartDashboard.putNumber("Robot Rotation", getPose().getRotation().getDegrees());
+        if(RobotContainer.m_endEffectorSubsystem.hasAlgae()){
+            scale -= 0.5; // Further reduce speed if carrying algae
+        }
+        RobotContainer.driveAngularVelocity.scaleTranslation(
+            Math.max(
+                scale,
+                SwerveConstants.MIN_TRANSLATION_SPEED_SCALE
+            )
+        );
     }
 
 
@@ -155,7 +135,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
             final boolean enableFeedforward = true;
             // Configure AutoBuilder last
-            AutoBuilder.configure(this::getPose,
+            AutoBuilder.configure(
+                    this::getPose,
                     // Robot pose supplier
                     this::resetOdometry,
                     // Method to reset odometry (will be called if your auto has a starting pose)
@@ -208,8 +189,7 @@ public class SwerveSubsystem extends SubsystemBase {
         // IF USING CUSTOM PATHFINDER ADD BEFORE THIS LINE
         PathfindingCommand.warmupCommand().schedule();
     }
-
-    /**
+    /*
      * Command to characterize the robot drive motors using SysId
      *
      * @return SysId Drive Command
@@ -391,12 +371,6 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     /**
-     * Resets the robot's pose to the given pose.
-     *
-     * @param pose The pose to reset to.
-     */
-
-    /**
      * Gets the current pose (position and rotation) of the robot, as reported by
      * odometry.
      *
@@ -545,9 +519,7 @@ public class SwerveSubsystem extends SubsystemBase {
      *
      * @return A {@link ChassisSpeeds} object representing the robot-relative speeds.
      */
-    public ChassisSpeeds getRobotRelativeSpeeds() {
-        return swerveDrive.getRobotVelocity();
-    }
+
 
     /**
      * Get the {@link SwerveController} in the swerve drive.

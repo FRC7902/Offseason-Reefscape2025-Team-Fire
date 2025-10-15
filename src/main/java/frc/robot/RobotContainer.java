@@ -77,7 +77,6 @@ public class RobotContainer {
 
   public RobotContainer() { 
     
-    NamedCommands.registerCommand("Brake", new BrakeCommand(m_swerveSubsystem));
     // Configure the trigger bindings
     configureBindings();
     m_swerveSubsystem.setDefaultCommand(
