@@ -78,9 +78,9 @@ public class AutoAlignToReef extends Command {
 
             double[] positions = LimelightHelpers.getBotPose_TargetSpace("");
 
-            double xSpeed = -m_xController.calculate(positions[2]);
-            double ySpeed = m_yController.calculate(positions[0]);
-            double rotValue = -m_rotController.calculate(positions[4]);
+            double xSpeedReefRelative = -m_xController.calculate(positions[2]);
+            double ySpeedReefRelative = m_yController.calculate(positions[0]);
+            double rotValueReefRelative = -m_rotController.calculate(positions[4]);
 
             // Error values
             SmartDashboard.putNumber("AutoAlign - error x", m_xController.getError());
@@ -91,7 +91,21 @@ public class AutoAlignToReef extends Command {
 //            SmartDashboard.putNumber("AutoAlign - ySpeed", ySpeed);
 //            SmartDashboard.putNumber("AutoAlign - rotValue", rotValue);
 
-            m_drivebase.drive(new Translation2d(xSpeed, ySpeed), rotValue, false);
+            // TODO: Double check what units this is
+            double angleRadBetweenReefAndRobot = m_rotController.getError();
+
+            double xSpeedRobotRelative = 0;
+            double ySpeedRobotRelative = 0;
+            double rotValueRobotRelative = 0;
+
+            // TODO: Check if this is correct (even with negative)
+            xSpeedRobotRelative += Math.cos(Math.toRadians(angleRadBetweenReefAndRobot)) * xSpeedReefRelative;
+            xSpeedRobotRelative += -Math.sin(Math.toRadians(angleRadBetweenReefAndRobot)) * ySpeedReefRelative;
+            ySpeedRobotRelative += Math.sin(Math.toRadians(angleRadBetweenReefAndRobot)) * xSpeedReefRelative;
+            ySpeedRobotRelative += Math.cos(Math.toRadians(angleRadBetweenReefAndRobot)) * ySpeedReefRelative;
+            rotValueRobotRelative = rotValueReefRelative;
+
+            m_drivebase.drive(new Translation2d(xSpeedRobotRelative, ySpeedRobotRelative), rotValueRobotRelative, false);
 
             if (!m_rotController.atSetpoint() ||
                     !m_yController.atSetpoint() ||
