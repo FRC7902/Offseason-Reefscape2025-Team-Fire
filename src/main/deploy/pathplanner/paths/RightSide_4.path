@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.0924460431654675,
-        "y": 2.573021582733812
+        "x": 5.054,
+        "y": 2.647472067039106
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.068766930685771,
-        "y": 2.821897655573637
+        "x": 5.25106513001889,
+        "y": 2.427788473132109
       },
       "isLocked": false,
       "linkedName": "RightSide4"
@@ -31,7 +31,14 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Score L4 coral",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

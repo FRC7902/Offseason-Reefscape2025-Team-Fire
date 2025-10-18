@@ -11,9 +11,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "score algae"
+            "waitTime": 1.0
           }
         },
         {
@@ -23,9 +23,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "score algae"
+            "waitTime": 1.0
           }
         }
       ]

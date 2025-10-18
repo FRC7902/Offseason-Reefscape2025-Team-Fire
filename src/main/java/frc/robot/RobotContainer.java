@@ -153,8 +153,8 @@ public class RobotContainer {
     Command driveRobotOrientedAngularVelocity = m_swerveSubsystem.driveFieldOriented(driveRobotOriented);
 
     SwerveInputStream driveAngularVelocitySim = SwerveInputStream.of(m_swerveSubsystem.getSwerveDrive(),
-                    () -> -m_driverController.getLeftY(),
-                    () -> -m_driverController.getLeftX())
+                    () -> -m_driverController.getLeftX()*-1,
+                    () -> -m_driverController.getLeftY())
             .withControllerRotationAxis(() -> m_driverController.getRawAxis(
                     2))
             .deadband(OperatorConstants.DEADBAND)

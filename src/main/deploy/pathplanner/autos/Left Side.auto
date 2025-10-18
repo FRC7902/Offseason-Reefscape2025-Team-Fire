@@ -11,9 +11,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "Score L4 coral"
+            "waitTime": 1.0
           }
         },
         {
@@ -29,9 +29,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "Score L4 coral"
+            "waitTime": 1.0
           }
         },
         {
@@ -41,9 +41,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "Obtain coral"
+            "waitTime": 1.0
           }
         },
         {
@@ -53,9 +53,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "Score L4 coral"
+            "waitTime": 1.0
           }
         },
         {
@@ -71,9 +71,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "Score L4 coral"
+            "waitTime": 1.0
           }
         }
       ]
