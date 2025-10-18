@@ -89,12 +89,14 @@ public final class Constants {
 	    public static final double Y_REEF_ALIGNMENT_P = 3.3;
 	    public static final double ROT_REEF_ALIGNMENT_P = 0.058;
 
-        public static final double ROT_SETPOINT_REEF_ALIGNMENT = 0;  // Rotation
-	    public static final double ROT_TOLERANCE_REEF_ALIGNMENT = 1;
-	    public static final double X_SETPOINT_REEF_ALIGNMENT = -0.75;  // Vertical pose
-	    public static final double X_TOLERANCE_REEF_ALIGNMENT = 0.02;
-	    public static final double Y_SETPOINT_REEF_ALIGNMENT = 0.00;  // Horizontal pose
-	    public static final double Y_TOLERANCE_REEF_ALIGNMENT = 0.02;
+        public static final double ROT_SETPOINT_REEF_ALIGNMENT = 0; // Rotation
+        public static final double ROT_TOLERANCE_REEF_ALIGNMENT = 0.5;
+        public static final double X_SETPOINT_REEF_ALIGNMENT = -0.55; // Vertical pose (-0.4 is about touching the reef,
+                                                                      // -0.55 is closest robot can be aligned to left
+                                                                      // branch before it cannot see April Tag anymore)
+        public static final double X_TOLERANCE_REEF_ALIGNMENT = 0.01;
+        public static final double Y_SETPOINT_REEF_ALIGNMENT = 0.16; // Horizontal pose
+        public static final double Y_TOLERANCE_REEF_ALIGNMENT = 0.01;
 
         public static final double DONT_SEE_TAG_WAIT_TIME = 1;
 	    public static final double POSE_VALIDATION_TIME = 0.3;
