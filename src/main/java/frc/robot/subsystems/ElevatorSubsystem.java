@@ -318,6 +318,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     /**
      * Gets the current elevator position in the ElevatorPosition enum. Returns UKNOWN if not in a valid position.
      *
+     * @deprecated This command is inaccurate as some states share elevator positions but differ in arm positions, use {@link #getElevatorArmPositionEnum()} instead
      * @return The current elevator position as an ElevatorPosition enum.
      */
     public ElevatorPosition getElevatorPositionEnum() {
@@ -346,6 +347,72 @@ public class ElevatorSubsystem extends SubsystemBase {
         } else {
             return ElevatorPosition.UNKNOWN;
         }
+    }
+
+    /**
+     * Returns the definitive enum of the state of the elevator and arm subsystems. It checks against both
+     * the elevator and the arm position, resulting in 100% accuracy.
+     * @return The state of the arm and elevator
+     */
+    public ElevatorPosition getElevatorArmPositionEnum() {
+        double armPos = getArmPositionDegrees();
+        double elevatorPos = getElevatorPositionMeters();
+
+        if (Math.abs(elevatorPos - ElevatorConstants.MIN_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2 &&
+                Math.abs(armPos - ArmConstants.ZERO_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR * 2)
+        {
+            return ElevatorPosition.ZERO;
+        }
+        else if (Math.abs(elevatorPos - ElevatorConstants.REST_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2 &&
+                Math.abs(armPos - ArmConstants.REST_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR * 2)
+        {
+            return ElevatorPosition.REST;
+        }
+        else if (Math.abs(elevatorPos - ElevatorConstants.L1_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2 &&
+               Math.abs(armPos - ArmConstants.L1_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR * 2)
+        {
+            return ElevatorPosition.CORAL_L1;
+        }
+        else if (Math.abs(elevatorPos - ElevatorConstants.L2_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2 &&
+               Math.abs(armPos - ArmConstants.L2_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR * 2)
+        {
+            return ElevatorPosition.CORAL_L2;
+        }
+        else if (Math.abs(elevatorPos - ElevatorConstants.L3_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2 &&
+               Math.abs(armPos - ArmConstants.L3_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR * 2)
+        {
+            return ElevatorPosition.CORAL_L3;
+        }
+        else if (Math.abs(elevatorPos - ElevatorConstants.L4_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2 &&
+               Math.abs(armPos - ArmConstants.L4_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR * 2)
+        {
+            return ElevatorPosition.CORAL_L4;
+        }
+        else if (Math.abs(elevatorPos - ElevatorConstants.PROCESSOR_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2 &&
+               Math.abs(armPos - ArmConstants.PROCESSOR_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR * 2)
+        {
+            return ElevatorPosition.PROCESSOR;
+        }
+        else if (Math.abs(elevatorPos - ElevatorConstants.HIGH_ALGAE_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2 &&
+               Math.abs(armPos - ArmConstants.HIGH_ALGAE_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR * 2)
+        {
+            return ElevatorPosition.ALGAE_HIGH;
+        }
+        else if (Math.abs(elevatorPos - ElevatorConstants.LOW_ALGAE_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2 &&
+               Math.abs(armPos - ArmConstants.LOW_ALGAE_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR * 2)
+        {
+            return ElevatorPosition.ALGAE_LOW;
+        }
+        else if (Math.abs(elevatorPos - ElevatorConstants.BARGE_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2 &&
+               Math.abs(armPos - ArmConstants.BARGE_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR * 2)
+        {
+            return ElevatorPosition.BARGE;
+        } 
+        else
+        {
+            return ElevatorPosition.UNKNOWN;
+        }
+
     }
 
     /**

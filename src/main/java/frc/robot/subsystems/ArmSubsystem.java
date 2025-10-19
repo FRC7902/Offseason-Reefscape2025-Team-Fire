@@ -304,6 +304,8 @@ public class ArmSubsystem extends SubsystemBase {
     /**
      * Gets the current arm position as an enum based on predefined angles.
      *
+     * @deprecated This method is inaccurate as multiple states share the same degree value but differ in elevator position,
+     * use the getElevatorArmPositionEnum() in the ElevatorSubsystem instead
      * @return The current arm position as an ElevatorPosition enum.
      */
     public ElevatorPosition getArmPositionEnum() {
