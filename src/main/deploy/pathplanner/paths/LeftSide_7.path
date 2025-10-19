@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.5005734092310854,
+        "y": 6.930343146073191
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.8987922357353858,
+        "y": 7.0301400359352435
+      },
+      "isLocked": false,
+      "linkedName": "LeftSide_7"
+    },
+    {
+      "anchor": {
+        "x": 3.647262569832402,
+        "y": 5.246345801326815
+      },
+      "prevControl": {
+        "x": 2.6521561620006975,
+        "y": 5.941730038344222
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "LeftSide_8"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Score L4 coral",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -60.419
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -47.737878646203676
+  },
+  "useDefaultConstraints": true
+}
