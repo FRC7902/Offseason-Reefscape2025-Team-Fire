@@ -44,6 +44,10 @@ public class AutoAlignToReef extends Command {
         SmartDashboard.putNumber("AutoAlign - error x", 0);
         SmartDashboard.putNumber("AutoAlign - error y", 0);
         SmartDashboard.putNumber("AutoAlign - error rot", 0);
+
+        SmartDashboard.putNumber("AutoAlign - xSpeedRobotRelative", 0);
+        SmartDashboard.putNumber("AutoAlign - ySpeedRobotRelative", 0);
+        SmartDashboard.putNumber("AutoAlign - rotValueRobotRelative", 0);
     }
 
     // Called when the command is initially scheduled.
@@ -104,6 +108,10 @@ public class AutoAlignToReef extends Command {
             ySpeedRobotRelative += Math.sin(Math.toRadians(angleRadBetweenReefAndRobot)) * xSpeedReefRelative;
             ySpeedRobotRelative += Math.cos(Math.toRadians(angleRadBetweenReefAndRobot)) * ySpeedReefRelative;
             rotValueRobotRelative = rotValueReefRelative;
+
+            SmartDashboard.putNumber("AutoAlign - xSpeedRobotRelative", xSpeedRobotRelative);
+            SmartDashboard.putNumber("AutoAlign - ySpeedRobotRelative", ySpeedRobotRelative);
+            SmartDashboard.putNumber("AutoAlign - rotValueRobotRelative", rotValueRobotRelative);
 
             m_drivebase.drive(new Translation2d(xSpeedRobotRelative, ySpeedRobotRelative), rotValueRobotRelative, false);
 
