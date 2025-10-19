@@ -32,9 +32,9 @@ public class AutoAlignToReef extends Command {
      * Creates a new AutoAlignToReef.
      */
     public AutoAlignToReef(ReefBranchSide side) {
-        m_xController = new PIDController(VisionConstants.X_REEF_ALIGNMENT_P, 0.0, 0);  // Vertical movement
-        m_yController = new PIDController(VisionConstants.Y_REEF_ALIGNMENT_P, 0.0, 0);  // Horizontal movement
-        m_rotController = new PIDController(VisionConstants.ROT_REEF_ALIGNMENT_P, 0, 0);  // Rotation
+        m_xController = new PIDController(VisionConstants.X_REEF_ALIGNMENT_P, 0.0, 0); // Vertical movement
+        m_yController = new PIDController(VisionConstants.Y_REEF_ALIGNMENT_P, 0.0, 0); // Horizontal movement
+        m_rotController = new PIDController(VisionConstants.ROT_REEF_ALIGNMENT_P, 0, 0); // Rotation
 
         m_side = side;
 
@@ -61,10 +61,8 @@ public class AutoAlignToReef extends Command {
         m_xController.setTolerance(VisionConstants.X_TOLERANCE_REEF_ALIGNMENT);
 
         m_yController.setSetpoint(
-                m_side == ReefBranchSide.RIGHT ?
-                        VisionConstants.Y_SETPOINT_REEF_ALIGNMENT :
-                        -VisionConstants.Y_SETPOINT_REEF_ALIGNMENT
-        );
+                m_side == ReefBranchSide.RIGHT ? VisionConstants.Y_SETPOINT_REEF_ALIGNMENT
+                        : -VisionConstants.Y_SETPOINT_REEF_ALIGNMENT);
         m_yController.setTolerance(VisionConstants.Y_TOLERANCE_REEF_ALIGNMENT);
 
         m_tagID = LimelightHelpers.getFiducialID("");
@@ -87,11 +85,13 @@ public class AutoAlignToReef extends Command {
             SmartDashboard.putNumber("AutoAlign - error y", m_yController.getError());
             SmartDashboard.putNumber("AutoAlign - error rot", m_rotController.getError());
 
-//            SmartDashboard.putNumber("AutoAlign - xSpeed", xSpeed);
-//            SmartDashboard.putNumber("AutoAlign - ySpeed", ySpeed);
-//            SmartDashboard.putNumber("AutoAlign - rotValue", rotValue);
+            SmartDashboard.putNumber("AutoAlign - xSpeed", xSpeed);
+            SmartDashboard.putNumber("AutoAlign - ySpeed", ySpeed);
+            SmartDashboard.putNumber("AutoAlign - rotValue", rotValue);
 
-            m_drivebase.drive(new Translation2d(xSpeed, ySpeed), rotValue, false);
+            double rotErrorScale = (90 - Math.min(90, Math.abs(m_rotController.getError()))) / 90;
+
+            m_drivebase.drive(new Translation2d(xSpeed * rotErrorScale, ySpeed * rotErrorScale), rotValue, false);
 
             if (!m_rotController.atSetpoint() ||
                     !m_yController.atSetpoint() ||
