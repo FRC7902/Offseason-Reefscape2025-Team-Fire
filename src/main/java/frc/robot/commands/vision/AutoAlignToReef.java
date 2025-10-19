@@ -89,7 +89,7 @@ public class AutoAlignToReef extends Command {
             SmartDashboard.putNumber("AutoAlign - ySpeed", ySpeed);
             SmartDashboard.putNumber("AutoAlign - rotValue", rotValue);
 
-            double rotErrorScale = (90 - Math.abs(m_rotController.getError())) / 90;
+            double rotErrorScale = (90 - Math.min(90, Math.abs(m_rotController.getError()))) / 90;
 
             m_drivebase.drive(new Translation2d(xSpeed * rotErrorScale, ySpeed * rotErrorScale), rotValue, false);
 
