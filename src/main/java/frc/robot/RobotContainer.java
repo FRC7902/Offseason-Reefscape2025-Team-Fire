@@ -217,21 +217,41 @@ public class RobotContainer {
         // === Auto Score Controls ===
         
         m_driverController.L1().whileTrue(
-                new SequentialCommandGroup(
-                        new ParallelCommandGroup(
-                        new MoveElevatorArmCommand(m_elevatorSubsystem.getElevatorPositionEnumOperator()),
-                        AutoAlignCommands.AutoAlignLeft()
-                        ),
-                        EndEffectorCommands.OuttakeEffector()
-                ));
+                new ConditionalCommand( 
+                        new SequentialCommandGroup(
+                                EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
+                                new MoveElevatorArmCommand(m_elevatorSubsystem.getElevatorPositionEnumOperator()),
+                                AutoAlignCommands.AutoAlignRight(),
+                                EndEffectorCommands.OuttakeEffector()), 
+                        new SequentialCommandGroup(
+                                new ParallelDeadlineGroup(
+                                        new MoveElevatorArmCommand(m_elevatorSubsystem.getElevatorPositionEnumOperator()), 
+                                        EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE)),
+                                new ParallelCommandGroup(
+                                        EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE),
+                                        AutoAlignCommands.AutoAlignRight()
+                                ),
+                                EndEffectorCommands.OuttakeEffector()), 
+                () -> m_elevatorSubsystem.getIntakeMode() == IntakeMode.CORAL)   
+                );
         m_driverController.R1().whileTrue( 
-                new SequentialCommandGroup(
-                        new ParallelCommandGroup(
-                        new MoveElevatorArmCommand(m_elevatorSubsystem.getElevatorPositionEnumOperator()),
-                        AutoAlignCommands.AutoAlignLeft()
-                        ),
-                        EndEffectorCommands.OuttakeEffector()
-                ));
+                new ConditionalCommand( 
+                        new SequentialCommandGroup(
+                                EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
+                                new MoveElevatorArmCommand(m_elevatorSubsystem.getElevatorPositionEnumOperator()),
+                                AutoAlignCommands.AutoAlignLeft(),
+                                EndEffectorCommands.OuttakeEffector()), 
+                        new SequentialCommandGroup(
+                                new ParallelDeadlineGroup(
+                                        new MoveElevatorArmCommand(m_elevatorSubsystem.getElevatorPositionEnumOperator()), 
+                                        EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE)),
+                                new ParallelCommandGroup(
+                                        EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE),
+                                        AutoAlignCommands.AutoAlignLeft()
+                                ),
+                                EndEffectorCommands.OuttakeEffector()), 
+                () -> m_elevatorSubsystem.getIntakeMode() == IntakeMode.CORAL)
+               );
         // === Intake/Outtake controls ===
         m_driverController.R2().whileTrue(
                 m_selectOuttakeCommand

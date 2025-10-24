@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.commands.end_effector.IntakeCommand.IntakeMode;
 import frc.robot.RobotContainer;
 
 public class ElevatorSubsystem extends SubsystemBase {
@@ -152,6 +153,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     private ElevatorPosition m_ElevatorPositionEnum = ElevatorPosition.REST;
 
+    private IntakeMode m_IntakeMode = null;
+
     /**
      * SysId routine object to determine S, V, and A constants
      */
@@ -257,6 +260,24 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void setElevatorPositionEnumOperator(ElevatorPosition positionEnum) {
         m_ElevatorPositionEnum = positionEnum;
+    }
+    public void setIntakeMode(){
+        switch (m_ElevatorPositionEnum){
+            case CORAL_L1:
+                m_IntakeMode = IntakeMode.CORAL;
+            case CORAL_L2:
+                m_IntakeMode = IntakeMode.CORAL;
+            case CORAL_L3:
+                m_IntakeMode = IntakeMode.CORAL;
+            case CORAL_L4:
+                m_IntakeMode = IntakeMode.CORAL;
+            case ALGAE_HIGH:
+                m_IntakeMode = IntakeMode.ALGAE;
+            case ALGAE_LOW:
+                m_IntakeMode = IntakeMode.ALGAE;
+            default:
+                m_IntakeMode = null;
+        }
     }
     public ElevatorPosition getElevatorPositionEnumOperator() {
         return m_ElevatorPositionEnum;
