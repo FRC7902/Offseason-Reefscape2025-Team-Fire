@@ -312,7 +312,11 @@ public class ElevatorSubsystem extends SubsystemBase {
      * @return The current elevator position as a scale from 0 to 1.
      */
     public double getElevatorPositionScale() {
-        return (getElevatorPositionMeters() - ElevatorConstants.MIN_HEIGHT_METERS) / (ElevatorConstants.MAX_HEIGHT_METERS - ElevatorConstants.MIN_HEIGHT_METERS);
+        double elevPositionScaleFromBottom = (getElevatorPositionMeters() - ElevatorConstants.MIN_HEIGHT_METERS) / (ElevatorConstants.MAX_HEIGHT_METERS - ElevatorConstants.MIN_HEIGHT_METERS);
+        elevPositionScaleFromBottom = Math.min(0, elevPositionScaleFromBottom);
+        elevPositionScaleFromBottom = Math.max(1, elevPositionScaleFromBottom);
+
+        return elevPositionScaleFromBottom;
     }
 
     /**

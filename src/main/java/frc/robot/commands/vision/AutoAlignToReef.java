@@ -91,6 +91,14 @@ public class AutoAlignToReef extends Command {
 
             double rotErrorScale = (90 - Math.min(90, Math.abs(m_rotController.getError()))) / 90;
 
+            // Limit the max speed of auto-align based on elevator height
+            // TODO: Tune this to find max speed at each elev height
+            double TEST_MAX_SPEED = 1.5; // m/s
+            xSpeed = Math.min(xSpeed, TEST_MAX_SPEED);
+            ySpeed = Math.min(ySpeed, TEST_MAX_SPEED);
+
+            // Scale translation speed down based on how much % rotational error there is between 0 and 90 degrees
+            // E.g. if robot is offset by 30deg from the setpoint, xSpeed and ySpeed will be reduced by (60/90) * speed
             m_drivebase.drive(new Translation2d(xSpeed * rotErrorScale, ySpeed * rotErrorScale), rotValue, false);
 
             if (!m_rotController.atSetpoint() ||

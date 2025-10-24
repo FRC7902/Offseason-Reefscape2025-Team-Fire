@@ -90,7 +90,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     private void scaleSwerveInput() {
-        double scale = Math.min(1.0 - RobotContainer.m_elevatorSubsystem.getElevatorPositionScale(), 1.0); // Prevents applied scale > 1.0
+        double scale = 1.0 - RobotContainer.m_elevatorSubsystem.getElevatorPositionScale();
 
         // TODO: Maybe remove this if end effector can hold onto algae without this
         if (RobotContainer.m_endEffectorSubsystem.hasAlgae())

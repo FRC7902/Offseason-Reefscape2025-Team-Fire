@@ -46,6 +46,9 @@ public final class Constants {
 
     }
 
+    public static class AutoAlignConstants {
+        public static final double MINIMUM_SPEED_METERS_PER_SECOND = 1.0;
+    }
 
     public static class FunnelIndexerConstants {
         public static final int LEFT_MOTOR_CAN_ID = 34;
