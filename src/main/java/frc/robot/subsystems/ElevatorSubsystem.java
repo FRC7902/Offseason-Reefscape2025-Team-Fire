@@ -150,6 +150,8 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     private double m_elevatorSetPointMeters = ElevatorConstants.MIN_HEIGHT_METERS;
 
+    private ElevatorPosition m_ElevatorPositionEnum = ElevatorPosition.REST;
+
     /**
      * SysId routine object to determine S, V, and A constants
      */
@@ -253,6 +255,12 @@ public class ElevatorSubsystem extends SubsystemBase {
         setElevatorPositionMeters(m_elevatorSetPointMeters);
     }
 
+    public void setElevatorPositionEnumOperator(ElevatorPosition positionEnum) {
+        m_ElevatorPositionEnum = positionEnum;
+    }
+    public ElevatorPosition getElevatorPositionEnumOperator() {
+        return m_ElevatorPositionEnum;
+    }
     /**
      * Sets the elevator position in meters.
      *

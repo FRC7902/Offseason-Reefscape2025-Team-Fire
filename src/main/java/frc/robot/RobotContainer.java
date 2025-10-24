@@ -5,7 +5,6 @@
 package frc.robot;
 
 import java.io.File;
-import java.time.Instant;
 import java.util.Map;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -219,26 +218,20 @@ public class RobotContainer {
         
         m_driverController.L1().whileTrue(
                 new SequentialCommandGroup(
-                        AutoAlignCommands.AutoAlignLeft(),
-                        // the elevator should already be at the required position
+                        new ParallelCommandGroup(
+                        new MoveElevatorArmCommand(m_elevatorSubsystem.getElevatorPositionEnumOperator()),
+                        AutoAlignCommands.AutoAlignLeft()
+                        ),
                         EndEffectorCommands.OuttakeEffector()
-                ).finallyDo(() -> new ParallelCommandGroup(
-                        new InstantCommand(() -> m_swerveSubsystem.drive(new Translation2d(
-                                0,-5 // is this in meters?
-                        ), 0, false)) // moves back a bit
-                        , new MoveElevatorArmCommand(ElevatorPosition.ZERO)))
-                );
+                ));
         m_driverController.R1().whileTrue( 
                 new SequentialCommandGroup(
-                        AutoAlignCommands.AutoAlignLeft(),
-                        // the elevator should already be at the required position
+                        new ParallelCommandGroup(
+                        new MoveElevatorArmCommand(m_elevatorSubsystem.getElevatorPositionEnumOperator()),
+                        AutoAlignCommands.AutoAlignLeft()
+                        ),
                         EndEffectorCommands.OuttakeEffector()
-                ).finallyDo(() -> new ParallelCommandGroup(
-                        new InstantCommand(() -> m_swerveSubsystem.drive(new Translation2d(
-                                0,-5 // is this in meters?
-                        ), 0, false)) // moves back a bit
-                        , new MoveElevatorArmCommand(ElevatorPosition.ZERO)))
-                );
+                ));
         // === Intake/Outtake controls ===
         m_driverController.R2().whileTrue(
                 m_selectOuttakeCommand
@@ -259,14 +252,20 @@ public class RobotContainer {
         m_driverController.create().onTrue(new InstantCommand(m_swerveSubsystem::toggleFastDriveRampRateMode));
 
         // === Elevator Setpoints ===
+        // define a position variable and just set it when operator presses
         m_operatorController.y().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPositionEnumOperator(ElevatorPosition.CORAL_L4))
+                //new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
+                );
         m_operatorController.b().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPositionEnumOperator(ElevatorPosition.CORAL_L3)));
+                //new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
         m_operatorController.x().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPositionEnumOperator(ElevatorPosition.CORAL_L2)));
+                //new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
         m_operatorController.a().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPositionEnumOperator(ElevatorPosition.CORAL_L3)));
+                //new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
 
         // m_operatorController.povDown().onTrue(
         // new ConditionalCommand(
