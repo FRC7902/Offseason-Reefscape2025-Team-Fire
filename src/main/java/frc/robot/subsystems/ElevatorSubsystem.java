@@ -53,7 +53,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         BARGE,
         UNKNOWN
     }
-
     /**
      * Leader TalonFX motor
      */
