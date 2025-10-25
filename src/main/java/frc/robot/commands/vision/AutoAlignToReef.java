@@ -61,8 +61,8 @@ public class AutoAlignToReef extends Command {
         m_xController.setTolerance(VisionConstants.X_TOLERANCE_REEF_ALIGNMENT);
 
         m_yController.setSetpoint(
-                m_side == ReefBranchSide.RIGHT ? VisionConstants.Y_SETPOINT_REEF_ALIGNMENT
-                        : -VisionConstants.Y_SETPOINT_REEF_ALIGNMENT);
+                m_side == ReefBranchSide.RIGHT ? VisionConstants.Y_SETPOINT_RIGHT_REEF_ALIGNMENT
+                        : VisionConstants.Y_SETPOINT_LEFT_REEF_ALIGNMENT);
         m_yController.setTolerance(VisionConstants.Y_TOLERANCE_REEF_ALIGNMENT);
 
         m_tagID = LimelightHelpers.getFiducialID("");
