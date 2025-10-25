@@ -57,7 +57,7 @@ public class SwerveSubsystem extends SubsystemBase {
         // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary
         // objects being created.
         // High Telemetry only feeds readable data related to swerve drive
-        SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+        SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH; // TODO: Turn this off
 
         try {
             swerveDrive = new SwerveParser(directory).createSwerveDrive(SwerveConstants.MAX_SPEED,
@@ -69,25 +69,20 @@ public class SwerveSubsystem extends SubsystemBase {
 
         if (Robot.isSimulation()) {
             // Set these values to false so that simulation works
-            swerveDrive.setHeadingCorrection(false);
             swerveDrive.setCosineCompensator(false);
         } else {
             swerveDrive.setCosineCompensator(true);
-            // !SwerveDriveTelemetry.isSimulation);
             // Disables cosine compensation for simulations since it causes discrepancies
             // not seen in real life.
-            swerveDrive.setHeadingCorrection(false);
-            // Heading correction should only be used while
-            // controlling the robot via angle.
-
         }
 
-        swerveDrive.setAngularVelocityCompensation(true, false, 0.08);
+        swerveDrive.setHeadingCorrection(false);
+        swerveDrive.setAngularVelocityCompensation(true, true, 0.09);
         // Correct for skew that gets worse as angular velocity increases. Start with a
         // coefficient of 0.08.
         swerveDrive.setModuleEncoderAutoSynchronize(false, 1);
 
-        swerveDrive.setChassisDiscretization(false, true, 0.03);
+        swerveDrive.setChassisDiscretization(true, true, 0.02);
         swerveDrive.swerveController.addSlewRateLimiters(null, null, null);
         swerveDrive.swerveController.setMaximumChassisAngularVelocity(20);
 
