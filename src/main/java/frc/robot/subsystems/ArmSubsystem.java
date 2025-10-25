@@ -21,9 +21,7 @@ import com.ctre.phoenix6.sim.TalonFXSimState;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-
 import static edu.wpi.first.units.Units.Volts;
-
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -110,10 +108,21 @@ public class ArmSubsystem extends SubsystemBase {
 
     public ArmSubsystem() {
         if (ArmConstants.TUNING_MODE_ENABLED) {
-            SmartDashboard.putNumber("Arm P", ArmConstants.PID_P);
-            SmartDashboard.putNumber("Arm I", ArmConstants.PID_I);
-            SmartDashboard.putNumber("Arm D", ArmConstants.PID_D);
-            SmartDashboard.putNumber("Arm G", ArmConstants.FF_G);
+            SmartDashboard.putNumber("arm/tuning/P", ArmConstants.PID_P);
+            SmartDashboard.putNumber("arm/tuning/I", ArmConstants.PID_I);
+            SmartDashboard.putNumber("arm/tuning/D", ArmConstants.PID_D);
+            SmartDashboard.putNumber("arm/tuning/G", ArmConstants.FF_G);
+
+            SmartDashboard.putNumber("arm/tuning/setpoint/Zero", ArmConstants.ZERO_ANGLE_DEGREES);
+            SmartDashboard.putNumber("arm/tuning/setpoint/Rest", ArmConstants.REST_ANGLE_DEGREES);
+            SmartDashboard.putNumber("arm/tuning/setpoint/Coral L1", ArmConstants.L1_ANGLE_DEGREES);
+            SmartDashboard.putNumber("arm/tuning/setpoint/Coral L2", ArmConstants.L2_ANGLE_DEGREES);
+            SmartDashboard.putNumber("arm/tuning/setpoint/Coral L3", ArmConstants.L3_ANGLE_DEGREES);
+            SmartDashboard.putNumber("arm/tuning/setpoint/Coral L4", ArmConstants.L4_ANGLE_DEGREES);
+            SmartDashboard.putNumber("arm/tuning/setpoint/Processor", ArmConstants.PROCESSOR_ANGLE_DEGREES);
+            SmartDashboard.putNumber("arm/tuning/setpoint/Algae High", ArmConstants.HIGH_ALGAE_ANGLE_DEGREES);
+            SmartDashboard.putNumber("arm/tuning/setpoint/Algae Low", ArmConstants.LOW_ALGAE_ANGLE_DEGREES);
+            SmartDashboard.putNumber("arm/tuning/setpoint/Barge", ArmConstants.BARGE_ANGLE_DEGREES);
         }
 
         // Configure motor
@@ -165,10 +174,21 @@ public class ArmSubsystem extends SubsystemBase {
             double previousD = ArmConstants.PID_D;
             double previousG = ArmConstants.FF_G;
 
-            ArmConstants.PID_P = SmartDashboard.getNumber("Arm P", ArmConstants.PID_P);
-            ArmConstants.PID_I = SmartDashboard.getNumber("Arm I", ArmConstants.PID_I);
-            ArmConstants.PID_D = SmartDashboard.getNumber("Arm D", ArmConstants.PID_D);
-            ArmConstants.FF_G = SmartDashboard.getNumber("Arm G", ArmConstants.FF_G);
+            ArmConstants.PID_P = SmartDashboard.getNumber("arm/tuning/PID_P", ArmConstants.PID_P);
+            ArmConstants.PID_I = SmartDashboard.getNumber("arm/tuning/PID_I", ArmConstants.PID_I);
+            ArmConstants.PID_D = SmartDashboard.getNumber("arm/tuning/PID_D", ArmConstants.PID_D);
+            ArmConstants.FF_G = SmartDashboard.getNumber("arm/tuning/FF_G", ArmConstants.FF_G);
+
+            ArmConstants.ZERO_ANGLE_DEGREES = SmartDashboard.getNumber("arm/tuning/setpoint/Zero", ArmConstants.ZERO_ANGLE_DEGREES);
+            ArmConstants.REST_ANGLE_DEGREES = SmartDashboard.getNumber("arm/tuning/setpoint/Rest", ArmConstants.REST_ANGLE_DEGREES);
+            ArmConstants.L1_ANGLE_DEGREES = SmartDashboard.getNumber("arm/tuning/setpoint/Coral L1", ArmConstants.L1_ANGLE_DEGREES);
+            ArmConstants.L2_ANGLE_DEGREES = SmartDashboard.getNumber("arm/tuning/setpoint/Coral L2", ArmConstants.L2_ANGLE_DEGREES);
+            ArmConstants.L3_ANGLE_DEGREES = SmartDashboard.getNumber("arm/tuning/setpoint/Coral L3", ArmConstants.L3_ANGLE_DEGREES);
+            ArmConstants.L4_ANGLE_DEGREES = SmartDashboard.getNumber("arm/tuning/setpoint/Coral L4", ArmConstants.L4_ANGLE_DEGREES);
+            ArmConstants.PROCESSOR_ANGLE_DEGREES = SmartDashboard.getNumber("arm/tuning/setpoint/Processor", ArmConstants.PROCESSOR_ANGLE_DEGREES);
+            ArmConstants.HIGH_ALGAE_ANGLE_DEGREES = SmartDashboard.getNumber("arm/tuning/setpoint/Algae High", ArmConstants.HIGH_ALGAE_ANGLE_DEGREES);
+            ArmConstants.LOW_ALGAE_ANGLE_DEGREES = SmartDashboard.getNumber("arm/tuning/setpoint/Algae Low", ArmConstants.LOW_ALGAE_ANGLE_DEGREES);
+            ArmConstants.BARGE_ANGLE_DEGREES = SmartDashboard.getNumber("arm/tuning/setpoint/Barge", ArmConstants.BARGE_ANGLE_DEGREES);
 
             // Reapply config if any constants have changed
             if (previousP != ArmConstants.PID_P || previousI != ArmConstants.PID_I || previousD != ArmConstants.PID_D
@@ -181,15 +201,15 @@ public class ArmSubsystem extends SubsystemBase {
             }
         }
 
-        SmartDashboard.putNumber("Arm Position (rotations)", getArmPositionDegrees() / 360);
-        SmartDashboard.putNumber("Arm position setpoint (rotations)",
+        SmartDashboard.putNumber("arm/info/Position (rotations)", getArmPositionDegrees() / 360);
+        SmartDashboard.putNumber("arm/info/position setpoint (rotations)",
                 m_armMotor.getClosedLoopReference().getValueAsDouble());
 
-        SmartDashboard.putNumber("Arm - Position (Degrees)", getArmPositionDegrees());
-        SmartDashboard.putNumber("Arm - Setpoint (Degrees)", getArmSetpointDegrees());
+        SmartDashboard.putNumber("arm/info/Position (Degrees)", getArmPositionDegrees());
+        SmartDashboard.putNumber("arm/info/Setpoint (Degrees)", getArmSetpointDegrees());
 
-        SmartDashboard.putBoolean("Arm - Reached Angle", hasReachedAngle());
-        SmartDashboard.putString("Arm - Position Enum", getArmPositionEnum().toString());
+        SmartDashboard.putBoolean("arm/info/Reached Angle", hasReachedAngle());
+        SmartDashboard.putString("arm/info/Position Enum", getArmPositionEnum().toString());
 
         updateTelemetry();
     }
