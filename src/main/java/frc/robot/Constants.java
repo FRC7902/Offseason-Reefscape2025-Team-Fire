@@ -108,7 +108,7 @@ public final class Constants {
 
     public static class ArmConstants {
         //PID tuning mode
-        public static final boolean TUNING_MODE_ENABLED = false;
+        public static final boolean TUNING_MODE_ENABLED = true;
 
         // CAN IDs
         public static final int MOTOR_CAN_ID = 21;
@@ -121,7 +121,7 @@ public final class Constants {
 
         // Motion Constraints
         public static final double MIN_ANGLE_DEGREES = -94; // Minimum angle for the arm
-        public static final double MAX_ANGLE_DEGREES = 65;
+        public static final double MAX_ANGLE_DEGREES = 75;
 
         // Current limits
         public static final double STATOR_CURRENT_LIMIT = 50.0;
@@ -148,9 +148,9 @@ public final class Constants {
         public static double PROCESSOR_ANGLE_DEGREES = -45.0;
 
         public static double L1_ANGLE_DEGREES = 45.0;
-        public static double L2_ANGLE_DEGREES = 56.0;
-        public static double L3_ANGLE_DEGREES = 75.0;
-        public static double L4_ANGLE_DEGREES = 56.0;
+        public static double L2_ANGLE_DEGREES = 68.7;
+        public static double L3_ANGLE_DEGREES = 68.7;
+        public static double L4_ANGLE_DEGREES = 60.0;
 
         public static double LOW_ALGAE_ANGLE_DEGREES = 0.0;
         public static double HIGH_ALGAE_ANGLE_DEGREES = 0.0;
@@ -162,7 +162,7 @@ public final class Constants {
 
     public static class ElevatorConstants {
         //PID tuning mode
-        public static final boolean TUNING_MODE_ENABLED = false;
+        public static final boolean TUNING_MODE_ENABLED = true;
 
         // CAN IDs
         public static final int LEADER_MOTOR_CAN_ID = 19;
@@ -187,7 +187,7 @@ public final class Constants {
         public static final double CARRIAGE_HEIGHT_METERS = Units.inchesToMeters(18.5);
 
         // Elevator safety
-        public static final double SAFETY_POSITION_METERS = 0.403;
+        public static final double SAFETY_POSITION_METERS = 0.35;
 
 
         // Motion Constraints
@@ -213,9 +213,9 @@ public final class Constants {
 
         public static double REST_HEIGHT_METERS = ElevatorConstants.MIN_HEIGHT_METERS + 0.05;
         public static double L1_HEIGHT_METERS = 0.12678049;
-        public static double L2_HEIGHT_METERS = 0.15887805;
-        public static double L3_HEIGHT_METERS = 0.40585366;
-        public static double L4_HEIGHT_METERS = 1.22;
+        public static double L2_HEIGHT_METERS = 0.4;
+        public static double L3_HEIGHT_METERS = 0.67;
+        public static double L4_HEIGHT_METERS = 1.27;
 
         public static double LOW_ALGAE_HEIGHT_METERS = 0.14878049;
         public static double HIGH_ALGAE_HEIGHT_METERS = 0.53085366;

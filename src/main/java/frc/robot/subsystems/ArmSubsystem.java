@@ -148,7 +148,7 @@ public class ArmSubsystem extends SubsystemBase {
         m_armMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
         m_armMotorConfig.Feedback.FeedbackRemoteSensorID = m_armEncoder.getDeviceID();
 
-        m_armMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        m_armMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         m_armMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         m_armMotor.getConfigurator().apply(m_armMotorConfig);
