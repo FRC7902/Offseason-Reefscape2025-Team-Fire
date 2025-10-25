@@ -581,21 +581,23 @@ public class SwerveSubsystem extends SubsystemBase {
 
         // Localize based on alliance color
         if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-            visionFeed = LimelightHelpers.getBotPoseEstimate_wpiBlue("");
-        } else {
             visionFeed = LimelightHelpers.getBotPoseEstimate_wpiRed("");
+        } else {
+            visionFeed = LimelightHelpers.getBotPoseEstimate_wpiBlue("");
         }
 
+        // Ensure that AprilTags are detected to circumvent NullPointerException
         double tagCount = visionFeed.tagCount;
-        double dist = visionFeed.rawFiducials[0].distToCamera;
-        double ambiguity = visionFeed.rawFiducials[0].ambiguity;
+        if (tagCount != 0) {
+            double dist = visionFeed.rawFiducials[0].distToCamera;
+            double ambiguity = visionFeed.rawFiducials[0].ambiguity;
 
-        // Ensure that the nearest tag is not too far away and not too ambiguous
-        if (tagCount != 0 &&
-            dist < Constants.VisionConstants.LOCALIZE_DISTANCE_THRESHOLD &&
-            ambiguity < Constants.VisionConstants.LOCALIZE_AMBIGUITY_THRESHOLD)
-        {
-            swerveDrive.addVisionMeasurement(visionFeed.pose, visionFeed.timestampSeconds);
+            // Ensure that the nearest tag is not too far away and not too ambiguous
+            if (dist < Constants.VisionConstants.LOCALIZE_DISTANCE_THRESHOLD &&
+                ambiguity < Constants.VisionConstants.LOCALIZE_AMBIGUITY_THRESHOLD)
+            {
+                swerveDrive.addVisionMeasurement(visionFeed.pose, visionFeed.timestampSeconds);
+            }
         }
     }
 
