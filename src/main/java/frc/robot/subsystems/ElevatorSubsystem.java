@@ -16,9 +16,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-
 import static edu.wpi.first.units.Units.Volts;
-
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
@@ -31,7 +29,6 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.RobotContainer;
 
@@ -170,14 +167,24 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public ElevatorSubsystem() {
         if (RobotBase.isSimulation()) {
-            SmartDashboard.putData("Elevator - Simulation", m_mech2d);
+            SmartDashboard.putData("elevator/info/Simulation", m_mech2d);
         }
 
         if (ElevatorConstants.TUNING_MODE_ENABLED) {
-            SmartDashboard.putNumber("Elevator - PID_P", ElevatorConstants.PID_P);
-            SmartDashboard.putNumber("Elevator - PID_I", ElevatorConstants.PID_I);
-            SmartDashboard.putNumber("Elevator - PID_D", ElevatorConstants.PID_D);
-            SmartDashboard.putNumber("Elevator - FF_G", ElevatorConstants.FF_G);
+            SmartDashboard.putNumber("elevator/tuning/PID_P", ElevatorConstants.PID_P);
+            SmartDashboard.putNumber("elevator/tuning/PID_I", ElevatorConstants.PID_I);
+            SmartDashboard.putNumber("elevator/tuning/PID_D", ElevatorConstants.PID_D);
+            SmartDashboard.putNumber("elevator/tuning/FF_G", ElevatorConstants.FF_G);
+
+            SmartDashboard.putNumber("elevator/tuning/setpoint/REST Height (m)", ElevatorConstants.REST_HEIGHT_METERS);
+            SmartDashboard.putNumber("elevator/tuning/setpoint/L1 Height (m)", ElevatorConstants.L1_HEIGHT_METERS);
+            SmartDashboard.putNumber("elevator/tuning/setpoint/L2 Height (m)", ElevatorConstants.L2_HEIGHT_METERS);
+            SmartDashboard.putNumber("elevator/tuning/setpoint/L3 Height (m)", ElevatorConstants.L3_HEIGHT_METERS);
+            SmartDashboard.putNumber("elevator/tuning/setpoint/L4 Height (m)", ElevatorConstants.L4_HEIGHT_METERS);
+            SmartDashboard.putNumber("elevator/tuning/setpoint/Processor Height (m)", ElevatorConstants.PROCESSOR_HEIGHT_METERS);
+            SmartDashboard.putNumber("elevator/tuning/setpoint/High Algae Height (m)", ElevatorConstants.HIGH_ALGAE_HEIGHT_METERS);
+            SmartDashboard.putNumber("elevator/tuning/setpoint/Low Algae Height (m)", ElevatorConstants.LOW_ALGAE_HEIGHT_METERS);
+            SmartDashboard.putNumber("elevator/tuning/setpoint/Barge Height (m)", ElevatorConstants.BARGE_HEIGHT_METERS);
         }
 
         // Set motor configuration
@@ -416,28 +423,45 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
 
         if (ElevatorConstants.TUNING_MODE_ENABLED) {
-            ElevatorConstants.PID_P = SmartDashboard.getNumber("Elevator - PID_P", ElevatorConstants.PID_P);
-            ElevatorConstants.PID_I = SmartDashboard.getNumber("Elevator - PID_I", ElevatorConstants.PID_I);
-            ElevatorConstants.PID_D = SmartDashboard.getNumber("Elevator - PID_D", ElevatorConstants.PID_D);
-            ElevatorConstants.FF_G = SmartDashboard.getNumber("Elevator - FF_G", ElevatorConstants.FF_G);
+            ElevatorConstants.PID_P = SmartDashboard.getNumber("elevator/tuning/PID_P", ElevatorConstants.PID_P);
+            ElevatorConstants.PID_I = SmartDashboard.getNumber("elevator/tuning/PID_I", ElevatorConstants.PID_I);
+            ElevatorConstants.PID_D = SmartDashboard.getNumber("elevator/tuning/PID_D", ElevatorConstants.PID_D);
+            ElevatorConstants.FF_G = SmartDashboard.getNumber("elevator/tuning/FF_G", ElevatorConstants.FF_G);
 
-            m_motorConfig.Slot0.kP = ElevatorConstants.PID_P;
-            m_motorConfig.Slot0.kI = ElevatorConstants.PID_I;
-            m_motorConfig.Slot0.kD = ElevatorConstants.PID_D;
-            m_motorConfig.Slot0.kG = ElevatorConstants.FF_G;
+            ElevatorConstants.REST_HEIGHT_METERS = SmartDashboard.getNumber("elevator/tuning/setpoint/REST Height (m)", ElevatorConstants.REST_HEIGHT_METERS);
+            ElevatorConstants.L1_HEIGHT_METERS = SmartDashboard.getNumber("elevator/tuning/setpoint/L1 Height (m)", ElevatorConstants.L1_HEIGHT_METERS);
+            ElevatorConstants.L2_HEIGHT_METERS = SmartDashboard.getNumber("elevator/tuning/setpoint/L2 Height (m)", ElevatorConstants.L2_HEIGHT_METERS);
+            ElevatorConstants.L3_HEIGHT_METERS = SmartDashboard.getNumber("elevator/tuning/setpoint/L3 Height (m)", ElevatorConstants.L3_HEIGHT_METERS);
+            ElevatorConstants.L4_HEIGHT_METERS = SmartDashboard.getNumber("elevator/tuning/setpoint/L4 Height (m)", ElevatorConstants.L4_HEIGHT_METERS);
+            ElevatorConstants.PROCESSOR_HEIGHT_METERS = SmartDashboard.getNumber("elevator/tuning/setpoint/Processor Height (m)", ElevatorConstants.PROCESSOR_HEIGHT_METERS);
+            ElevatorConstants.HIGH_ALGAE_HEIGHT_METERS = SmartDashboard.getNumber("elevator/tuning/setpoint/High Algae Height (m)", ElevatorConstants.HIGH_ALGAE_HEIGHT_METERS);
+            ElevatorConstants.LOW_ALGAE_HEIGHT_METERS = SmartDashboard.getNumber("elevator/tuning/setpoint/Low Algae Height (m)", ElevatorConstants.LOW_ALGAE_HEIGHT_METERS);
+            ElevatorConstants.BARGE_HEIGHT_METERS = SmartDashboard.getNumber("elevator/tuning/setpoint/Barge Height (m)", ElevatorConstants.BARGE_HEIGHT_METERS);
 
-            m_leaderMotor.getConfigurator().apply(m_motorConfig);
+            // If there is a discrepancy between the actual config and the to-be-set config, reconfigure.
+            if (m_motorConfig.Slot0.kP != ElevatorConstants.PID_P &&
+                m_motorConfig.Slot0.kI != ElevatorConstants.PID_I &&
+                m_motorConfig.Slot0.kD != ElevatorConstants.PID_D &&
+                m_motorConfig.Slot0.kG != ElevatorConstants.FF_G)
+            {
+                m_motorConfig.Slot0.kP = ElevatorConstants.PID_P;
+                m_motorConfig.Slot0.kI = ElevatorConstants.PID_I;
+                m_motorConfig.Slot0.kD = ElevatorConstants.PID_D;
+                m_motorConfig.Slot0.kG = ElevatorConstants.FF_G;
+
+                m_leaderMotor.getConfigurator().apply(m_motorConfig);
+            }
         }
 
-        SmartDashboard.putNumber("Elevator - Position (m)", getElevatorPositionMeters());
-        SmartDashboard.putNumber("Elevator - Setpoint (m)", m_elevatorSetPointMeters);
-        SmartDashboard.putString("Elevator - Position Enum", getElevatorPositionEnum().toString());
-        SmartDashboard.putNumber("Elevator - Stator Current", m_leaderMotor.getStatorCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Elevator - Leader Motor Pos", m_leaderMotor.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Elevator - Follower Motor Pos", m_followerMotor.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Elevator - Closed loop error (m)", m_leaderMotor.getClosedLoopError().getValueAsDouble() * ElevatorConstants.METERS_PER_MOTOR_ROTATION);
+        SmartDashboard.putNumber("elevator/info/Position (m)", getElevatorPositionMeters());
+        SmartDashboard.putNumber("elevator/info/Setpoint (m)", m_elevatorSetPointMeters);
+        SmartDashboard.putString("elevator/info/Position Enum", getElevatorPositionEnum().toString());
+        SmartDashboard.putNumber("elevator/info/Stator Current", m_leaderMotor.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("elevator/info/Leader Motor Pos", m_leaderMotor.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("elevator/info/Follower Motor Pos", m_followerMotor.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("elevator/info/Closed loop error (m)", m_leaderMotor.getClosedLoopError().getValueAsDouble() * ElevatorConstants.METERS_PER_MOTOR_ROTATION);
 
-        SmartDashboard.putBoolean("Elevator - At Setpoint", hasReachedSetpoint());
+        SmartDashboard.putBoolean("elevator/info/At Setpoint", hasReachedSetpoint());
 
         updateTelemetry();
     }
