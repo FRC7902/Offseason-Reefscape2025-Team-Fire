@@ -229,6 +229,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_leaderMotor.getDutyCycle().setUpdateFrequency(50);
         m_leaderMotor.getMotorVoltage().setUpdateFrequency(50);
         m_leaderMotor.getTorqueCurrent().setUpdateFrequency(50);
+
+        setElevatorPositionEnum(getElevatorPositionEnum());
     }
 
     /**
