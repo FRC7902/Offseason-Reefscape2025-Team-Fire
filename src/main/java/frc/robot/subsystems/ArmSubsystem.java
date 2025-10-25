@@ -308,6 +308,7 @@ public class ArmSubsystem extends SubsystemBase {
      * use the getElevatorArmPositionEnum() in the ElevatorSubsystem instead
      * @return The current arm position as an ElevatorPosition enum.
      */
+    @Deprecated
     public ElevatorPosition getArmPositionEnum() {
         double positionDeg = getArmPositionDegrees();
         if (Math.abs(positionDeg - ArmConstants.ZERO_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {

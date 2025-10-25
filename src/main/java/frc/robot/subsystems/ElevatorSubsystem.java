@@ -321,6 +321,7 @@ public class ElevatorSubsystem extends SubsystemBase {
      * @deprecated This command is inaccurate as some states share elevator positions but differ in arm positions, use {@link #getElevatorArmPositionEnum()} instead
      * @return The current elevator position as an ElevatorPosition enum.
      */
+    @Deprecated
     public ElevatorPosition getElevatorPositionEnum() {
         double currentHeightMeters = getElevatorPositionMeters();
 
