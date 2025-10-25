@@ -85,9 +85,19 @@ public final class Constants {
     }
 
     public static class VisionConstants {
-        public static final double X_REEF_ALIGNMENT_P = 3.3;
-	    public static final double Y_REEF_ALIGNMENT_P = 3.3;
-	    public static final double ROT_REEF_ALIGNMENT_P = 0.058;
+        public static final boolean AA_TUNING_MODE = false;
+
+        public static double X_REEF_ALIGNMENT_P = 3.3;
+        public static double X_REEF_ALIGNMENT_I = 0.0;
+        public static double X_REEF_ALIGNMENT_D = 0.0;
+
+	    public static double Y_REEF_ALIGNMENT_P = 3.3;
+        public static double Y_REEF_ALIGNMENT_I = 0.0;
+        public static double Y_REEF_ALIGNMENT_D = 0.0;
+
+	    public static double ROT_REEF_ALIGNMENT_P = 0.058;
+        public static double ROT_REEF_ALIGNMENT_I = 0.0;
+        public static double ROT_REEF_ALIGNMENT_D = 0.0;
 
         public static final double ROT_SETPOINT_REEF_ALIGNMENT = 0;  // Rotation
 	    public static final double ROT_TOLERANCE_REEF_ALIGNMENT = 1;

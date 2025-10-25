@@ -32,9 +32,9 @@ public class AutoAlignToReef extends Command {
      * Creates a new AutoAlignToReef.
      */
     public AutoAlignToReef(ReefBranchSide side) {
-        m_xController = new PIDController(VisionConstants.X_REEF_ALIGNMENT_P, 0.0, 0); // Vertical movement
-        m_yController = new PIDController(VisionConstants.Y_REEF_ALIGNMENT_P, 0.0, 0); // Horizontal movement
-        m_rotController = new PIDController(VisionConstants.ROT_REEF_ALIGNMENT_P, 0, 0); // Rotation
+        m_xController = new PIDController(VisionConstants.X_REEF_ALIGNMENT_P, VisionConstants.X_REEF_ALIGNMENT_I,VisionConstants.X_REEF_ALIGNMENT_D); // Vertical movement
+        m_yController = new PIDController(VisionConstants.Y_REEF_ALIGNMENT_P, VisionConstants.Y_REEF_ALIGNMENT_I, VisionConstants.Y_REEF_ALIGNMENT_D); // Horizontal movement
+        m_rotController = new PIDController(VisionConstants.ROT_REEF_ALIGNMENT_P, VisionConstants.ROT_REEF_ALIGNMENT_I, VisionConstants.ROT_REEF_ALIGNMENT_D); // Rotation
 
         m_side = side;
 
