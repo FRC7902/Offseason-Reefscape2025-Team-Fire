@@ -78,7 +78,7 @@ public final class Constants {
         public static final double CORAL_HOLD_SPEED = 0.1;
         public static final double ALGAE_HOLD_SPEED = 1.0;
 
-        public static final double OUTTAKE_SPEED = -1;
+        public static final double OUTTAKE_SPEED = -0.5;
 
         public static final double ALGAE_INTAKE_STALL_DETECTION_CURRENT_LOW = 11;
         public static final double ALGAE_INTAKE_STALL_DETECTION_CURRENT_HIGH = 13;
@@ -90,12 +90,12 @@ public final class Constants {
 	    public static final double ROT_REEF_ALIGNMENT_P = 0.058;
 
         public static final double ROT_SETPOINT_REEF_ALIGNMENT = 0;  // Rotation
-	    public static final double ROT_TOLERANCE_REEF_ALIGNMENT = 1;
-	    public static final double X_SETPOINT_REEF_ALIGNMENT = -0.75;  // Vertical pose
+	    public static final double ROT_TOLERANCE_REEF_ALIGNMENT = 0.5;
+	    public static final double X_SETPOINT_REEF_ALIGNMENT = -0.60;  // Vertical pose
 	    public static final double X_TOLERANCE_REEF_ALIGNMENT = 0.02;
 
-        public static final double Y_SETPOINT_RIGHT_REEF_ALIGNMENT = 0.05;  // Horizontal pose
-        public static final double Y_SETPOINT_LEFT_REEF_ALIGNMENT = -0.05;  // Horizontal pose
+        public static final double Y_SETPOINT_RIGHT_REEF_ALIGNMENT = 0.15;  // Horizontal pose
+        public static final double Y_SETPOINT_LEFT_REEF_ALIGNMENT = -0.15;  // Horizontal pose
 	    public static final double Y_TOLERANCE_REEF_ALIGNMENT = 0.02;
 
         public static final double DONT_SEE_TAG_WAIT_TIME = 1;
@@ -149,8 +149,8 @@ public final class Constants {
 
         public static double L1_ANGLE_DEGREES = 45.0;
         public static double L2_ANGLE_DEGREES = 68.7;
-        public static double L3_ANGLE_DEGREES = 68.7;
-        public static double L4_ANGLE_DEGREES = 60.0;
+        public static double L3_ANGLE_DEGREES = 71.7;
+        public static double L4_ANGLE_DEGREES = 72.0;
 
         public static double LOW_ALGAE_ANGLE_DEGREES = 0.0;
         public static double HIGH_ALGAE_ANGLE_DEGREES = 0.0;
@@ -214,7 +214,7 @@ public final class Constants {
         public static double REST_HEIGHT_METERS = ElevatorConstants.MIN_HEIGHT_METERS + 0.05;
         public static double L1_HEIGHT_METERS = 0.12678049;
         public static double L2_HEIGHT_METERS = 0.4;
-        public static double L3_HEIGHT_METERS = 0.67;
+        public static double L3_HEIGHT_METERS = 0.71;
         public static double L4_HEIGHT_METERS = 1.27;
 
         public static double LOW_ALGAE_HEIGHT_METERS = 0.14878049;
