@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -171,15 +172,13 @@ public class RobotContainer {
             ),
             this::select);
 
-    private final Command m_selectOuttakeCommand = new SelectCommand<>(
-            Map.ofEntries(
-                    Map.entry(ElevatorPosition.CORAL_L1, EndEffectorCommands.OuttakeEffector()),
-                    Map.entry(ElevatorPosition.CORAL_L2, EndEffectorCommands.OuttakeEffector()),
-                    Map.entry(ElevatorPosition.CORAL_L3, EndEffectorCommands.OuttakeEffector()),
-                    Map.entry(ElevatorPosition.CORAL_L4, EndEffectorCommands.OuttakeEffector()),
-                    Map.entry(ElevatorPosition.BARGE, EndEffectorCommands.OuttakeEffector()),
-                    Map.entry(ElevatorPosition.PROCESSOR, EndEffectorCommands.OuttakeEffector())
-            ),
+    private final Command m_selectOuttakeCommand = new SelectCommand<>(Map.ofEntries(
+            Map.entry(ElevatorPosition.CORAL_L1, EndEffectorCommands.OuttakeEffector()),
+            Map.entry(ElevatorPosition.CORAL_L2, EndEffectorCommands.OuttakeEffector()),
+            Map.entry(ElevatorPosition.CORAL_L3, EndEffectorCommands.OuttakeEffector()),
+            Map.entry(ElevatorPosition.CORAL_L4, EndEffectorCommands.OuttakeEffector()),
+            Map.entry(ElevatorPosition.BARGE, EndEffectorCommands.OuttakeEffector()),
+            Map.entry(ElevatorPosition.PROCESSOR, EndEffectorCommands.OuttakeEffector(EndEffectorConstants.ALGAE_PROCESSOR_OUTTAKE_SPEED))),
             this::select);
 
     /**
