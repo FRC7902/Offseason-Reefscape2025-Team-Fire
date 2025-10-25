@@ -152,7 +152,7 @@ public class RobotContainer {
     }
 
     private ElevatorPosition select() {
-        return m_elevatorSubsystem.getElevatorPositionEnum();
+        return m_elevatorSubsystem.getElevatorArmPositionEnum();
     }
 
     private final Command selectIntakeCommand = new SelectCommand<>(
