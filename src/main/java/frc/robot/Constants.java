@@ -108,7 +108,7 @@ public final class Constants {
 
     public static class ArmConstants {
         //PID tuning mode
-        public static final boolean TUNING_MODE_ENABLED = true;
+        public static final boolean TUNING_MODE_ENABLED = false;
 
         // CAN IDs
         public static final int MOTOR_CAN_ID = 21;
@@ -162,7 +162,7 @@ public final class Constants {
 
     public static class ElevatorConstants {
         //PID tuning mode
-        public static final boolean TUNING_MODE_ENABLED = true;
+        public static final boolean TUNING_MODE_ENABLED = false;
 
         // CAN IDs
         public static final int LEADER_MOTOR_CAN_ID = 19;
