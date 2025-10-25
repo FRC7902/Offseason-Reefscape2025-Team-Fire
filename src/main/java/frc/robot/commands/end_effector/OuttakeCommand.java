@@ -10,24 +10,24 @@ import frc.robot.RobotContainer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class OuttakeCommand extends Command {
-    private double outtakeSpeed;
+    private double m_outtakeSpeed;
     /**
      * Creates a new OuttakeAlgaeCoralCommand.
      */
     public OuttakeCommand() {
-        this.outtakeSpeed = EndEffectorConstants.OUTTAKE_SPEED;
+        m_outtakeSpeed = EndEffectorConstants.OUTTAKE_SPEED;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(RobotContainer.m_endEffectorSubsystem);
     }
     public OuttakeCommand(double outtakeSpeed) {
-        this.outtakeSpeed = outtakeSpeed; 
+        m_outtakeSpeed = outtakeSpeed; 
         addRequirements(RobotContainer.m_endEffectorSubsystem);  
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        RobotContainer.m_endEffectorSubsystem.setSpeed(outtakeSpeed);
+        RobotContainer.m_endEffectorSubsystem.setSpeed(m_outtakeSpeed);
 
     }
 
