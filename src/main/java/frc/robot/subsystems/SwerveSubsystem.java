@@ -29,10 +29,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.Constants;
 import frc.robot.Constants.PathPlanner;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.vision.LimelightHelpers;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -570,12 +572,40 @@ public class SwerveSubsystem extends SubsystemBase {
         }
     }
 
+    /**
+     * Localizes the robot by setting the YAGSL odometry pose to the result of the LimeLight MegaTag1 calculation.
+     * Does not localize if the tag is too far away or the calculation is too ambiguous.
+     */
+    public void localize() {
+        LimelightHelpers.PoseEstimate visionFeed;
+
+        // Localize based on alliance color
+        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+            visionFeed = LimelightHelpers.getBotPoseEstimate_wpiBlue("");
+        } else {
+            visionFeed = LimelightHelpers.getBotPoseEstimate_wpiRed("");
+        }
+
+        double tagCount = visionFeed.tagCount;
+        double dist = visionFeed.rawFiducials[0].distToCamera;
+        double ambiguity = visionFeed.rawFiducials[0].ambiguity;
+
+        // Ensure that the nearest tag is not too far away and not too ambiguous
+        if (tagCount != 0 &&
+            dist < Constants.VisionConstants.LOCALIZE_DISTANCE_THRESHOLD &&
+            ambiguity < Constants.VisionConstants.LOCALIZE_AMBIGUITY_THRESHOLD)
+        {
+            swerveDrive.addVisionMeasurement(visionFeed.pose, visionFeed.timestampSeconds);
+        }
+    }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
         SmartDashboard.putNumber("Swerve - Gyro angle rotation (rad)", swerveDrive.getGyro().getRotation3d().getAngle());
         SmartDashboard.putString("Swerve - Robo Pose2D", swerveDrive.getPose().toString());
 
+        localize();
         scaleSwerveInput();
     }
 
