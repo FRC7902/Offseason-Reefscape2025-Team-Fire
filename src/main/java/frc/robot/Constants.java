@@ -79,6 +79,7 @@ public final class Constants {
         public static final double ALGAE_HOLD_SPEED = 1.0;
 
         public static final double OUTTAKE_SPEED = -0.5;
+        public static final double ALGAE_PROCESSOR_OUTTAKE_SPEED = -0.1;
 
         public static final double ALGAE_INTAKE_STALL_DETECTION_CURRENT_LOW = 11;
         public static final double ALGAE_INTAKE_STALL_DETECTION_CURRENT_HIGH = 13;
