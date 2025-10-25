@@ -22,11 +22,23 @@ public class AutoAlignToReef extends Command {
         RIGHT
     }
 
-    private final PIDController m_xController, m_yController, m_rotController;
+    private PIDController m_xController, m_yController, m_rotController;
     private final ReefBranchSide m_side;
     private Timer m_dontSeeTagTimer, m_stopTimer;
     private final SwerveSubsystem m_drivebase;
     private double m_tagID = -1;
+
+    double X_P;
+    double X_I;
+    double X_D;
+
+    double Y_P;
+    double Y_I;
+    double Y_D;
+
+    double ROT_P;
+    double ROT_I;
+    double ROT_D;
 
     /**
      * Creates a new AutoAlignToReef.
@@ -44,6 +56,18 @@ public class AutoAlignToReef extends Command {
         SmartDashboard.putNumber("AutoAlign - error x", 0);
         SmartDashboard.putNumber("AutoAlign - error y", 0);
         SmartDashboard.putNumber("AutoAlign - error rot", 0);
+
+        SmartDashboard.putNumber("AutoAlign - X_P", X_P);
+        SmartDashboard.putNumber("AutoAlign - X_I", X_I);
+        SmartDashboard.putNumber("AutoAlign - X_D", X_D);
+
+        SmartDashboard.putNumber("AutoAlign - Y_P", Y_P);
+        SmartDashboard.putNumber("AutoAlign - Y_I", Y_I);
+        SmartDashboard.putNumber("AutoAlign - Y_D", Y_D);
+
+        SmartDashboard.putNumber("AutoAlign - ROT_P", ROT_P);
+        SmartDashboard.putNumber("AutoAlign - ROT_I", ROT_I);
+        SmartDashboard.putNumber("AutoAlign - ROT_D", ROT_D);
     }
 
     // Called when the command is initially scheduled.
@@ -66,6 +90,22 @@ public class AutoAlignToReef extends Command {
         m_yController.setTolerance(VisionConstants.Y_TOLERANCE_REEF_ALIGNMENT);
 
         m_tagID = LimelightHelpers.getFiducialID("");
+
+        X_P = SmartDashboard.getNumber("AutoAlign - X_P",X_P);
+        X_I = SmartDashboard.getNumber("AutoAlign - X_I",X_I);
+        X_D = SmartDashboard.getNumber("AutoAlign - X_D",X_D);
+
+        Y_P = SmartDashboard.getNumber("AutoAlign - Y_P",Y_P);
+        Y_I = SmartDashboard.getNumber("AutoAlign - Y_I",Y_I);
+        Y_D = SmartDashboard.getNumber("AutoAlign - Y_D",Y_D);
+
+        ROT_P = SmartDashboard.getNumber("AutoAlign - ROT_P",ROT_P);
+        ROT_I = SmartDashboard.getNumber("AutoAlign - ROT_I",ROT_I);
+        ROT_D = SmartDashboard.getNumber("AutoAlign - ROT_D",ROT_D);
+
+        m_xController = new PIDController(X_P,X_I,X_D); // Vertical movement
+        m_yController = new PIDController(Y_P, Y_I,Y_D); // Horizontal movement
+        m_rotController = new PIDController(ROT_P,ROT_I, ROT_D); // Rotation
     }
 
     // Called every time the scheduler runs while the command is scheduled.
