@@ -279,6 +279,9 @@ public class ElevatorSubsystem extends SubsystemBase {
                 m_IntakeMode = null;
         }
     }
+    public IntakeMode getIntakeMode() {
+        return m_IntakeMode;
+    }
     public ElevatorPosition getElevatorPositionEnumOperator() {
         return m_ElevatorPositionEnum;
     }
