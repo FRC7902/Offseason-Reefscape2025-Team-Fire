@@ -11,6 +11,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.events.EventTrigger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,6 +25,7 @@ import frc.robot.commands.end_effector.IntakeCommand;
 import frc.robot.commands.end_effector.OuttakeCommand;
 import frc.robot.commands.end_effector.IntakeCommand.IntakeMode;
 import frc.robot.commands.funnel_indexer.OuttakeCoralCommand;
+import frc.robot.commands.swerve.StrafeRightCommand;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -210,8 +212,39 @@ public class RobotContainer {
         m_endEffectorSubsystem.setDefaultCommand(EndEffectorCommands.HoldCoralCommand());
 
         // === Auto Align Controls ===
-        m_driverController.L1().whileTrue(AutoAlignCommands.AutoAlignLeft());
-        m_driverController.R1().whileTrue(AutoAlignCommands.AutoAlignRight());
+       // m_driverController.L1().whileTrue(AutoAlignCommands.AutoAlignLeft());
+        //m_driverController.R1().whileTrue(AutoAlignCommands.AutoAlignRight());
+        // === Auto Score Controls ===
+        
+        m_driverController.L1().whileTrue(
+                new ConditionalCommand( 
+                        new SequentialCommandGroup(
+                                coralHandoffCommand(),
+                                new MoveElevatorArmCommand(m_elevatorSubsystem.getElevatorPositionEnumOperator()),
+                                AutoAlignCommands.AutoAlignRight(),
+                                EndEffectorCommands.OuttakeEffector()), 
+                        new SequentialCommandGroup(
+                                new MoveElevatorArmCommand(m_elevatorSubsystem.getElevatorPositionEnumOperator()),
+                                new ParallelCommandGroup(
+                                        EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE),
+                                        AutoAlignCommands.AutoAlignRight())),
+                () -> m_elevatorSubsystem.getIntakeMode().equals(IntakeMode.CORAL)
+                ));
+        m_driverController.R1().whileTrue( 
+                new ConditionalCommand( 
+                        new SequentialCommandGroup(
+                                coralHandoffCommand(),
+                                new MoveElevatorArmCommand(m_elevatorSubsystem.getElevatorPositionEnumOperator()),
+                                AutoAlignCommands.AutoAlignLeft(),
+                                EndEffectorCommands.OuttakeEffector()), 
+                        new SequentialCommandGroup(
+                                new MoveElevatorArmCommand(m_elevatorSubsystem.getElevatorPositionEnumOperator()), 
+                                new ParallelCommandGroup(
+                                        EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE),
+                                        AutoAlignCommands.AutoAlignLeft()
+                                )), 
+                () -> m_elevatorSubsystem.getIntakeMode().equals(IntakeMode.CORAL))
+               );
         // === Intake/Outtake controls ===
         m_driverController.R2().whileTrue(
                 m_selectOuttakeCommand
@@ -225,21 +258,27 @@ public class RobotContainer {
         // ===============================
 
         // Strafe controls
-        m_driverController.povLeft().whileTrue(SwereCommands.StrafeLeft());
-        m_driverController.povRight().whileTrue(SwereCommands.StrafeRight());
+        m_driverController.povLeft().whileTrue(SwerveCommands.StrafeLeft());
+        m_driverController.povRight().whileTrue(SwerveCommands.StrafeRight());
 
         m_driverController.options().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
         m_driverController.create().onTrue(new InstantCommand(m_swerveSubsystem::toggleFastDriveRampRateMode));
 
         // === Elevator Setpoints ===
+        // define a position variable and just set it when operator presses
         m_operatorController.y().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPositionEnumOperator(ElevatorPosition.CORAL_L4))
+                //new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
+                );
         m_operatorController.b().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPositionEnumOperator(ElevatorPosition.CORAL_L3)));
+                //new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
         m_operatorController.x().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPositionEnumOperator(ElevatorPosition.CORAL_L2)));
+                //new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
         m_operatorController.a().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
+                new InstantCommand(() -> m_elevatorSubsystem.setElevatorPositionEnumOperator(ElevatorPosition.CORAL_L3)));
+                //new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
 
         // m_operatorController.povDown().onTrue(
         // new ConditionalCommand(

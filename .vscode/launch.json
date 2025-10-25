@@ -8,6 +8,13 @@
       "type": "java",
       "name": "Main",
       "request": "launch",
+      "mainClass": "frc.robot.subsystems.Main",
+      "projectName": "Offseason-Reefscape2025-Team-Fire"
+    },
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
       "mainClass": "frc.robot.Main",
       "projectName": "Offseason-Reefscape2025-Team-Fire"
     },
