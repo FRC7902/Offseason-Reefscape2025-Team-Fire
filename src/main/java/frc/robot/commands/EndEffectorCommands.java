@@ -14,6 +14,10 @@ public class EndEffectorCommands {
         return new OuttakeCommand();
     }
 
+    public static OuttakeCommand OuttakeEffector(double outtakeSpeed) {
+        return new OuttakeCommand(outtakeSpeed);
+    }
+
     public static HoldCoralCommand HoldCoralCommand() {
         return new HoldCoralCommand();
     }

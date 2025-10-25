@@ -8,23 +8,26 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.RobotContainer;
 
-
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class OuttakeCommand extends Command {
-
-
+    private double outtakeSpeed;
     /**
      * Creates a new OuttakeAlgaeCoralCommand.
      */
     public OuttakeCommand() {
+        this.outtakeSpeed = EndEffectorConstants.OUTTAKE_SPEED;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(RobotContainer.m_endEffectorSubsystem);
+    }
+    public OuttakeCommand(double outtakeSpeed) {
+        this.outtakeSpeed = outtakeSpeed; 
+        addRequirements(RobotContainer.m_endEffectorSubsystem);  
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        RobotContainer.m_endEffectorSubsystem.setSpeed(EndEffectorConstants.OUTTAKE_SPEED);
+        RobotContainer.m_endEffectorSubsystem.setSpeed(outtakeSpeed);
 
     }
 
@@ -46,7 +49,8 @@ public class OuttakeCommand extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        // return !RobotContainer.m_endEffectorSubsystem.isCoralDetected() && !RobotContainer.m_endEffectorSubsystem.isAlgaeDetected();
+        // return !RobotContainer.m_endEffectorSubsystem.isCoralDetected() &&
+        // !RobotContainer.m_endEffectorSubsystem.isAlgaeDetected();
         return false;
     }
 }
