@@ -63,7 +63,7 @@ public class IntakeCommand extends Command {
 
         // Algae mode
         return RobotContainer.m_endEffectorSubsystem.hasAlgae()
-                || ((RobotContainer.m_elevatorSubsystem.getElevatorPositionEnum() != ElevatorSubsystem.ElevatorPosition.ALGAE_HIGH)
-                && (RobotContainer.m_elevatorSubsystem.getElevatorPositionEnum() != ElevatorSubsystem.ElevatorPosition.ALGAE_LOW));
+                || ((RobotContainer.m_elevatorSubsystem.getElevatorArmPositionEnum() != ElevatorSubsystem.ElevatorPosition.ALGAE_HIGH)
+                && (RobotContainer.m_elevatorSubsystem.getElevatorArmPositionEnum() != ElevatorSubsystem.ElevatorPosition.ALGAE_LOW));
     }
 }

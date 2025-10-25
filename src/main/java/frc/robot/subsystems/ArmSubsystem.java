@@ -21,9 +21,7 @@ import com.ctre.phoenix6.sim.TalonFXSimState;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-
 import static edu.wpi.first.units.Units.Volts;
-
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -284,8 +282,11 @@ public class ArmSubsystem extends SubsystemBase {
     /**
      * Gets the current arm position as an enum based on predefined angles.
      *
+     * @deprecated This method is inaccurate as multiple states share the same degree value but differ in elevator position,
+     * use the getElevatorArmPositionEnum() in the ElevatorSubsystem instead
      * @return The current arm position as an ElevatorPosition enum.
      */
+    @Deprecated
     public ElevatorPosition getArmPositionEnum() {
         double positionDeg = getArmPositionDegrees();
         if (Math.abs(positionDeg - ArmConstants.ZERO_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
