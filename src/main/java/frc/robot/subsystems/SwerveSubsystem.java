@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants.PathPlanner;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import swervelib.SwerveController;
@@ -87,6 +88,21 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.swerveController.setMaximumChassisAngularVelocity(20);
 
         setupPathPlanner();
+        // Put AA Tuning Values
+        if (VisionConstants.AA_TUNING_MODE){
+            SmartDashboard.putNumber("X Reef Alignment P",VisionConstants.X_REEF_ALIGNMENT_P);
+            SmartDashboard.putNumber("X Reef Alignment I",VisionConstants.X_REEF_ALIGNMENT_I);
+            SmartDashboard.putNumber("X Reef Alignment D",VisionConstants.X_REEF_ALIGNMENT_D);
+
+            SmartDashboard.putNumber("Y Reef Alignment P", VisionConstants.Y_REEF_ALIGNMENT_P);
+            SmartDashboard.putNumber("Y Reef Alignment I", VisionConstants.Y_REEF_ALIGNMENT_I);
+            SmartDashboard.putNumber("Y Reef Alignment D", VisionConstants.Y_REEF_ALIGNMENT_D);
+
+            SmartDashboard.putNumber("Y Reef Alignment P", VisionConstants.ROT_REEF_ALIGNMENT_P);
+            SmartDashboard.putNumber("Y Reef Alignment I", VisionConstants.ROT_REEF_ALIGNMENT_I);
+            SmartDashboard.putNumber("Y Reef Alignment D", VisionConstants.ROT_REEF_ALIGNMENT_D);
+        }
+        
     }
 
     private void scaleSwerveInput() {
@@ -570,7 +586,19 @@ public class SwerveSubsystem extends SubsystemBase {
         // This method will be called once per scheduler run
         SmartDashboard.putNumber("Swerve - Gyro angle rotation (rad)", swerveDrive.getGyro().getRotation3d().getAngle());
         SmartDashboard.putString("Swerve - Robo Pose2D", swerveDrive.getPose().toString());
+        if (VisionConstants.AA_TUNING_MODE){
+            SmartDashboard.getNumber("X Reef Alignment P",VisionConstants.X_REEF_ALIGNMENT_P);
+            SmartDashboard.getNumber("X Reef Alignment I",VisionConstants.X_REEF_ALIGNMENT_I);
+            SmartDashboard.getNumber("X Reef Alignment D",VisionConstants.X_REEF_ALIGNMENT_D);
 
+            SmartDashboard.getNumber("Y Reef Alignment P", VisionConstants.Y_REEF_ALIGNMENT_P);
+            SmartDashboard.getNumber("Y Reef Alignment I", VisionConstants.Y_REEF_ALIGNMENT_I);
+            SmartDashboard.getNumber("Y Reef Alignment D", VisionConstants.Y_REEF_ALIGNMENT_D);
+
+            SmartDashboard.getNumber("Y Reef Alignment P", VisionConstants.ROT_REEF_ALIGNMENT_P);
+            SmartDashboard.getNumber("Y Reef Alignment I", VisionConstants.ROT_REEF_ALIGNMENT_I);
+            SmartDashboard.getNumber("Y Reef Alignment D", VisionConstants.ROT_REEF_ALIGNMENT_D);
+        }
         scaleSwerveInput();
     }
 
