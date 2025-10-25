@@ -85,7 +85,14 @@ public class RobotContainer {
                 ElevatorPosition.ALGAE_LOW));
         new EventTrigger("highalgae").onTrue(new MoveElevatorArmCommand(
                 ElevatorPosition.ALGAE_HIGH));
-
+        new EventTrigger("barge").onTrue(
+                new SequentialCommandGroup(
+                        new MoveElevatorArmCommand(ElevatorPosition.BARGE),
+                        m_selectOuttakeCommand));
+        new EventTrigger("processor").onTrue(
+                new SequentialCommandGroup(
+                        new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR),
+                        m_selectOuttakeCommand));
         new EventTrigger("ElevatorL1WithWait").onTrue(
                 new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
                         ElevatorPosition.CORAL_L1)));

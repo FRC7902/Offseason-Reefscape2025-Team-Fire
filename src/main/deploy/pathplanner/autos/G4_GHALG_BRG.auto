@@ -7,43 +7,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left1"
+            "pathName": "1. G4"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.2
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left2"
+            "pathName": "GO_BACK"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.3
+            "waitTime": 0.2
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left3"
+            "pathName": "GH_ALG"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.5
+            "waitTime": 0.2
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left4"
+            "pathName": "BARG"
           }
         }
       ]
