@@ -233,21 +233,33 @@ public class RobotContainer {
 
         // === Elevator Setpoints ===
         m_operatorController.y().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4));
+                new ConditionalCommand(
+                        new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4),
+                        new InstantCommand(),
+                        m_endEffectorSubsystem::hasCoral
+                )
+        );
         m_operatorController.b().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3));
+                new ConditionalCommand(
+                        new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3),
+                        new InstantCommand(),
+                        m_endEffectorSubsystem::hasCoral
+                )
+        );
         m_operatorController.x().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2));
+                new ConditionalCommand(
+                        new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2),
+                        new InstantCommand(),
+                        m_endEffectorSubsystem::hasCoral
+                )
+        );
         m_operatorController.a().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
-
-        // m_operatorController.povDown().onTrue(
-        // new ConditionalCommand(
-        // Commands.none(),
-        // new MoveElevatorArmCommand(ElevatorPosition.ZERO),
-        // m_endEffectorSubsystem::hasAlgae
-        // )
-        // );
+                new ConditionalCommand(
+                        new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1),
+                        new InstantCommand(),
+                        m_endEffectorSubsystem::hasCoral
+                )
+        );
 
         m_operatorController.povUp().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
         m_operatorController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
