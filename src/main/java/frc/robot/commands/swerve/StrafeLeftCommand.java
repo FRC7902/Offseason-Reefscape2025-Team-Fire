@@ -27,7 +27,7 @@ public class StrafeLeftCommand extends Command {
     public void execute() {
         RobotContainer.m_swerveSubsystem.strafe(
                 -1,
-                0.25
+                0.05
         );
     }
 
