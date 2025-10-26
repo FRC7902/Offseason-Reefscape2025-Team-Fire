@@ -296,6 +296,7 @@ public class ArmSubsystem extends SubsystemBase {
             case ALGAE_HIGH -> ArmConstants.HIGH_ALGAE_ANGLE_DEGREES;
             case ALGAE_LOW -> ArmConstants.LOW_ALGAE_ANGLE_DEGREES;
             case BARGE -> ArmConstants.BARGE_ANGLE_DEGREES;
+            case MIDDLE -> ArmConstants.MID_ANGLE_DEGREES;
             default -> ArmConstants.MIN_ANGLE_DEGREES;
         };
         setArmPositionDegrees(degrees);
@@ -331,6 +332,8 @@ public class ArmSubsystem extends SubsystemBase {
             return ElevatorPosition.ALGAE_LOW;
         } else if (Math.abs(positionDeg - ArmConstants.BARGE_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
             return ElevatorPosition.BARGE;
+        } else if (Math.abs(positionDeg - ArmConstants.MID_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR) {
+            return ElevatorPosition.MIDDLE;
         }
         return ElevatorPosition.UNKNOWN; // Default case
     }

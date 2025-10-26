@@ -141,7 +141,7 @@ public final class Constants {
         public static double FF_S = 0.0;
         public static double FF_G = 0.5;
         public static double FF_V = 0.3;
-        public static double FF_A = 0.01;
+        public static double FF_A = 0.005;
 
         // SAFETIES
         public static final double SAFETY_ANGLE_DOWNWARD_DEGREES = 45;
@@ -161,6 +161,7 @@ public final class Constants {
         public static double HIGH_ALGAE_ANGLE_DEGREES = 0.0;
 
         public static double BARGE_ANGLE_DEGREES = 50.0;
+        public static double MID_ANGLE_DEGREES = SAFETY_ANGLE_UPWARD_DEGREES;
 
         public static double TARGET_ERROR = 3;
     }
@@ -225,6 +226,8 @@ public final class Constants {
         public static double LOW_ALGAE_HEIGHT_METERS = 0.14878049;
         public static double HIGH_ALGAE_HEIGHT_METERS = 0.53085366;
         public static double BARGE_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS;
+
+        public static double MID_HEIGHT_METERS = 0.71;
         // ==============================
 
         // ===== Control Parameters =====
