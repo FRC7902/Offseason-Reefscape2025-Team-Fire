@@ -85,15 +85,17 @@ public class EndEffectorSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        SmartDashboard.putBoolean("End Effector — Has Coral", hasCoral());
+        SmartDashboard.putBoolean("End Effector - Has Coral", hasCoral());
         SmartDashboard.putBoolean("End Effector - Has Algae", hasAlgae());
         SmartDashboard.putBoolean("End Effector - Coral Bream Break Broken", isCoralBeamBreakBroken());
-        SmartDashboard.putNumber("Supply Current EndEffector", getSupplyCurrent());
-        SmartDashboard.putNumber("EndEffector Motor Velocity", m_motor.getVelocity().getValueAsDouble());
+        SmartDashboard.putNumber("End Effector - Supply Current", getSupplyCurrent());
+        SmartDashboard.putNumber("End Effector - Motor Velocity", m_motor.getVelocity().getValueAsDouble());
 
         // Debouncer to detect consistent current spike (between low and high) for longer than time (t)
         m_hasAlgae = m_algaeDebouncer.calculate(
                 EndEffectorConstants.ALGAE_INTAKE_STALL_DETECTION_CURRENT_LOW < getSupplyCurrent()
                         && getSupplyCurrent() < EndEffectorConstants.ALGAE_INTAKE_STALL_DETECTION_CURRENT_HIGH);
+
+        if (!hasCoral() && isCoralBeamBreakBroken()) setHasCoral(true);
     }
 }

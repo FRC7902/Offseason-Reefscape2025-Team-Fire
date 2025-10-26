@@ -36,6 +36,7 @@ import frc.robot.RobotContainer;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
+import swervelib.SwerveModule;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
@@ -46,6 +47,8 @@ public class SwerveSubsystem extends SubsystemBase {
     /* Swerve drive object */
     private final SwerveDrive swerveDrive;
 
+    private boolean m_fastDriveRampRateMode = false;
+
     /**
      * Creates a new SwerveSubsystem.
      */
@@ -54,7 +57,7 @@ public class SwerveSubsystem extends SubsystemBase {
         // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary
         // objects being created.
         // High Telemetry only feeds readable data related to swerve drive
-        SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+        SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH; // TODO: Turn this off
 
         try {
             swerveDrive = new SwerveParser(directory).createSwerveDrive(SwerveConstants.MAX_SPEED,
@@ -63,35 +66,33 @@ public class SwerveSubsystem extends SubsystemBase {
         } catch (Exception error) {
             throw new RuntimeException(error);
         }
+
         if (Robot.isSimulation()) {
             // Set these values to false so that simulation works
-            swerveDrive.setHeadingCorrection(false);
             swerveDrive.setCosineCompensator(false);
         } else {
             swerveDrive.setCosineCompensator(true);
-            // !SwerveDriveTelemetry.isSimulation);
             // Disables cosine compensation for simulations since it causes discrepancies
             // not seen in real life.
-            swerveDrive.setHeadingCorrection(false);
-            // Heading correction should only be used while
-            // controlling the robot via angle.
-
         }
 
-        swerveDrive.setAngularVelocityCompensation(true, false, 0.08);
+        swerveDrive.setHeadingCorrection(false);
+        swerveDrive.setAngularVelocityCompensation(true, true, 0.09);
         // Correct for skew that gets worse as angular velocity increases. Start with a
         // coefficient of 0.08.
         swerveDrive.setModuleEncoderAutoSynchronize(false, 1);
 
-        swerveDrive.setChassisDiscretization(false, true, 0.03);
+        swerveDrive.setChassisDiscretization(true, true, 0.02);
         swerveDrive.swerveController.addSlewRateLimiters(null, null, null);
         swerveDrive.swerveController.setMaximumChassisAngularVelocity(20);
+
         setupPathPlanner();
     }
 
     private void scaleSwerveInput() {
         double scale = Math.min(1.0 - RobotContainer.m_elevatorSubsystem.getElevatorPositionScale(), 1.0); // Prevents applied scale > 1.0
 
+        // TODO: Maybe remove this if end effector can hold onto algae without this
         if (RobotContainer.m_endEffectorSubsystem.hasAlgae())
             scale -= 0.15; // Further reduce speed if carrying algae
 
@@ -537,9 +538,9 @@ public class SwerveSubsystem extends SubsystemBase {
                     controller.headingCalculate(swerveDrive.getOdometryHeading().unaryMinus().getRadians(),
                             new Rotation2d(Math.toRadians(angleDegrees)).getRadians()),
                     swerveDrive.getPose().getRotation()));
-            SmartDashboard.putNumber("Odom Heading (rad)", swerveDrive.getOdometryHeading().unaryMinus().getRadians());
-            SmartDashboard.putNumber("Target Heading (rad)", Math.toRadians(angleDegrees));
-            SmartDashboard.putNumber("Error (rad)", Math.abs(new Rotation2d(Math.toRadians(angleDegrees))
+            SmartDashboard.putNumber("Swerve - Odom Heading (rad)", swerveDrive.getOdometryHeading().unaryMinus().getRadians());
+            SmartDashboard.putNumber("Swerve - Target Heading (rad)", Math.toRadians(angleDegrees));
+            SmartDashboard.putNumber("Swerve - Error (rad)", Math.abs(new Rotation2d(Math.toRadians(angleDegrees))
                     .minus(swerveDrive.getOdometryHeading().unaryMinus()).getRadians()));
         }).until(() -> (Math.abs(new Rotation2d(Math.toRadians(angleDegrees))
                 .minus(swerveDrive.getOdometryHeading().unaryMinus()).getDegrees()) < toleranceDegrees)
@@ -552,11 +553,23 @@ public class SwerveSubsystem extends SubsystemBase {
                 0, false, false);
     }
 
+    public void toggleFastDriveRampRateMode() {
+        m_fastDriveRampRateMode = !m_fastDriveRampRateMode;
+
+        for (SwerveModule module : getSwerveDrive().getModules()) {
+            module.getDriveMotor().setLoopRampRate(
+                    m_fastDriveRampRateMode ?
+                            SwerveConstants.FAST_DRIVE_RAMP_RATE :
+                            getSwerveDrive().swerveDriveConfiguration.physicalCharacteristics.driveMotorRampRate
+            );
+        }
+    }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        SmartDashboard.putNumber("Gyro angle rotation (rad)", swerveDrive.getGyro().getRotation3d().getAngle());
-        SmartDashboard.putString("Robo Pose2D", swerveDrive.getPose().toString());
+        SmartDashboard.putNumber("Swerve - Gyro angle rotation (rad)", swerveDrive.getGyro().getRotation3d().getAngle());
+        SmartDashboard.putString("Swerve - Robo Pose2D", swerveDrive.getPose().toString());
 
         scaleSwerveInput();
     }

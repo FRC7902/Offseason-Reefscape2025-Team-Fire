@@ -2,23 +2,26 @@ package frc.robot.commands.funnel_indexer;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FunnelIndexerConstants;
-import frc.robot.subsystems.FunnelSubsystem;
+import frc.robot.RobotContainer;
 
 public class OuttakeCoralCommand extends Command {
-    private final FunnelSubsystem m_funnelIndexerSubsystem;
 
-    public OuttakeCoralCommand(FunnelSubsystem funnelIndexerSubsystem) {
-        this.m_funnelIndexerSubsystem = funnelIndexerSubsystem;
-        addRequirements(funnelIndexerSubsystem);
+    public OuttakeCoralCommand() {
+        addRequirements(RobotContainer.m_funnelIndexerSubsystem);
     }
 
     @Override
     public void execute() {
-        m_funnelIndexerSubsystem.setIndexerSpeed(FunnelIndexerConstants.OUTTAKE_SPEED);
+        RobotContainer.m_funnelIndexerSubsystem.setIndexerSpeed(FunnelIndexerConstants.OUTTAKE_SPEED);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        RobotContainer.m_funnelIndexerSubsystem.stop();
     }
 
     @Override
     public boolean isFinished() {
-        return !m_funnelIndexerSubsystem.isShallowBeamBreakBroken() && !m_funnelIndexerSubsystem.isDeepBeamBreakBroken();
+        return !RobotContainer.m_funnelIndexerSubsystem.isShallowBeamBreakBroken() && !RobotContainer.m_funnelIndexerSubsystem.isDeepBeamBreakBroken();
     }
 }

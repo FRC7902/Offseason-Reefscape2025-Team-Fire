@@ -31,6 +31,8 @@ public final class Constants {
         // Speed scaling factors, should be between 0 and 1
         public static final double MIN_TRANSLATION_SPEED_SCALE = 0.175; // Minimum speed scaling factor for joystick input
         public static final double MIN_ROTATION_SPEED_SCALE = 0.25; // Minimum speed scaling factor for joystick input
+
+        public static final double FAST_DRIVE_RAMP_RATE = 0.15;
     }
 
     public static class PathPlanner {
@@ -73,17 +75,33 @@ public final class Constants {
 
         public static final double INTAKE_SPEED = 1;
 
-        public static final double CORAL_HOLD_SPEED = 0.1;
+        public static final double CORAL_HOLD_SPEED = 0.05;
         public static final double ALGAE_HOLD_SPEED = 1.0;
 
-        public static final double OUTTAKE_SPEED = -1;
+        public static final double OUTTAKE_SPEED = -0.5;
 
         public static final double ALGAE_INTAKE_STALL_DETECTION_CURRENT_LOW = 11;
         public static final double ALGAE_INTAKE_STALL_DETECTION_CURRENT_HIGH = 13;
     }
 
     public static class VisionConstants {
+        public static final double X_REEF_ALIGNMENT_P = 3.3;
+	    public static final double Y_REEF_ALIGNMENT_P = 3.3;
+	    public static final double ROT_REEF_ALIGNMENT_P = 0.058;
 
+        public static final double ROT_SETPOINT_REEF_ALIGNMENT = 0;  // Rotation
+	    public static final double ROT_TOLERANCE_REEF_ALIGNMENT = 0.5;
+
+	    public static final double X_SETPOINT_REEF_ALIGNMENT = -0.58;  // Vertical pose
+        public static final double X_SETPOINT_CLOSER_REEF_ALIGNMENT = -0.55;  // Vertical pose
+	    public static final double X_TOLERANCE_REEF_ALIGNMENT = 0.01;
+
+        public static final double Y_SETPOINT_RIGHT_REEF_ALIGNMENT = 0.15;  // Horizontal pose
+        public static final double Y_SETPOINT_LEFT_REEF_ALIGNMENT = -0.15;  // Horizontal pose
+	    public static final double Y_TOLERANCE_REEF_ALIGNMENT = 0.01;
+
+        public static final double DONT_SEE_TAG_WAIT_TIME = 1;
+	    public static final double POSE_VALIDATION_TIME = 0.3;
     }
 
     public static class PathPlannerConstants {
@@ -105,11 +123,11 @@ public final class Constants {
 
         // Motion Constraints
         public static final double MIN_ANGLE_DEGREES = -94; // Minimum angle for the arm
-        public static final double MAX_ANGLE_DEGREES = 65;
+        public static final double MAX_ANGLE_DEGREES = 75;
 
         // Current limits
         public static final double STATOR_CURRENT_LIMIT = 50.0;
-        public static final double SUPPLY_CURRENT_LIMIT = 50.0;
+        public static final double SUPPLY_CURRENT_LIMIT = 40.0;
 
         // PID Constants
         public static double PID_P = 60;
@@ -120,28 +138,29 @@ public final class Constants {
         public static double FF_S = 0.0;
         public static double FF_G = 0.5;
         public static double FF_V = 0.3;
-        public static double FF_A = 0.01;
+        public static double FF_A = 0.005;
 
         // SAFETIES
         public static final double SAFETY_ANGLE_DOWNWARD_DEGREES = 45;
         public static final double SAFETY_ANGLE_UPWARD_DEGREES = -40;
 
         // Arm Setpoints
-        public static final double ZERO_ANGLE_DEGREES = -90;
-        public static final double REST_ANGLE_DEGREES = 55;
-        public static final double PROCESSOR_ANGLE_DEGREES = -45.0;
+        public static double ZERO_ANGLE_DEGREES = -90;
+        public static double REST_ANGLE_DEGREES = 55;
+        public static double PROCESSOR_ANGLE_DEGREES = -45.0;
 
-        public static final double L1_ANGLE_DEGREES = 45.0;
-        public static final double L2_ANGLE_DEGREES = 56.0;
-        public static final double L3_ANGLE_DEGREES = 75.0;
-        public static final double L4_ANGLE_DEGREES = 56.0;
+        public static double L1_ANGLE_DEGREES = 45.0;
+        public static double L2_ANGLE_DEGREES = 68.7;
+        public static double L3_ANGLE_DEGREES = 71.7;
+        public static double L4_ANGLE_DEGREES = 72.0;
 
-        public static final double LOW_ALGAE_ANGLE_DEGREES = 0.0;
-        public static final double HIGH_ALGAE_ANGLE_DEGREES = 0.0;
+        public static double LOW_ALGAE_ANGLE_DEGREES = 0.0;
+        public static double HIGH_ALGAE_ANGLE_DEGREES = 0.0;
 
-        public static final double BARGE_ANGLE_DEGREES = 50.0;
+        public static double BARGE_ANGLE_DEGREES = 50.0;
+        public static double MID_ANGLE_DEGREES = SAFETY_ANGLE_UPWARD_DEGREES;
 
-        public static final double TARGET_ERROR = 3;
+        public static double TARGET_ERROR = 3;
     }
 
     public static class ElevatorConstants {
@@ -153,7 +172,7 @@ public final class Constants {
         public static final int FOLLOWER_MOTOR_CAN_ID = 18;
 
         // Current Limits
-        public static final double STATOR_CURRENT_LIMIT = 80.0;
+        public static final double STATOR_CURRENT_LIMIT = 70.0;
         public static final double SUPPLY_CURRENT_LIMIT = 50.0;
 
         // Physical Constants
@@ -167,11 +186,11 @@ public final class Constants {
         public static final double HEIGHT_METERS = Units.inchesToMeters(42);
         public static final double MIN_HEIGHT_METERS = Units.inchesToMeters(0);
         public static final double ZERO_THRESHOLD = MIN_HEIGHT_METERS + 0.01;
-        public static final double MAX_HEIGHT_METERS = 1.28;
+        public static final double MAX_HEIGHT_METERS = 1.27;
         public static final double CARRIAGE_HEIGHT_METERS = Units.inchesToMeters(18.5);
 
         // Elevator safety
-        public static final double SAFETY_POSITION_METERS = 0.403;
+        public static final double SAFETY_POSITION_METERS = 0.35;
 
 
         // Motion Constraints
@@ -193,17 +212,19 @@ public final class Constants {
         public static double FF_A = 0;//0.02;
 
         // ===== Elevator Setpoints =====
-        public static final double PROCESSOR_HEIGHT_METERS = ElevatorConstants.MIN_HEIGHT_METERS;
+        public static double PROCESSOR_HEIGHT_METERS = ElevatorConstants.MIN_HEIGHT_METERS;
 
-        public static final double REST_HEIGHT_METERS = ElevatorConstants.MIN_HEIGHT_METERS + 0.05;
-        public static final double L1_HEIGHT_METERS = 0.12678049;
-        public static final double L2_HEIGHT_METERS = 0.15887805;
-        public static final double L3_HEIGHT_METERS = 0.40585366;
-        public static final double L4_HEIGHT_METERS = 1.22;
+        public static double REST_HEIGHT_METERS = ElevatorConstants.MIN_HEIGHT_METERS + 0.05;
+        public static double L1_HEIGHT_METERS = 0.12678049;
+        public static double L2_HEIGHT_METERS = 0.4;
+        public static double L3_HEIGHT_METERS = 0.71;
+        public static double L4_HEIGHT_METERS = 1.27;
 
-        public static final double LOW_ALGAE_HEIGHT_METERS = 0.14878049;
-        public static final double HIGH_ALGAE_HEIGHT_METERS = 0.53085366;
-        public static final double BARGE_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS;
+        public static double LOW_ALGAE_HEIGHT_METERS = 0.14878049;
+        public static double HIGH_ALGAE_HEIGHT_METERS = 0.53085366;
+        public static double BARGE_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS;
+
+        public static double MID_HEIGHT_METERS = 0.71;
         // ==============================
 
         // ===== Control Parameters =====

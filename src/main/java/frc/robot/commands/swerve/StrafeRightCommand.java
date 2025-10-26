@@ -26,8 +26,8 @@ public class StrafeRightCommand extends Command {
     @Override
     public void execute() {
         RobotContainer.m_swerveSubsystem.strafe(
-                -1,
-                0.25
+                1,
+                0.05
         );
     }
 
