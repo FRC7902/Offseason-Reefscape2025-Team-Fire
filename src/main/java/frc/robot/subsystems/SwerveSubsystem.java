@@ -592,9 +592,6 @@ public class SwerveSubsystem extends SubsystemBase {
                 visionFeedMT2.rawFiducials[0].ambiguity < VisionConstants.LOCALIZE_AMBIGUITY_THRESHOLD &&
                 swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond) < VisionConstants.LOCALIZE_YAW_SPEED_THRESHOLD_DEGREES_PER_SECOND)
             {
-                // Set the orientation to that of the robot
-                LimelightHelpers.SetRobotOrientation("", getHeading().getDegrees(), 0, 0, 0,0, 0);
-
                 // Standard Deviation, increase if you don't trust the LimeLight, decrease if you do
                 swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(VisionConstants.LOCALIZE_STANDARD_DEVIATION,
                                                                         VisionConstants.LOCALIZE_STANDARD_DEVIATION,
@@ -611,6 +608,9 @@ public class SwerveSubsystem extends SubsystemBase {
         // This method will be called once per scheduler run
         SmartDashboard.putNumber("Swerve - Gyro angle rotation (rad)", swerveDrive.getGyro().getRotation3d().getAngle());
         SmartDashboard.putString("Swerve - Robo Pose2D", swerveDrive.getPose().toString());
+
+        // Set LimeLight the orientation to that of the robot
+        LimelightHelpers.SetRobotOrientation("", getHeading().getDegrees(), 0, 0, 0,0, 0);
 
         localize();
         scaleSwerveInput();
