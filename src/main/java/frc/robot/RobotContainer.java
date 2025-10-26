@@ -65,62 +65,7 @@ public class RobotContainer {
         configurePathPlanner();
 
         autoChooser = AutoBuilder.buildAutoChooser("DEFAULT");
-<<<<<<< HEAD
-=======
 
-        new EventTrigger("ZeroPosition").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.ZERO));
-        new EventTrigger("ElevatorL1").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.CORAL_L1));
-        new EventTrigger("ElevatorL2").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.CORAL_L2));
-        new EventTrigger("ElevatorL3").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.CORAL_L3));
-        new EventTrigger("ElevatorL4").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.CORAL_L4));
-        new EventTrigger("lowalgae").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.ALGAE_LOW));
-        new EventTrigger("highalgae").onTrue(new MoveElevatorArmCommand(
-                ElevatorPosition.ALGAE_HIGH));
-        new EventTrigger("barge").onTrue(
-                new SequentialCommandGroup(
-                        new MoveElevatorArmCommand(ElevatorPosition.BARGE),
-                        m_selectOuttakeCommand));
-        new EventTrigger("processor").onTrue(
-                new SequentialCommandGroup(
-                        new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR),
-                        m_selectOuttakeCommand));
-        new EventTrigger("ElevatorL1WithWait").onTrue(
-                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
-                        ElevatorPosition.CORAL_L1)));
-
-        new EventTrigger("ElevatorL2WithWait").onTrue(
-                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
-                        ElevatorPosition.CORAL_L2)));
-
-        new EventTrigger("ElevatorL3WithWait").onTrue(
-                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
-                        ElevatorPosition.CORAL_L3)));
-
-        new EventTrigger("ElevatorL4WithWait").onTrue(
-                new SequentialCommandGroup(coralHandoffCommand(), new MoveElevatorArmCommand(
-                        ElevatorPosition.CORAL_L4)));
-
-        new EventTrigger("highalgaeWithWait").onTrue(
-                new SequentialCommandGroup(
-                        new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH),
-                        new IntakeCommand(IntakeMode.ALGAE)));
-
-
-        new EventTrigger("lowalgaeWithWait").onTrue(
-                new SequentialCommandGroup(
-                        new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW),
-                        new IntakeCommand(IntakeMode.ALGAE)));
-
-        new EventTrigger("outtakecoral").onTrue(new OuttakeCoralCommand(m_funnelIndexerSubsystem));
-        new EventTrigger("outtakealgae").onTrue(new OuttakeCommand());
-
->>>>>>> 76e912e (added main 4 paths - need to change GO BACK path)
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
