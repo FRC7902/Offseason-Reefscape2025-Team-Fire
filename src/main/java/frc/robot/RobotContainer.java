@@ -118,17 +118,19 @@ public class RobotContainer {
         return new ConditionalCommand(
                 new SequentialCommandGroup(
                         // Move elevator to pickup position
-                        new ParallelRaceGroup(
+                        new ParallelCommandGroup(
                                 new MoveElevatorArmCommand(ElevatorPosition.ZERO),
                                 FunnelCommands.IntakeCoral()
+                                        .until(m_funnelIndexerSubsystem::getHasCoral)
                         ),
+                        new WaitCommand(0.1),
                         // If no coral in funnel yet, run pass through cmd to shoot coral directly into end effector
                         // If coral already in funnel, skip this step
-                        new ConditionalCommand(
-                                new InstantCommand(),
-                                FunnelCommands.PassThroughCoral(),
-                                m_funnelIndexerSubsystem::getHasCoral
-                        ),
+                        // new ConditionalCommand(
+                        //         new InstantCommand(),
+                        //         FunnelCommands.PassThroughCoral(),
+                        //         m_funnelIndexerSubsystem::getHasCoral
+                        // ),
                         // Intake coral until funnel no longer detects it (shallow beam break)
                         new ParallelCommandGroup(
                                 EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
