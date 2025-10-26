@@ -11,8 +11,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.vision.LimelightHelpers;
 import frc.robot.subsystems.SwerveSubsystem;
+
+import java.util.List;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AutoAlignToReef extends Command {
@@ -93,9 +96,27 @@ public class AutoAlignToReef extends Command {
 
             m_drivebase.drive(new Translation2d(xSpeed * rotErrorScale, ySpeed * rotErrorScale), rotValue, false);
 
+            List<ElevatorSubsystem.ElevatorPosition> coralPositions = List.of(
+                    ElevatorSubsystem.ElevatorPosition.CORAL_L1,
+                    ElevatorSubsystem.ElevatorPosition.CORAL_L2,
+                    ElevatorSubsystem.ElevatorPosition.CORAL_L3,
+                    ElevatorSubsystem.ElevatorPosition.CORAL_L4
+            );
+
+            if (coralPositions.contains(RobotContainer.m_elevatorSubsystem.getElevatorArmPositionEnum()) &&
+                    (RobotContainer.m_elevatorSubsystem.hasReachedSetpoint() && RobotContainer.m_armSubsystem.hasReachedAngle())
+            ) {
+                m_xController.setSetpoint(VisionConstants.X_SETPOINT_CLOSER_REEF_ALIGNMENT);
+            }
+
+            // Reset timer to mark 'not reached setpoint'.
+            // Also reset timer if elevator/arm has not reached setpoint, since we want the auto-align setpoint
+            // to update after reaching coral setpoint, so it can move closer after elevator/arm has extended fully
             if (!m_rotController.atSetpoint() ||
                     !m_yController.atSetpoint() ||
-                    !m_xController.atSetpoint()) {
+                    !m_xController.atSetpoint() ||
+                    !(RobotContainer.m_elevatorSubsystem.hasReachedSetpoint() && RobotContainer.m_armSubsystem.hasReachedAngle())
+            ) {
                 m_stopTimer.reset();
             }
         } else {
