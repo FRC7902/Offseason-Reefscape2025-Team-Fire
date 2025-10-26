@@ -97,8 +97,8 @@ public final class Constants {
         public static final double X_SETPOINT_CLOSER_REEF_ALIGNMENT = -0.55;  // Vertical pose
 	    public static final double X_TOLERANCE_REEF_ALIGNMENT = 0.01;
 
-        public static final double Y_SETPOINT_RIGHT_REEF_ALIGNMENT = 0.15;  // Horizontal pose
-        public static final double Y_SETPOINT_LEFT_REEF_ALIGNMENT = -0.15;  // Horizontal pose
+        public static final double Y_SETPOINT_RIGHT_REEF_ALIGNMENT = 0.16;  // Horizontal pose
+        public static final double Y_SETPOINT_LEFT_REEF_ALIGNMENT = -0.16;  // Horizontal pose
 	    public static final double Y_TOLERANCE_REEF_ALIGNMENT = 0.01;
 
         public static final double DONT_SEE_TAG_WAIT_TIME = 1;
@@ -153,7 +153,7 @@ public final class Constants {
         public static double L1_ANGLE_DEGREES = 45.0;
         public static double L2_ANGLE_DEGREES = 68.7;
         public static double L3_ANGLE_DEGREES = 71.7;
-        public static double L4_ANGLE_DEGREES = 72.0;
+        public static double L4_ANGLE_DEGREES = 67.0;
 
         public static double LOW_ALGAE_ANGLE_DEGREES = 0.0;
         public static double HIGH_ALGAE_ANGLE_DEGREES = 0.0;
@@ -217,8 +217,8 @@ public final class Constants {
 
         public static double REST_HEIGHT_METERS = ElevatorConstants.MIN_HEIGHT_METERS + 0.05;
         public static double L1_HEIGHT_METERS = 0.12678049;
-        public static double L2_HEIGHT_METERS = 0.4;
-        public static double L3_HEIGHT_METERS = 0.71;
+        public static double L2_HEIGHT_METERS = 0.37;
+        public static double L3_HEIGHT_METERS = 0.68;
         public static double L4_HEIGHT_METERS = 1.27;
 
         public static double LOW_ALGAE_HEIGHT_METERS = 0.14878049;
