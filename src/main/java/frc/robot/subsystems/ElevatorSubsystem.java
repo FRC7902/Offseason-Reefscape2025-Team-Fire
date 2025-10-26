@@ -238,7 +238,14 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_leaderMotor.getMotorVoltage().setUpdateFrequency(50);
         m_leaderMotor.getTorqueCurrent().setUpdateFrequency(50);
 
-        setElevatorPositionEnum(getElevatorPositionEnum());
+        // Safety of keeping elevator position at current position when it initializes, instead of going to zero
+        // TODO: Change getElevatorPositionEnum() to getElevatorArmPositionEnum
+        ElevatorPosition currPositionEnum = getElevatorPositionEnum();
+        if (currPositionEnum != ElevatorPosition.UNKNOWN) {
+            setElevatorPositionEnum(currPositionEnum);
+        } else {
+            setElevatorPositionMeters(getElevatorPositionMeters());
+        }
     }
 
     /**
