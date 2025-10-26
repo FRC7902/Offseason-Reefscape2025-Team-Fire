@@ -51,7 +51,7 @@ public class RobotContainer {
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final static CommandPS5Controller m_driverController = new CommandPS5Controller(
             OperatorConstants.DRIVER_CONTROLLER_PORT);
-    private final static CommandXboxController m_operatorController = new CommandXboxController(
+    private final static CommandPS5Controller m_operatorController = new CommandPS5Controller(
             OperatorConstants.OPERATOR_CONTROLLER_PORT);
 
     private final SendableChooser<Command> autoChooser;
@@ -163,7 +163,9 @@ public class RobotContainer {
                     Map.entry(ElevatorPosition.CORAL_L3, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.CORAL_L4, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.BARGE, coralHandoffCommand()),
-                    Map.entry(ElevatorPosition.PROCESSOR, coralHandoffCommand())
+                    Map.entry(ElevatorPosition.PROCESSOR, coralHandoffCommand()),
+                    Map.entry(ElevatorPosition.MIDDLE, coralHandoffCommand()),
+                    Map.entry(ElevatorPosition.UNKNOWN, coralHandoffCommand())
             ),
             this::select);
 
@@ -229,42 +231,44 @@ public class RobotContainer {
         m_driverController.create().onTrue(new InstantCommand(m_swerveSubsystem::toggleFastDriveRampRateMode));
 
         // === Elevator Setpoints ===
-        m_operatorController.y().onTrue(
+        m_operatorController.triangle().onTrue(
                 new ConditionalCommand(
                         new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4),
                         new InstantCommand(),
                         m_endEffectorSubsystem::hasCoral
                 )
         );
-        m_operatorController.b().onTrue(
+        m_operatorController.circle().onTrue(
                 new ConditionalCommand(
                         new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3),
                         new InstantCommand(),
                         m_endEffectorSubsystem::hasCoral
                 )
         );
-        m_operatorController.x().onTrue(
+        m_operatorController.square().onTrue(
                 new ConditionalCommand(
                         new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2),
                         new InstantCommand(),
                         m_endEffectorSubsystem::hasCoral
                 )
         );
-        m_operatorController.a().onTrue(
+        m_operatorController.cross().onTrue(
                 new ConditionalCommand(
                         new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1),
                         new InstantCommand(),
                         m_endEffectorSubsystem::hasCoral
                 )
         );
-
+        m_operatorController.create().onTrue(
+                new MoveElevatorArmCommand(ElevatorPosition.MIDDLE)
+        );
         m_operatorController.povUp().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
         m_operatorController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
         m_operatorController.povLeft().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH));
         m_operatorController.povRight().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));
         // ==========================
 
-        m_operatorController.start().whileTrue(m_swerveSubsystem.centerModulesCommand());
+        m_operatorController.options().whileTrue(m_swerveSubsystem.centerModulesCommand());
     }
 
     private void configurePathPlanner() {

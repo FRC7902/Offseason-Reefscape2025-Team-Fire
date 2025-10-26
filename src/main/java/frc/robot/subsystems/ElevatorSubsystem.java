@@ -49,7 +49,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         ALGAE_HIGH,
         ALGAE_LOW,
         BARGE,
-        UNKNOWN
+        UNKNOWN,
+        MIDDLE
     }
 
     /**
@@ -265,6 +266,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             case ALGAE_HIGH -> ElevatorConstants.HIGH_ALGAE_HEIGHT_METERS;
             case ALGAE_LOW -> ElevatorConstants.LOW_ALGAE_HEIGHT_METERS;
             case BARGE -> ElevatorConstants.BARGE_HEIGHT_METERS;
+            case MIDDLE -> ElevatorConstants.MID_HEIGHT_METERS;
             default -> ElevatorConstants.MIN_HEIGHT_METERS;
         };
 
@@ -353,6 +355,8 @@ public class ElevatorSubsystem extends SubsystemBase {
             return ElevatorPosition.ALGAE_LOW;
         } else if (Math.abs(currentHeightMeters - ElevatorConstants.BARGE_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2) {
             return ElevatorPosition.BARGE;
+        } else if (Math.abs(currentHeightMeters - ElevatorConstants.MID_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2){
+            return ElevatorPosition.MIDDLE;
         } else {
             return ElevatorPosition.UNKNOWN;
         }
@@ -416,6 +420,11 @@ public class ElevatorSubsystem extends SubsystemBase {
                Math.abs(armPos - ArmConstants.BARGE_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR * 2)
         {
             return ElevatorPosition.BARGE;
+        } 
+        else if (Math.abs(elevatorPos - ElevatorConstants.MID_HEIGHT_METERS) < ElevatorConstants.TARGET_ERROR * 2 &&
+               Math.abs(armPos - ArmConstants.MID_ANGLE_DEGREES) < ArmConstants.TARGET_ERROR * 2)
+        {
+            return ElevatorPosition.MIDDLE;
         } 
         else
         {
