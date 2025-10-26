@@ -595,19 +595,21 @@ public class SwerveSubsystem extends SubsystemBase {
         // Ensure that AprilTags are detected to circumvent NullPointerException
         double tagCount = visionFeedMT2.tagCount;
         if (tagCount != 0) {
-
-            // Set the orientation of the robot to MegaTag1's rotation value
-            Rotation2d rotation = visionFeedMT1.pose.getRotation();
-            LimelightHelpers.SetRobotOrientation("", rotation.getDegrees(), 0, 0, 0,0, 0);
-
             // Ensure that the nearest tag is not too far away, not too ambiguous, and the robot is not rotating too quickly
             if (visionFeedMT2.rawFiducials[0].distToCamera < VisionConstants.LOCALIZE_DISTANCE_THRESHOLD_METERS &&
                 visionFeedMT2.rawFiducials[0].ambiguity < VisionConstants.LOCALIZE_AMBIGUITY_THRESHOLD &&
                 swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond) < VisionConstants.LOCALIZE_YAW_SPEED_THRESHOLD_DEGREES_PER_SECOND)
             {
+                // Set the orientation of the robot to MegaTag1's rotation value
+                Rotation2d rotation = visionFeedMT1.pose.getRotation();
+                LimelightHelpers.SetRobotOrientation("", rotation.getDegrees(), 0, 0, 0,0, 0);
+
+                // Standard Deviation, increase if you don't trust the LimeLight, decrease if you do
                 swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(VisionConstants.LOCALIZE_STANDARD_DEVIATION,
                                                                         VisionConstants.LOCALIZE_STANDARD_DEVIATION,
-                                                                        Integer.MAX_VALUE)); // Standard Deviation, increase if you don't trust the LimeLight, decrease if you do
+                                                                        Integer.MAX_VALUE));
+
+                // Feed the MegaTag pose into Swerve Drive
                 swerveDrive.addVisionMeasurement(visionFeedMT2.pose, visionFeedMT2.timestampSeconds);
             }
         }
