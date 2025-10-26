@@ -75,7 +75,7 @@ public final class Constants {
 
         public static final double INTAKE_SPEED = 1;
 
-        public static final double CORAL_HOLD_SPEED = 0.1;
+        public static final double CORAL_HOLD_SPEED = 0.05;
         public static final double ALGAE_HOLD_SPEED = 1.0;
 
         public static final double OUTTAKE_SPEED = -0.5;
