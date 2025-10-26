@@ -575,20 +575,17 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     /**
-     * Localized the robot by combining MegaTag1 and MegaTag2, it takes the rotational value from MegaTag1, and
-     * translational value from MegaTag2. It is alliance color dependent, and ensures that the nearest tag is not
+     * Localize the robot with MegaTag2, it takes the translational value from MegaTag2 and uses the Gyro for the orientation. 
+     * It is alliance color dependent, and ensures that the nearest tag is not
      * too far away, not too ambiguous, or the robot is not spinning too fast.
      */
     public void localize() {
-        LimelightHelpers.PoseEstimate visionFeedMT1;
         LimelightHelpers.PoseEstimate visionFeedMT2;
 
         // Localize based on alliance color
         if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-            visionFeedMT1 = LimelightHelpers.getBotPoseEstimate_wpiRed("");
             visionFeedMT2 = LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2("");
         } else {
-            visionFeedMT1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("");
             visionFeedMT2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("");
         }
 
@@ -600,9 +597,8 @@ public class SwerveSubsystem extends SubsystemBase {
                 visionFeedMT2.rawFiducials[0].ambiguity < VisionConstants.LOCALIZE_AMBIGUITY_THRESHOLD &&
                 swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond) < VisionConstants.LOCALIZE_YAW_SPEED_THRESHOLD_DEGREES_PER_SECOND)
             {
-                // Set the orientation of the robot to MegaTag1's rotation value
-                Rotation2d rotation = visionFeedMT1.pose.getRotation();
-                LimelightHelpers.SetRobotOrientation("", rotation.getDegrees(), 0, 0, 0,0, 0);
+                // Set the orientation to that of the robot
+                LimelightHelpers.SetRobotOrientation("", getHeading().getDegrees(), 0, 0, 0,0, 0);
 
                 // Standard Deviation, increase if you don't trust the LimeLight, decrease if you do
                 swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(VisionConstants.LOCALIZE_STANDARD_DEVIATION,
@@ -623,6 +619,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         localize();
         scaleSwerveInput();
+        swerveDrive.updateOdometry();
     }
 
     @Override
