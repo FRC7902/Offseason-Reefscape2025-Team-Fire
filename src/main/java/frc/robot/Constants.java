@@ -91,12 +91,14 @@ public final class Constants {
 
         public static final double ROT_SETPOINT_REEF_ALIGNMENT = 0;  // Rotation
 	    public static final double ROT_TOLERANCE_REEF_ALIGNMENT = 0.5;
-	    public static final double X_SETPOINT_REEF_ALIGNMENT = -0.60;  // Vertical pose
-	    public static final double X_TOLERANCE_REEF_ALIGNMENT = 0.02;
+
+	    public static final double X_SETPOINT_REEF_ALIGNMENT = -0.6;  // Vertical pose
+        public static final double X_SETPOINT_REEF_ALIGNMENT_L4 = -0.58;
+	    public static final double X_TOLERANCE_REEF_ALIGNMENT = 0.01;
 
         public static final double Y_SETPOINT_RIGHT_REEF_ALIGNMENT = 0.15;  // Horizontal pose
         public static final double Y_SETPOINT_LEFT_REEF_ALIGNMENT = -0.15;  // Horizontal pose
-	    public static final double Y_TOLERANCE_REEF_ALIGNMENT = 0.02;
+	    public static final double Y_TOLERANCE_REEF_ALIGNMENT = 0.01;
 
         public static final double DONT_SEE_TAG_WAIT_TIME = 1;
 	    public static final double POSE_VALIDATION_TIME = 0.3;
@@ -125,7 +127,7 @@ public final class Constants {
 
         // Current limits
         public static final double STATOR_CURRENT_LIMIT = 50.0;
-        public static final double SUPPLY_CURRENT_LIMIT = 50.0;
+        public static final double SUPPLY_CURRENT_LIMIT = 40.0;
 
         // PID Constants
         public static double PID_P = 60;
@@ -136,7 +138,7 @@ public final class Constants {
         public static double FF_S = 0.0;
         public static double FF_G = 0.5;
         public static double FF_V = 0.3;
-        public static double FF_A = 0.01;
+        public static double FF_A = 0.005;
 
         // SAFETIES
         public static final double SAFETY_ANGLE_DOWNWARD_DEGREES = 45;
@@ -156,6 +158,7 @@ public final class Constants {
         public static double HIGH_ALGAE_ANGLE_DEGREES = 0.0;
 
         public static double BARGE_ANGLE_DEGREES = 50.0;
+        public static double MID_ANGLE_DEGREES = SAFETY_ANGLE_UPWARD_DEGREES;
 
         public static double TARGET_ERROR = 3;
     }
@@ -169,7 +172,7 @@ public final class Constants {
         public static final int FOLLOWER_MOTOR_CAN_ID = 18;
 
         // Current Limits
-        public static final double STATOR_CURRENT_LIMIT = 80.0;
+        public static final double STATOR_CURRENT_LIMIT = 70.0;
         public static final double SUPPLY_CURRENT_LIMIT = 50.0;
 
         // Physical Constants
@@ -220,6 +223,8 @@ public final class Constants {
         public static double LOW_ALGAE_HEIGHT_METERS = 0.14878049;
         public static double HIGH_ALGAE_HEIGHT_METERS = 0.53085366;
         public static double BARGE_HEIGHT_METERS = ElevatorConstants.MAX_HEIGHT_METERS;
+
+        public static double MID_HEIGHT_METERS = 0.71;
         // ==============================
 
         // ===== Control Parameters =====
