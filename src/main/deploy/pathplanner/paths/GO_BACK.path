@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.381321497679196,
-        "y": 3.8368101358496745
+        "x": 6.003947368421052,
+        "y": 3.8421875
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.025299657534247,
-        "y": 4.002461472602739
+        "x": 6.040325342465753,
+        "y": 4.017487157534247
       },
       "prevControl": {
-        "x": 6.290062340305873,
-        "y": 4.013674046418439
+        "x": 5.589304435963092,
+        "y": 4.017487157534247
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,14 +31,7 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "lowalgaeWithWait",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
