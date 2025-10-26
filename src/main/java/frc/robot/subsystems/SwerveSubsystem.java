@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Meter;
 
 import java.io.File;
@@ -17,6 +18,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -29,7 +31,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
-import frc.robot.Constants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.PathPlanner;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Robot;
@@ -573,30 +575,40 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     /**
-     * Localizes the robot by setting the YAGSL odometry pose to the result of the LimeLight MegaTag1 calculation.
-     * Does not localize if the tag is too far away or the calculation is too ambiguous.
+     * Localized the robot by combining MegaTag1 and MegaTag2, it takes the rotational value from MegaTag1, and
+     * translational value from MegaTag2. It is alliance color dependent, and ensures that the nearest tag is not
+     * too far away, not too ambiguous, or the robot is not spinning too fast.
      */
     public void localize() {
-        LimelightHelpers.PoseEstimate visionFeed;
+        LimelightHelpers.PoseEstimate visionFeedMT1;
+        LimelightHelpers.PoseEstimate visionFeedMT2;
 
         // Localize based on alliance color
         if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-            visionFeed = LimelightHelpers.getBotPoseEstimate_wpiRed("");
+            visionFeedMT1 = LimelightHelpers.getBotPoseEstimate_wpiRed("");
+            visionFeedMT2 = LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2("");
         } else {
-            visionFeed = LimelightHelpers.getBotPoseEstimate_wpiBlue("");
+            visionFeedMT1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("");
+            visionFeedMT2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("");
         }
 
         // Ensure that AprilTags are detected to circumvent NullPointerException
-        double tagCount = visionFeed.tagCount;
+        double tagCount = visionFeedMT2.tagCount;
         if (tagCount != 0) {
-            double dist = visionFeed.rawFiducials[0].distToCamera;
-            double ambiguity = visionFeed.rawFiducials[0].ambiguity;
 
-            // Ensure that the nearest tag is not too far away and not too ambiguous
-            if (dist < Constants.VisionConstants.LOCALIZE_DISTANCE_THRESHOLD &&
-                ambiguity < Constants.VisionConstants.LOCALIZE_AMBIGUITY_THRESHOLD)
+            // Set the orientation of the robot to MegaTag1's rotation value
+            Rotation2d rotation = visionFeedMT1.pose.getRotation();
+            LimelightHelpers.SetRobotOrientation("", rotation.getDegrees(), 0, 0, 0,0, 0);
+
+            // Ensure that the nearest tag is not too far away, not too ambiguous, and the robot is not rotating too quickly
+            if (visionFeedMT2.rawFiducials[0].distToCamera < VisionConstants.LOCALIZE_DISTANCE_THRESHOLD_METERS &&
+                visionFeedMT2.rawFiducials[0].ambiguity < VisionConstants.LOCALIZE_AMBIGUITY_THRESHOLD &&
+                swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond) < VisionConstants.LOCALIZE_YAW_SPEED_THRESHOLD_DEGREES_PER_SECOND)
             {
-                swerveDrive.addVisionMeasurement(visionFeed.pose, visionFeed.timestampSeconds);
+                swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(VisionConstants.LOCALIZE_STANDARD_DEVIATION,
+                                                                        VisionConstants.LOCALIZE_STANDARD_DEVIATION,
+                                                                        Integer.MAX_VALUE)); // Standard Deviation, increase if you don't trust the LimeLight, decrease if you do
+                swerveDrive.addVisionMeasurement(visionFeedMT2.pose, visionFeedMT2.timestampSeconds);
             }
         }
     }
