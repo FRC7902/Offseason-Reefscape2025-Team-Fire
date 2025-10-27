@@ -12,6 +12,7 @@ import com.pathplanner.lib.events.EventTrigger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
@@ -210,8 +211,16 @@ public class RobotContainer {
         m_endEffectorSubsystem.setDefaultCommand(EndEffectorCommands.HoldCoralCommand());
 
         // === Auto Align Controls ===
-        m_driverController.L1().whileTrue(AutoAlignCommands.AutoAlignLeft());
-        m_driverController.R1().whileTrue(AutoAlignCommands.AutoAlignRight());
+        m_driverController.L1().whileTrue(
+                AutoAlignCommands.AutoAlignLeft().finallyDo(
+                        () -> m_driverController.setRumble(RumbleType.kLeftRumble, 1)
+                ));
+        // rumbles after auto align is complete
+        m_driverController.R1().whileTrue(
+                AutoAlignCommands.AutoAlignRight().finallyDo(
+                        () -> m_driverController.setRumble(RumbleType.kRightRumble, 1)
+                ));
+        // rumbles after auto align is complete
         // === Intake/Outtake controls ===
         m_driverController.R2().whileTrue(
                 m_selectOuttakeCommand
