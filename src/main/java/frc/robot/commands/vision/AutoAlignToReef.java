@@ -22,7 +22,8 @@ public class AutoAlignToReef extends Command {
 
     public enum ReefBranchSide {
         LEFT,
-        RIGHT
+        RIGHT,
+        CENTER
     }
 
     private final PIDController m_xController, m_yController, m_rotController;
@@ -60,12 +61,21 @@ public class AutoAlignToReef extends Command {
         m_rotController.setSetpoint(VisionConstants.ROT_SETPOINT_REEF_ALIGNMENT);
         m_rotController.setTolerance(VisionConstants.ROT_TOLERANCE_REEF_ALIGNMENT);
 
-        m_xController.setSetpoint(VisionConstants.X_SETPOINT_REEF_ALIGNMENT);
+        m_xController.setSetpoint(m_side == ReefBranchSide.CENTER ? VisionConstants.X_SETPOINT_FARTHER_REEF_ALIGNMENT : VisionConstants.X_SETPOINT_REEF_ALIGNMENT);
         m_xController.setTolerance(VisionConstants.X_TOLERANCE_REEF_ALIGNMENT);
 
-        m_yController.setSetpoint(
-                m_side == ReefBranchSide.RIGHT ? VisionConstants.Y_SETPOINT_RIGHT_REEF_ALIGNMENT
-                        : VisionConstants.Y_SETPOINT_LEFT_REEF_ALIGNMENT);
+        if (m_side == ReefBranchSide.RIGHT){
+            m_yController.setSetpoint(VisionConstants.Y_SETPOINT_RIGHT_REEF_ALIGNMENT);
+        }
+        else if (m_side == ReefBranchSide.LEFT){
+            m_yController.setSetpoint(VisionConstants.Y_SETPOINT_LEFT_REEF_ALIGNMENT);
+        }
+        else if (m_side == ReefBranchSide.CENTER){
+            m_yController.setSetpoint(VisionConstants.Y_SETPOINT_CENTER_REEF_ALIGNMENT);
+        }
+        // m_yController.setSetpoint(
+        //         m_side == ReefBranchSide.RIGHT ? VisionConstants.Y_SETPOINT_RIGHT_REEF_ALIGNMENT
+        //                 : VisionConstants.Y_SETPOINT_LEFT_REEF_ALIGNMENT);
         m_yController.setTolerance(VisionConstants.Y_TOLERANCE_REEF_ALIGNMENT);
 
         m_tagID = LimelightHelpers.getFiducialID("");
@@ -102,13 +112,20 @@ public class AutoAlignToReef extends Command {
                     ElevatorSubsystem.ElevatorPosition.CORAL_L3,
                     ElevatorSubsystem.ElevatorPosition.CORAL_L4
             );
-
+            List<ElevatorSubsystem.ElevatorPosition> algaePositions = List.of(
+                ElevatorSubsystem.ElevatorPosition.ALGAE_HIGH,
+                ElevatorSubsystem.ElevatorPosition.ALGAE_LOW
+            );
             if (coralPositions.contains(RobotContainer.m_elevatorSubsystem.getElevatorArmPositionEnum()) &&
                     (RobotContainer.m_elevatorSubsystem.hasReachedSetpoint() && RobotContainer.m_armSubsystem.hasReachedAngle())
             ) {
                 m_xController.setSetpoint(VisionConstants.X_SETPOINT_CLOSER_REEF_ALIGNMENT);
             }
-
+            else if (algaePositions.contains(RobotContainer.m_elevatorSubsystem.getElevatorArmPositionEnum()) &&
+                    (RobotContainer.m_elevatorSubsystem.hasReachedSetpoint() && RobotContainer.m_armSubsystem.hasReachedAngle())) 
+            {
+                m_xController.setSetpoint(VisionConstants.X_SETPOINT_CLOSER_ALGAE_REEF_ALIGNMENT);
+            }
             // Reset timer to mark 'not reached setpoint'.
             // Also reset timer if elevator/arm has not reached setpoint, since we want the auto-align setpoint
             // to update after reaching coral setpoint, so it can move closer after elevator/arm has extended fully
