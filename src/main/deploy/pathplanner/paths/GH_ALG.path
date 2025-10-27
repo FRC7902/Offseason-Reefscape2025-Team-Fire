@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.025,
-        "y": 4.002
+        "x": 6.196,
+        "y": 3.938
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.6663214976791965,
-        "y": 3.986810135849675
+        "x": 5.946,
+        "y": 3.938
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.815,
-        "y": 4.002
+        "x": 6.061677631579636,
+        "y": 3.938
       },
       "prevControl": {
-        "x": 6.079762682771624,
-        "y": 4.013212573815699
+        "x": 6.326060936272797,
+        "y": 3.9457191755569654
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "lowalgae",
+      "name": "EE_ALG_INTAKE",
       "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
       "command": null
@@ -49,13 +49,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -0.6059349089251536
   },
   "reversed": false,
   "folder": "Middle Path",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -1.3021223315784347
   },
   "useDefaultConstraints": true
 }
