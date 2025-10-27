@@ -66,6 +66,7 @@ public class RobotContainer {
         configurePathPlanner();
 
         autoChooser = AutoBuilder.buildAutoChooser("DEFAULT");
+
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
@@ -294,9 +295,16 @@ public class RobotContainer {
         new EventTrigger("ELV_ALG_PROCESSOR").onTrue(new MoveElevatorArmCommand(
                 ElevatorPosition.PROCESSOR));
 
-        new EventTrigger("EE_OUTTAKE").onTrue(EndEffectorCommands.OuttakeEffector());
+        new EventTrigger("EE_OUTTAKE").onTrue(
+                new SequentialCommandGroup(
+                        AutoAlignCommands.AutoAlignLeft(),
+                        EndEffectorCommands.OuttakeEffector()
+                        ));
         new EventTrigger("CRL_HANDOFF").onTrue(coralHandoffCommand());
         new EventTrigger("EE_ALG_INTAKE").onTrue(EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE));
+
+        new EventTrigger("AUTO_ALIGN_LEFT").onTrue(AutoAlignCommands.AutoAlignLeft());
+        new EventTrigger("AUTO_ALIGN_RIGHT").onTrue(AutoAlignCommands.AutoAlignRight());
     }
 
     /**
