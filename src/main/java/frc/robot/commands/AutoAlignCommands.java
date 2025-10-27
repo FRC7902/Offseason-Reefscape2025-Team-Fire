@@ -10,4 +10,8 @@ public class AutoAlignCommands {
     public static AutoAlignToReef AutoAlignRight() {
         return new AutoAlignToReef(AutoAlignToReef.ReefBranchSide.RIGHT);
     }
+
+    public static AutoAlignToReef AutoAlignCenter() {
+        return new AutoAlignToReef(AutoAlignToReef.ReefBranchSide.CENTER);
+    }
 }
