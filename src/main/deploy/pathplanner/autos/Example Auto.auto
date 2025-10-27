@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightL4-1"
+            "pathName": null
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightL4-2"
+            "pathName": null
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightL4-3"
+            "pathName": null
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightL4-4"
+            "pathName": null
           }
         },
         {
@@ -55,7 +55,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightL4-5"
+            "pathName": null
           }
         }
       ]
