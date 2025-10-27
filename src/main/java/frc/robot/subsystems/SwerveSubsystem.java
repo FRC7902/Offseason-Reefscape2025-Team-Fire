@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Meter;
 
 import java.io.File;
@@ -17,6 +18,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -29,10 +31,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.PathPlanner;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.vision.LimelightHelpers;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -565,13 +569,52 @@ public class SwerveSubsystem extends SubsystemBase {
         }
     }
 
+    /**
+     * Localize the robot with MegaTag2, it takes the translational value from MegaTag2 and uses the Gyro for the orientation. 
+     * It is alliance color dependent, and ensures that the nearest tag is not
+     * too far away, not too ambiguous, or the robot is not spinning too fast.
+     */
+    public void localize() {
+        LimelightHelpers.PoseEstimate visionFeedMT2;
+
+        // Localize based on alliance color
+        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+            visionFeedMT2 = LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2("");
+        } else {
+            visionFeedMT2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("");
+        }
+
+        // Ensure that AprilTags are detected to circumvent NullPointerException
+        double tagCount = visionFeedMT2.tagCount;
+        if (tagCount != 0) {
+            // Ensure that the nearest tag is not too far away, not too ambiguous, and the robot is not rotating too quickly
+            if (visionFeedMT2.rawFiducials[0].distToCamera < VisionConstants.LOCALIZE_DISTANCE_THRESHOLD_METERS &&
+                visionFeedMT2.rawFiducials[0].ambiguity < VisionConstants.LOCALIZE_AMBIGUITY_THRESHOLD &&
+                swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond) < VisionConstants.LOCALIZE_YAW_SPEED_THRESHOLD_DEGREES_PER_SECOND)
+            {
+                // Standard Deviation, increase if you don't trust the LimeLight, decrease if you do
+                swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(VisionConstants.LOCALIZE_STANDARD_DEVIATION,
+                                                                        VisionConstants.LOCALIZE_STANDARD_DEVIATION,
+                                                                        Integer.MAX_VALUE));
+
+                // Feed the MegaTag pose into Swerve Drive
+                swerveDrive.addVisionMeasurement(visionFeedMT2.pose, visionFeedMT2.timestampSeconds);
+            }
+        }
+    }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
         SmartDashboard.putNumber("Swerve - Gyro angle rotation (rad)", swerveDrive.getGyro().getRotation3d().getAngle());
         SmartDashboard.putString("Swerve - Robo Pose2D", swerveDrive.getPose().toString());
 
+        // Set LimeLight the orientation to that of the robot
+        LimelightHelpers.SetRobotOrientation("", getHeading().getDegrees(), 0, 0, 0,0, 0);
+
+        localize();
         scaleSwerveInput();
+        swerveDrive.updateOdometry();
     }
 
     @Override

@@ -103,6 +103,11 @@ public final class Constants {
 
         public static final double DONT_SEE_TAG_WAIT_TIME = 1;
 	    public static final double POSE_VALIDATION_TIME = 0.3;
+
+        public static final double LOCALIZE_DISTANCE_THRESHOLD_METERS = 3;
+        public static final double LOCALIZE_AMBIGUITY_THRESHOLD = 0.7;
+        public static final double LOCALIZE_YAW_SPEED_THRESHOLD_DEGREES_PER_SECOND = 360;
+        public static final double LOCALIZE_STANDARD_DEVIATION = 0.7;
     }
 
     public static class PathPlannerConstants {
