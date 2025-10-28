@@ -94,7 +94,7 @@ public final class Constants {
 
 	    public static final double X_SETPOINT_REEF_ALIGNMENT = -0.58;  // Vertical pose
         public static final double X_SETPOINT_CLOSER_REEF_ALIGNMENT = -0.55;  // Vertical pose
-        public static final double X_SETPOINT_FARTHER_REEF_ALIGNMENT = -0.6; // Vertical pose
+        public static final double X_SETPOINT_FARTHER_REEF_ALIGNMENT = -0.55; // Vertical pose
         // above constant for algae pickup position
         public static final double X_SETPOINT_CLOSER_ALGAE_REEF_ALIGNMENT = -0.59; //Vertical pose
         // above constant for when algae is driven towards reef

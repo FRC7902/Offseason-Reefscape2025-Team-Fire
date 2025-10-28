@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.subsystems.vision.LimelightHelpers;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -116,12 +117,13 @@ public class AutoAlignToReef extends Command {
                 ElevatorSubsystem.ElevatorPosition.ALGAE_HIGH,
                 ElevatorSubsystem.ElevatorPosition.ALGAE_LOW
             );
-            if (coralPositions.contains(RobotContainer.m_elevatorSubsystem.getElevatorArmPositionEnum()) &&
+            ElevatorPosition currentPos = RobotContainer.m_elevatorSubsystem.getElevatorArmPositionEnum();
+            if (coralPositions.contains(currentPos) &&
                     (RobotContainer.m_elevatorSubsystem.hasReachedSetpoint() && RobotContainer.m_armSubsystem.hasReachedAngle())
             ) {
                 m_xController.setSetpoint(VisionConstants.X_SETPOINT_CLOSER_REEF_ALIGNMENT);
             }
-            else if (algaePositions.contains(RobotContainer.m_elevatorSubsystem.getElevatorArmPositionEnum()) &&
+            else if (algaePositions.contains(currentPos) &&
                     (RobotContainer.m_elevatorSubsystem.hasReachedSetpoint() && RobotContainer.m_armSubsystem.hasReachedAngle())) 
             {
                 m_xController.setSetpoint(VisionConstants.X_SETPOINT_CLOSER_ALGAE_REEF_ALIGNMENT);

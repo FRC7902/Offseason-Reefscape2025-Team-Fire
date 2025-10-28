@@ -313,14 +313,14 @@ public class RobotContainer {
                         EndEffectorCommands.OuttakeEffector().withTimeout(1)
                         ));
         new EventTrigger("CRL_HANDOFF").onTrue(coralHandoffCommand());
-        new EventTrigger("EE_ALG_INTAKE").onTrue(
-                EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE));
-
         new EventTrigger("AUTO_ALIGN_LEFT").onTrue(AutoAlignCommands.AutoAlignLeft());
         new EventTrigger("AUTO_ALIGN_RIGHT").onTrue(AutoAlignCommands.AutoAlignRight());
         new EventTrigger("DRIVE_TRIGGER_TEST").onTrue(
                 new InstantCommand(() -> m_swerveSubsystem.drive(new Translation2d(10,0), 0, false)).withTimeout(5)
         );
+        new EventTrigger("EE_ALG_INTAKE").onTrue(
+                AutoAlignCommands.AutoAlignCenter().andThen(EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE)));
+        new EventTrigger("AUTO_ALIGN_CENTER").onTrue(AutoAlignCommands.AutoAlignCenter());
     }
 
     /**
