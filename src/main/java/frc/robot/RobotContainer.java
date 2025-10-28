@@ -313,6 +313,8 @@ public class RobotContainer {
                         AutoAlignCommands.AutoAlignLeft().withTimeout(5),
                         EndEffectorCommands.OuttakeEffector().withTimeout(4)
                         ));
+
+        new EventTrigger("AUTO_ALIGN_CENTER").onTrue(AutoAlignCommands.AutoAlignCenter());
     }
 
     /**
