@@ -212,13 +212,22 @@ public class RobotContainer {
 
         // === Auto Align Controls ===
         m_driverController.L1().whileTrue(
-                AutoAlignCommands.AutoAlignLeft().finallyDo(
-                        () -> m_driverController.setRumble(RumbleType.kLeftRumble, 1)
+                AutoAlignCommands.AutoAlignLeft().andThen(
+                        new SequentialCommandGroup(
+                                new InstantCommand(() -> m_driverController.setRumble(RumbleType.kLeftRumble, 0.1)),
+                                new WaitCommand(0.1),
+                                new InstantCommand(() -> m_driverController.setRumble(RumbleType.kLeftRumble, 0.0))
+                        )
                 ));
         // rumbles after auto align is complete
         m_driverController.R1().whileTrue(
-                AutoAlignCommands.AutoAlignRight().finallyDo(
-                        () -> m_driverController.setRumble(RumbleType.kRightRumble, 1)
+                AutoAlignCommands.AutoAlignRight().andThen(
+                        new SequentialCommandGroup(
+                                new InstantCommand(() -> m_driverController.setRumble(RumbleType.kRightRumble, 0.1)),
+                                new WaitCommand(0.1),
+                                new InstantCommand(() -> m_driverController.setRumble(RumbleType.kRightRumble, 0.0))
+                        )
+                        
                 ));
         // rumbles after auto align is complete
         // === Intake/Outtake controls ===
