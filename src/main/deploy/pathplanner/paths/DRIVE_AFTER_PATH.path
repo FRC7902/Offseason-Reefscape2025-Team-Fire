@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.685,
-        "y": 5.071
+        "x": 7.107148972602739,
+        "y": 3.792
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8151452251595743,
-        "y": 5.903941512809178
+        "x": 8.10714897260274,
+        "y": 3.792
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.465,
-        "y": 7.3
+        "x": 6.1,
+        "y": 3.792
       },
       "prevControl": {
-        "x": 2.128130093279111,
-        "y": 6.659570419749856
+        "x": 5.1,
+        "y": 3.792
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,14 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "DRIVE_TRIGGER_TEST",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,13 +49,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 126.0
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Left Paths",
+  "folder": "TEST_PATHS",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

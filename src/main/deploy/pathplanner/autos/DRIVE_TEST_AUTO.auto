@@ -7,37 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1. G4"
+            "pathName": "DRIVE_AFTER_PATH"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.2
+            "waitTime": 8.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "GO BACK"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.2
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "GH_ALG"
+            "pathName": "SPOOKY"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "G4_BASED",
+  "folder": "TEST_AUTOS",
   "choreoAuto": false
 }

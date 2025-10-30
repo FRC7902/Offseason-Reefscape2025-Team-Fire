@@ -11,6 +11,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.events.EventTrigger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -299,7 +300,7 @@ public class RobotContainer {
         new EventTrigger("EE_OUTTAKE").onTrue(
                 new SequentialCommandGroup(
                         AutoAlignCommands.AutoAlignLeft(),
-                        EndEffectorCommands.OuttakeEffector()
+                        EndEffectorCommands.OuttakeEffector().withTimeout(1)
                         ));
         new EventTrigger("CRL_HANDOFF").onTrue(coralHandoffCommand());
         new EventTrigger("EE_ALG_INTAKE").onTrue(
@@ -307,6 +308,9 @@ public class RobotContainer {
 
         new EventTrigger("AUTO_ALIGN_LEFT").onTrue(AutoAlignCommands.AutoAlignLeft());
         new EventTrigger("AUTO_ALIGN_RIGHT").onTrue(AutoAlignCommands.AutoAlignRight());
+        new EventTrigger("DRIVE_TRIGGER_TEST").onTrue(
+                new InstantCommand(() -> m_swerveSubsystem.drive(new Translation2d(10,0), 0, false)).withTimeout(5)
+        );
     }
 
     /**

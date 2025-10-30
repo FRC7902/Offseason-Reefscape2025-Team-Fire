@@ -3,13 +3,15 @@
   "robotLength": 0.8636,
   "holonomicMode": true,
   "pathFolders": [
-    "Example Paths",
     "Left Paths",
-    "Right Path",
-    "Middle Path"
+    "Middle Path",
+    "Right Paths",
+    "TEST_PATHS"
   ],
   "autoFolders": [
-    "Example Routines"
+    "Example Routines",
+    "G4_BASED",
+    "TEST_AUTOS"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

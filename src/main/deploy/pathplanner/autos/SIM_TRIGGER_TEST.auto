@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "DEFAULTNOMOVE"
+            "pathName": "NON_MOVING"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "TEST_AUTOS",
   "choreoAuto": false
 }
