@@ -8,9 +8,11 @@ import java.io.File;
 import java.util.Map;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.events.EventTrigger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -64,7 +66,7 @@ public class RobotContainer {
         // Configure the trigger bindings
         configureBindings();
         configurePathPlanner();
-
+        NamedCommands.registerCommand("test", new InstantCommand(() -> m_swerveSubsystem.drive(new Translation2d(5,5), 0, false)).withTimeout(5));
         autoChooser = AutoBuilder.buildAutoChooser("DEFAULT");
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
