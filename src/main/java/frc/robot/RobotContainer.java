@@ -12,6 +12,7 @@ import com.pathplanner.lib.events.EventTrigger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
@@ -210,8 +211,25 @@ public class RobotContainer {
         m_endEffectorSubsystem.setDefaultCommand(EndEffectorCommands.HoldCoralCommand());
 
         // === Auto Align Controls ===
-        m_driverController.L1().whileTrue(AutoAlignCommands.AutoAlignLeft());
-        m_driverController.R1().whileTrue(AutoAlignCommands.AutoAlignRight());
+        m_driverController.L1().whileTrue(
+                AutoAlignCommands.AutoAlignLeft().andThen(
+                        new SequentialCommandGroup(
+                                new InstantCommand(() -> m_driverController.setRumble(RumbleType.kLeftRumble, 0.1)),
+                                new WaitCommand(0.1),
+                                new InstantCommand(() -> m_driverController.setRumble(RumbleType.kLeftRumble, 0.0))
+                        )
+                ));
+        // rumbles after auto align is complete
+        m_driverController.R1().whileTrue(
+                AutoAlignCommands.AutoAlignRight().andThen(
+                        new SequentialCommandGroup(
+                                new InstantCommand(() -> m_driverController.setRumble(RumbleType.kRightRumble, 0.1)),
+                                new WaitCommand(0.1),
+                                new InstantCommand(() -> m_driverController.setRumble(RumbleType.kRightRumble, 0.0))
+                        )
+                        
+                ));
+        // rumbles after auto align is complete
         // === Intake/Outtake controls ===
         m_driverController.R2().whileTrue(
                 m_selectOuttakeCommand
