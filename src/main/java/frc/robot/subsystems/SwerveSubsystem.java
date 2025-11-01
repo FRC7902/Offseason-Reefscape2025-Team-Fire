@@ -575,14 +575,8 @@ public class SwerveSubsystem extends SubsystemBase {
      * too far away, not too ambiguous, or the robot is not spinning too fast.
      */
     public void localize() {
-        LimelightHelpers.PoseEstimate visionFeedMT2;
-
-        // Localize based on alliance color
-        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-            visionFeedMT2 = LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2("");
-        } else {
-            visionFeedMT2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("");
-        }
+        // Get vision feed
+        LimelightHelpers.PoseEstimate visionFeedMT2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("");
 
         // Ensure that AprilTags are detected to circumvent NullPointerException
         double tagCount = visionFeedMT2.tagCount;
