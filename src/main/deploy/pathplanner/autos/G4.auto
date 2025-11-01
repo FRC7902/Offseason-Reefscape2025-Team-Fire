@@ -1,0 +1,19 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "G4"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "G4_BASED",
+  "choreoAuto": false
+}
