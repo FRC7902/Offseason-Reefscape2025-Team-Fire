@@ -99,14 +99,17 @@ public class AutoAlignToReef extends Command {
             List<ElevatorSubsystem.ElevatorPosition> coralPositions = List.of(
                     ElevatorSubsystem.ElevatorPosition.CORAL_L1,
                     ElevatorSubsystem.ElevatorPosition.CORAL_L2,
-                    ElevatorSubsystem.ElevatorPosition.CORAL_L3,
-                    ElevatorSubsystem.ElevatorPosition.CORAL_L4
+                    ElevatorSubsystem.ElevatorPosition.CORAL_L3
             );
 
             if (coralPositions.contains(RobotContainer.m_elevatorSubsystem.getElevatorArmPositionEnum()) &&
                     (RobotContainer.m_elevatorSubsystem.hasReachedSetpoint() && RobotContainer.m_armSubsystem.hasReachedAngle())
             ) {
                 m_xController.setSetpoint(VisionConstants.X_SETPOINT_CLOSER_REEF_ALIGNMENT);
+            }
+
+            else if (RobotContainer.m_elevatorSubsystem.getElevatorArmPositionEnum() == ElevatorSubsystem.ElevatorPosition.CORAL_L4) {
+                m_xController.setSetpoint(VisionConstants.X_SETPOINT_CLOSER_REEF_ALIGNMENT_L4);
             }
 
             // Reset timer to mark 'not reached setpoint'.
