@@ -95,10 +95,15 @@ public final class Constants {
 
 	    public static final double X_SETPOINT_REEF_ALIGNMENT = -0.58;  // Vertical pose
         public static final double X_SETPOINT_CLOSER_REEF_ALIGNMENT = -0.55;  // Vertical pose
+        public static final double X_SETPOINT_FARTHER_REEF_ALIGNMENT = -0.55; // Vertical pose
+        // above constant for algae pickup position
+        public static final double X_SETPOINT_CLOSER_ALGAE_REEF_ALIGNMENT = -0.45; //Vertical pose
+        // above constant for when algae is driven towards reef
 	    public static final double X_TOLERANCE_REEF_ALIGNMENT = 0.01;
 
         public static final double Y_SETPOINT_RIGHT_REEF_ALIGNMENT = 0.16;  // Horizontal pose
         public static final double Y_SETPOINT_LEFT_REEF_ALIGNMENT = -0.16;  // Horizontal pose
+        public static final double Y_SETPOINT_CENTER_REEF_ALIGNMENT = 0; // Horizontal pose
 	    public static final double Y_TOLERANCE_REEF_ALIGNMENT = 0.01;
 
         public static final double DONT_SEE_TAG_WAIT_TIME = 1;

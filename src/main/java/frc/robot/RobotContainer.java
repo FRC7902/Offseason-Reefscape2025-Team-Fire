@@ -210,8 +210,18 @@ public class RobotContainer {
         m_endEffectorSubsystem.setDefaultCommand(EndEffectorCommands.HoldCoralCommand());
 
         // === Auto Align Controls ===
-        m_driverController.L1().whileTrue(AutoAlignCommands.AutoAlignLeft());
-        m_driverController.R1().whileTrue(AutoAlignCommands.AutoAlignRight());
+        m_driverController.L1().whileTrue(
+                new ConditionalCommand(
+                        AutoAlignCommands.AutoAlignLeft(), 
+                        AutoAlignCommands.AutoAlignCenter(), 
+                        m_endEffectorSubsystem :: hasCoral)
+        );
+        m_driverController.R1().whileTrue(
+                new ConditionalCommand(
+                        AutoAlignCommands.AutoAlignRight(),
+                        AutoAlignCommands.AutoAlignCenter(), 
+                        m_endEffectorSubsystem :: hasCoral)
+                );
         // === Intake/Outtake controls ===
         m_driverController.R2().whileTrue(
                 m_selectOuttakeCommand
@@ -303,6 +313,8 @@ public class RobotContainer {
                         AutoAlignCommands.AutoAlignLeft().withTimeout(5),
                         EndEffectorCommands.OuttakeEffector().withTimeout(4)
                         ));
+
+        new EventTrigger("AUTO_ALIGN_CENTER").onTrue(AutoAlignCommands.AutoAlignCenter());
     }
 
     /**
