@@ -300,8 +300,8 @@ public class RobotContainer {
 
         new EventTrigger("AA_LEFT_OUTTAKE").onTrue(
                 new SequentialCommandGroup(
-                        AutoAlignCommands.AutoAlignLeft(),
-                        EndEffectorCommands.OuttakeEffector().withTimeout(1)
+                        AutoAlignCommands.AutoAlignLeft().withTimeout(5),
+                        EndEffectorCommands.OuttakeEffector().withTimeout(4)
                         ));
     }
 
