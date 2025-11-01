@@ -153,7 +153,7 @@ public final class Constants {
         public static double L1_ANGLE_DEGREES = 45.0;
         public static double L2_ANGLE_DEGREES = 68.7;
         public static double L3_ANGLE_DEGREES = 73;
-        public static double L4_ANGLE_DEGREES = 67.0;
+        public static double L4_ANGLE_DEGREES = 72.0;
 
         public static double LOW_ALGAE_ANGLE_DEGREES = 0.0;
         public static double HIGH_ALGAE_ANGLE_DEGREES = 0.0;

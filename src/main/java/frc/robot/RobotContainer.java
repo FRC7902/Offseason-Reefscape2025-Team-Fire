@@ -297,6 +297,12 @@ public class RobotContainer {
         new EventTrigger("EE_OUTTAKE").onTrue(EndEffectorCommands.OuttakeEffector());
         new EventTrigger("CRL_HANDOFF").onTrue(coralHandoffCommand());
         new EventTrigger("EE_ALG_INTAKE").onTrue(EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE));
+
+        new EventTrigger("AA_LEFT_OUTTAKE").onTrue(
+                new SequentialCommandGroup(
+                        AutoAlignCommands.AutoAlignLeft().withTimeout(5),
+                        EndEffectorCommands.OuttakeEffector().withTimeout(4)
+                        ));
     }
 
     /**
