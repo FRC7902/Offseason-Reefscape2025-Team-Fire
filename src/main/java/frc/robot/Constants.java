@@ -95,7 +95,8 @@ public final class Constants {
 
 	    public static final double X_SETPOINT_REEF_ALIGNMENT = -0.58;  // Vertical pose
         public static final double X_SETPOINT_CLOSER_REEF_ALIGNMENT = -0.55;  // Vertical pose
-	    public static final double X_TOLERANCE_REEF_ALIGNMENT = 0.01;
+        public static final double X_SETPOINT_CLOSER_REEF_ALIGNMENT_L4 = -0.525;
+        public static final double X_TOLERANCE_REEF_ALIGNMENT = 0.01;
 
         public static final double Y_SETPOINT_RIGHT_REEF_ALIGNMENT = 0.16;  // Horizontal pose
         public static final double Y_SETPOINT_LEFT_REEF_ALIGNMENT = -0.16;  // Horizontal pose
