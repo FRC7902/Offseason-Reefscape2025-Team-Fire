@@ -152,7 +152,7 @@ public final class Constants {
 
         public static double L1_ANGLE_DEGREES = 45.0;
         public static double L2_ANGLE_DEGREES = 68.7;
-        public static double L3_ANGLE_DEGREES = 71.7;
+        public static double L3_ANGLE_DEGREES = 73;
         public static double L4_ANGLE_DEGREES = 67.0;
 
         public static double LOW_ALGAE_ANGLE_DEGREES = 0.0;
@@ -218,7 +218,7 @@ public final class Constants {
         public static double REST_HEIGHT_METERS = ElevatorConstants.MIN_HEIGHT_METERS + 0.05;
         public static double L1_HEIGHT_METERS = 0.12678049;
         public static double L2_HEIGHT_METERS = 0.37;
-        public static double L3_HEIGHT_METERS = 0.68;
+        public static double L3_HEIGHT_METERS = 0.70;
         public static double L4_HEIGHT_METERS = 1.27;
 
         public static double LOW_ALGAE_HEIGHT_METERS = 0.14878049;
