@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "DEFAULTNOMOVE"
+            "pathName": "G4"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "COMPETITION AUTOS ",
+  "folder": "G4_BASED",
   "choreoAuto": false
 }
