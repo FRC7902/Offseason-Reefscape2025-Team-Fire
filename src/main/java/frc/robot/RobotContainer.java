@@ -309,7 +309,7 @@ public class RobotContainer {
 
         new EventTrigger("EE_OUTTAKE").onTrue(
                 new SequentialCommandGroup(
-                        AutoAlignCommands.AutoAlignLeft(),
+                        m_endEffectorSubsystem.hasCoral() ? AutoAlignCommands.AutoAlignLeft() : AutoAlignCommands.AutoAlignCenter(),
                         EndEffectorCommands.OuttakeEffector().withTimeout(1)
                         ));
         new EventTrigger("CRL_HANDOFF").onTrue(coralHandoffCommand());

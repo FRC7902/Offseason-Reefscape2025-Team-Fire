@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.815,
-        "y": 4.002
+        "x": 6.062,
+        "y": 3.938
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.517213689630682,
-        "y": 3.9672998046874994
+        "x": 6.765070529505726,
+        "y": 3.938
       },
       "isLocked": false,
       "linkedName": null
@@ -31,15 +31,21 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1.0,
-      "rotationDegrees": -90.0
+      "rotationDegrees": -5.936024041949038
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "processor",
-      "waypointRelativePos": 0,
+      "name": "ELV_ALG_PROCESSOR",
+      "waypointRelativePos": 0.5,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "EE_OUTTAKE",
+      "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -54,13 +60,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": "Middle Path",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

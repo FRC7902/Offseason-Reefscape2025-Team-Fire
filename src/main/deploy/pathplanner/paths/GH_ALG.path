@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 6.061677631579636,
+        "x": 6.062,
         "y": 3.938
       },
       "prevControl": {
-        "x": 6.326060936272797,
+        "x": 6.326383304693161,
         "y": 3.9457191755569654
       },
       "nextControl": null,
@@ -32,6 +32,12 @@
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
+    {
+      "name": "ELV_ALG_LOW",
+      "waypointRelativePos": 0.5,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
     {
       "name": "EE_ALG_INTAKE",
       "waypointRelativePos": 1.0,
