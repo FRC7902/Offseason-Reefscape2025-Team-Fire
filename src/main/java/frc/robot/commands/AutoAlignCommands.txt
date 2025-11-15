@@ -1,0 +1,23 @@
+# AutoAlignCommands.txt - vision alignment command factories
+
+## requirements:
+- provide factory methods for auto-align
+- support different reef branch sides
+
+## pseudocode:
+
+AutoAlignCommands class:
+
+AutoAlignLeft():
+  return new AutoAlignToReef with LEFT side
+
+AutoAlignRight():
+  return new AutoAlignToReef with RIGHT side
+
+AutoAlignCenter():
+  return new AutoAlignToReef with CENTER side
+
+## notes:
+- uses vision to align to reef
+- different setpoints for left/right/center
+- helps drivers score consistently

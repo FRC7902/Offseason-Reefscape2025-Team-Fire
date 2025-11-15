@@ -1,0 +1,82 @@
+# SwerveSubsystem.txt - the drivetrain controller
+
+## requirements:
+- control swerve drive base
+- handle field/robot relative driving
+- integrate with PathPlanner for auto
+- scale speed based on elevator height
+- manage gyro and odometry
+
+## pseudocode:
+
+SwerveSubsystem extends SubsystemBase:
+
+fields:
+  - swerveDrive (the actual drive object)
+  - fastDriveRampRateMode (boolean flag)
+
+constructor(directory):
+  set telemetry verbosity
+  parse swerve config from directory
+  create SwerveDrive with max speed and initial pose
+  
+  if simulation:
+    disable cosine compensation
+  else:
+    enable cosine compensation
+  
+  configure:
+    - heading correction (off)
+    - angular velocity compensation (on)
+    - module encoder auto-sync (off)
+    - chassis discretization (on)
+    - slew rate limiters (none)
+    - max angular velocity
+  
+  call setupPathPlanner()
+
+setupPathPlanner():
+  load robot config
+  configure AutoBuilder with:
+    - pose supplier
+    - odometry reset method
+    - velocity supplier
+    - drive method (with optional feedforward)
+    - PID controllers for translation and rotation
+    - alliance mirroring logic
+  warmup pathfinding
+
+scaleSwerveInput():
+  calculate speed scale based on:
+    - elevator position (higher = slower)
+    - if holding algae (extra slow)
+  apply scale between min and max values
+
+drive methods:
+  - driveCommand(): translative + angular velocity control
+  - driveFieldOriented(): field-relative driving
+  - drive(): robot-relative driving
+  various overloads for different input types
+
+utility methods:
+  - resetOdometry()
+  - getPose()
+  - getHeading()
+  - getTargetSpeeds()
+  - zeroGyro()
+  - zeroGyroWithAlliance()
+  - setMotorBrake()
+  - snapToAngle(): PID to target angle
+  - strafe(): move sideways
+  - centerModulesCommand(): point all wheels forward
+  - toggleFastDriveRampRateMode()
+
+periodic():
+  update SmartDashboard with gyro and pose
+  call scaleSwerveInput()
+
+## notes:
+- scaling speed based on elevator is important for stability
+- pathplanner integration is kinda complex
+- lots of coordinate frame conversions
+- dont forget to zero gyro at start of match

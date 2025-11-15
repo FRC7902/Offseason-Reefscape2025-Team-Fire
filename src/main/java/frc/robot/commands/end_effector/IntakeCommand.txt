@@ -1,0 +1,51 @@
+# IntakeCommand.txt - end effector intake command
+
+## requirements:
+- intake coral or algae
+- detect when piece acquired
+- hold piece after intake
+
+## pseudocode:
+
+IntakeCommand extends Command:
+
+enum:
+  IntakeMode: ALGAE, CORAL
+
+fields:
+  - mode (which type of game piece)
+
+constructor(mode):
+  store mode
+  require end effector subsystem
+
+initialize():
+  set end effector to intake speed
+
+execute():
+  // just runs at intake speed
+
+end():
+  if coral mode:
+    set hasCoral flag
+  else if detected algae:
+    switch to algae hold speed
+  else:
+    stop motor
+
+isFinished():
+  if coral mode:
+    finish when beam break triggered
+  
+  if algae mode:
+    finish when:
+      - algae detected (current spike)
+      OR
+      - not at algae position anymore
+
+## notes:
+- different detection for coral vs algae
+- coral uses beam break
+- algae uses current sensing
+- automatically holds piece after intake
+- stops if position changed during algae intake

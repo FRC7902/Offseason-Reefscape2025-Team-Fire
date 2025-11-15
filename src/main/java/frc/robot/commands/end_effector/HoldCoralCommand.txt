@@ -1,0 +1,42 @@
+# HoldCoralCommand.txt - hold coral in end effector
+
+## requirements:
+- keep coral from falling out
+- run as default command
+- don't interfere with algae
+
+## pseudocode:
+
+HoldCoralCommand extends Command:
+
+constructor:
+  require end effector subsystem
+
+initialize():
+  // nothing
+
+execute():
+  if holding algae:
+    return
+    // don't mess with algae
+  
+  if have coral:
+    if beam break not triggered:
+      run at hold speed
+      // keep coral pulled in
+    else:
+      stop motor
+      // already against beam break
+
+end():
+  stop motor
+
+isFinished():
+  return false
+  // runs as default command
+
+## notes:
+- default command for end effector
+- only runs when have coral
+- gentle hold speed keeps it secure
+- respects algae (doesn't interfere)

@@ -1,0 +1,31 @@
+# OuttakeCoralCommand_funnel.txt - funnel coral outtake
+
+## requirements:
+- push coral out of funnel
+- finish when coral fully cleared
+
+## pseudocode:
+
+OuttakeCoralCommand extends Command:
+
+constructor:
+  require funnel subsystem
+
+execute():
+  set indexer to outtake speed
+
+end():
+  stop funnel
+
+isFinished():
+  return true when:
+    - shallow beam break not broken
+    AND
+    - deep beam break not broken
+  // both clear means coral is gone
+
+## notes:
+- simple command
+- just runs motors until coral gone
+- both beam breaks must be clear
+- typically used in handoff sequence

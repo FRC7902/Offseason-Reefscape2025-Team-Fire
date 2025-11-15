@@ -1,0 +1,50 @@
+# MoveElevatorArmCommand.txt - move elevator and arm together
+
+## requirements:
+- control both elevator and arm in sync
+- support enum positions or manual values
+- finish when both reach target
+
+## pseudocode:
+
+MoveElevatorArmCommand extends Command:
+
+fields:
+  - isEnum (boolean flag)
+  - position (enum)
+  - positionMeters, angleDegrees (manual values)
+
+constructor(ElevatorPosition):
+  set isEnum to true
+  store position enum
+  require elevator and arm subsystems
+
+constructor(meters, degrees):
+  set isEnum to false
+  store manual values
+  require elevator and arm subsystems
+
+initialize():
+  // nothing needed
+
+execute():
+  if using enum:
+    set elevator to enum position
+    set arm to enum position
+  else:
+    set elevator to manual height
+    set arm to manual angle
+
+end():
+  // nothing needed
+
+isFinished():
+  return true when both:
+    - elevator reached setpoint
+    - arm reached angle
+
+## notes:
+- coordinated motion prevents collisions
+- enum positions are predefined safe combos
+- manual mode for special cases
+- command finishes when both axes stable

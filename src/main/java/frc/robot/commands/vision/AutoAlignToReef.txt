@@ -1,0 +1,82 @@
+# AutoAlignToReef.txt - vision-based reef alignment
+
+## requirements:
+- use limelight to align to reef AprilTags
+- control x, y, and rotation independently
+- adjust setpoints based on game piece and position
+- timeout if can't see tag or finished aligning
+
+## pseudocode:
+
+AutoAlignToReef extends Command:
+
+enum:
+  ReefBranchSide: LEFT, RIGHT, CENTER
+
+fields:
+  - xController, yController, rotController (PID)
+  - side (which branch to align to)
+  - dontSeeTagTimer, stopTimer
+  - drivebase reference
+  - tagID (to track same tag)
+
+constructor(side):
+  create PID controllers with vision constants
+  store side
+  require swerve subsystem
+
+initialize():
+  start both timers
+  
+  set PID setpoints:
+    - rotation: 0 degrees
+    - x: default distance (or farther for center)
+    - y: left/right/center offset based on side
+  
+  set tolerances
+  
+  get initial tag ID from limelight
+
+execute():
+  if can see tag AND same tag:
+    reset dontSeeTag timer
+    
+    get bot pose relative to tag
+    
+    calculate speeds:
+      - xSpeed from x PID
+      - ySpeed from y PID  
+      - rotValue from rotation PID
+    
+    scale translation by rotation error
+    // slow down movement when not rotated correctly
+    
+    drive with calculated speeds
+    
+    if at coral or algae position AND mechanisms ready:
+      adjust x setpoint to move closer
+    
+    if not at all setpoints OR mechanisms not ready:
+      reset stop timer
+  
+  else:
+    stop driving
+  
+  update dashboard
+
+end():
+  stop driving
+
+isFinished():
+  return true if:
+    - haven't seen tag for >1 second
+    OR
+    - been at setpoint for >0.3 seconds
+
+## notes:
+- three separate PID loops for x, y, rotation
+- x is forward/back, y is left/right
+- moves closer once elevator/arm extended
+- different positions for coral vs algae
+- rotation error scales translation (safety)
+- timers prevent infinite running

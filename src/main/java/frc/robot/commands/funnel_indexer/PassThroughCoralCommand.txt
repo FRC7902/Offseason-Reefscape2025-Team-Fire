@@ -1,0 +1,31 @@
+# PassThroughCoralCommand.txt - pass coral through funnel
+
+## requirements:
+- shoot coral straight through funnel to end effector
+- skip normal storage
+
+## pseudocode:
+
+PassThroughCoralCommand extends Command:
+
+constructor:
+  require funnel subsystem
+
+initialize():
+  set indexer to full speed
+
+isFinished():
+  return true when:
+    - shallow beam break not broken
+    AND
+    - deep beam break IS broken
+  // coral passed shallow but still at deep
+
+end():
+  stop funnel
+
+## notes:
+- used for direct handoff
+- coral goes straight to end effector
+- might not need this? commented out in robot container
+- finishes at intermediate position

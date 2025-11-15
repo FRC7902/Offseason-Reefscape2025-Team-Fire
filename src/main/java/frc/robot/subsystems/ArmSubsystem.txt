@@ -1,0 +1,98 @@
+# ArmSubsystem.txt - the rotating arm thing
+
+## requirements:
+- control arm angle with motion magic
+- use CANcoder for absolute position
+- enforce angle limits
+- safety checks with elevator position
+- simulate for testing
+- provide position enums
+
+## pseudocode:
+
+ArmSubsystem extends SubsystemBase:
+
+fields:
+  - armMotor (TalonFX)
+  - armMotorSim
+  - armMotorConfig
+  - motionMagicRequest
+  - armEncoder (CANcoder)
+  - armEncoderSim
+  - armSim (single jointed arm simulation)
+  - armLigament (for visualization)
+  - voltageRequest
+  - sysIdRoutine
+
+constructor:
+  if tuning mode:
+    put PID values and setpoints on dashboard
+  
+  configure motor:
+    - PID gains (slot 0)
+    - feedforward values (S, V, A, G)
+    - gravity type: arm cosine
+    - current limits
+    - motion magic (accel, velocity)
+    - feedback source: fused CANcoder
+    - brake mode
+    - inversion
+  
+  apply config
+  
+  create arm simulation
+
+setArmPositionDegrees(degrees):
+  clamp to min/max angle limits
+  
+  safety checks:
+    if elevator low and arm going down:
+      limit angle
+    if elevator high and arm going up:
+      limit angle
+  
+  convert degrees to rotations
+  send motion magic request
+
+getArmPositionDegrees():
+  read CANcoder position
+  convert to degrees
+
+setArmPositionEnum(position):
+  switch on enum:
+    map to corresponding angle
+  call setArmPositionDegrees()
+
+getArmPositionEnum():
+  check current angle against all predefined angles
+  return matching enum or UNKNOWN
+  // DEPRECATED - use elevator's combined enum instead
+
+getArmSetpointDegrees():
+  return motor's closed loop reference
+
+hasReachedAngle():
+  return true if within tolerance
+
+periodic():
+  if tuning mode:
+    read PID values from dashboard
+    if changed:
+      reapply config
+  
+  update dashboard with position, setpoint, errors
+  update visualization
+
+simulationPeriodic():
+  set sim supply voltage
+  feed motor voltage to arm sim
+  step simulation
+  convert mechanism angle to rotor rotations
+  feed back to motor and encoder sims
+
+## notes:
+- safety checks prevent arm from hitting frame
+- CANcoder gives absolute position (survives power cycles)
+- motion magic makes movement smooth
+- gravity compensation is important
+- simulation needs proper moment of inertia

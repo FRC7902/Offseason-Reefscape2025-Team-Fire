@@ -1,0 +1,61 @@
+# IntakeCoralCommand_funnel.txt - funnel coral intake
+
+## requirements:
+- intake coral into funnel
+- adjust speed based on coral position
+- position coral correctly using beam breaks
+- handle case where already have coral
+
+## pseudocode:
+
+IntakeCoralCommand extends Command:
+
+enum:
+  BeamBreakState: NONE_BROKEN, SHALLOW_BROKEN, BOTH_BROKEN, DEEP_BROKEN
+
+speed maps:
+  when don't have coral:
+    - NONE_BROKEN: full speed
+    - SHALLOW_BROKEN: half speed
+    - BOTH_BROKEN: stop
+    - DEEP_BROKEN: reverse
+
+  when have coral:
+    - NONE_BROKEN: stop
+    - SHALLOW_BROKEN: stop  
+    - BOTH_BROKEN: reverse
+    - DEEP_BROKEN: reverse
+
+constructor:
+  require funnel subsystem
+
+initialize():
+  // nothing
+
+getBeamBreakState():
+  check both beam breaks
+  return enum for current state
+
+execute():
+  get current beam break state
+  
+  if have coral:
+    use has-coral speed map
+  else:
+    use normal speed map
+  
+  set indexer to mapped speed
+
+end():
+  stop funnel
+
+isFinished():
+  return false
+  // runs as default command
+
+## notes:
+- state machine based on beam breaks
+- speeds adjust automatically as coral moves
+- prevents coral from falling through
+- reverses if coral goes too far
+- different behavior when already storing coral

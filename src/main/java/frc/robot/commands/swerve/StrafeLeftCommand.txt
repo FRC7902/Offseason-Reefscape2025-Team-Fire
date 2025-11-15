@@ -1,0 +1,32 @@
+# StrafeLeftCommand.txt - strafe left slowly
+
+## requirements:
+- move robot left without rotating
+- run while button held
+
+## pseudocode:
+
+StrafeLeftCommand extends Command:
+
+constructor:
+  require swerve subsystem
+
+initialize():
+  // nothing
+
+execute():
+  call swerve.strafe with:
+    - direction: -1 (left)
+    - speed multiplier: 0.05 (slow)
+
+end():
+  // nothing (swerve default command takes over)
+
+isFinished():
+  return false
+  // runs while button held
+
+## notes:
+- slow speed for precise alignment
+- negative direction = left
+- useful for fine positioning

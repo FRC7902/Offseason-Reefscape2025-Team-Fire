@@ -1,0 +1,86 @@
+# RobotContainer.txt - where all the robot stuff lives
+
+## requirements:
+- create all subsystems
+- set up controllers and button bindings
+- configure autonomous chooser
+- set default commands
+
+## pseudocode:
+
+RobotContainer class:
+
+static fields (so other classes can access):
+  - funnelIndexerSubsystem
+  - endEffectorSubsystem
+  - elevatorSubsystem
+  - armSubsystem
+  - swerveSubsystem
+  - driverController (PS5)
+  - operatorController (PS5)
+
+private fields:
+  - autoChooser (for selecting auto routine)
+  - various drive commands
+  - intake/outtake command selectors
+
+constructor:
+  call configureBindings()
+  call configurePathPlanner()
+  build auto chooser and put on dashboard
+
+configureBindings():
+  set default commands:
+    - swerve drives field-oriented
+    - funnel intakes coral (unless already have it)
+    - end effector holds coral
+  
+  driver controls:
+    L1: auto-align left or center (depending if have coral)
+    R1: auto-align right or center
+    R2: outtake (varies by position)
+    L2: intake (varies by position)
+    dpad left/right: strafe commands
+    options: zero gyro
+    create: toggle fast drive mode
+  
+  operator controls:
+    triangle/circle/square/cross: set elevator to L4/L3/L2/L1
+    create: middle position
+    dpad up/down: barge/processor positions
+    dpad left/right: algae high/low positions
+    options: center modules
+
+coralHandoffCommand():
+  parallel command that:
+    - moves elevator to pickup
+    - intakes coral through funnel
+    - waits a bit
+    - passes coral from funnel to end effector
+    - moves to rest position
+  only runs if dont already have algae
+
+selectIntakeCommand:
+  based on current elevator position:
+    - if at algae position: intake algae
+    - otherwise: run coral handoff
+
+selectOuttakeCommand:
+  based on current position:
+    - if at coral positions: outtake coral
+    - if at processor: outtake algae slower
+
+configurePathPlanner():
+  set up event triggers for auto:
+    - elevator position events
+    - intake/outtake events
+    - auto-align events
+
+getAutonomousCommand():
+  return selected auto from chooser
+
+## notes:
+- this file is kinda messy ngl
+- lots of conditional logic for intake/outtake
+- button bindings might need tweaking
+- pathplanner events let auto routines trigger commands

@@ -1,0 +1,23 @@
+# FunnelCommands.txt - funnel command factories
+
+## requirements:
+- provide factory methods for funnel operations
+- keep instantiation logic centralized
+
+## pseudocode:
+
+FunnelCommands class:
+
+OuttakeCoral():
+  return new OuttakeCoralCommand
+
+IntakeCoral():
+  return new IntakeCoralCommand
+
+PassThroughCoral():
+  return new PassThroughCoralCommand
+
+## notes:
+- static factory pattern
+- makes RobotContainer cleaner
+- easier to swap implementations if needed

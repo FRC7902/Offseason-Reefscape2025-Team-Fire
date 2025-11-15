@@ -1,0 +1,67 @@
+# FunnelSubsystem.txt - the coral intake/storage thing
+
+## requirements:
+- control indexer motors to move coral
+- detect coral position with beam breaks
+- track if we have coral stored
+- prevent coral from falling out
+
+## pseudocode:
+
+FunnelSubsystem extends SubsystemBase:
+
+fields:
+  - indexerLeftMotor, indexerRightMotor (SparkMax NEO 550s)
+  - shallowBeamBreak, deepBeamBreak (digital inputs)
+  - hasCoral (boolean flag)
+  - timer, lastTimeHasCoral
+
+constructor:
+  create motors with CAN IDs
+  
+  configure both motors:
+    - set current limits
+    - set brake mode
+    - apply and persist config
+  
+  create beam break inputs
+  
+  initialize hasCoral to false
+  start timer
+
+isShallowBeamBreakBroken():
+  return inverted digital input
+  // false when broken
+
+isDeepBeamBreakBroken():
+  return inverted digital input
+
+setIndexerSpeed(speed):
+  set left motor to speed
+  set right motor to -speed (inverted)
+
+stop():
+  set speed to 0
+  stop both motors
+
+getHasCoral():
+  return hasCoral flag
+
+periodic():
+  update dashboard with beam break states and hasCoral
+  
+  state machine:
+    if hasCoral:
+      if shallow not broken for >2 seconds:
+        set hasCoral to false
+    else:
+      if both beam breaks broken:
+        set hasCoral to true
+        record time
+
+## notes:
+- two beam breaks detect coral at different positions
+- shallow closer to intake, deep closer to output
+- state tracking prevents false positives
+- kicker motor commented out (might add later?)
+- right motor inverted so both spin same direction

@@ -1,0 +1,26 @@
+# EndEffectorCommands.txt - end effector command factories
+
+## requirements:
+- provide factory methods for end effector operations
+- support different intake modes
+
+## pseudocode:
+
+EndEffectorCommands class:
+
+IntakeEffector(intakeMode):
+  return new IntakeCommand with mode
+
+OuttakeEffector():
+  return new OuttakeCommand with default speed
+
+OuttakeEffector(outtakeSpeed):
+  return new OuttakeCommand with custom speed
+
+HoldCoralCommand():
+  return new HoldCoralCommand
+
+## notes:
+- static factories for all end effector commands
+- intake mode can be CORAL or ALGAE
+- outtake speed customizable for processor

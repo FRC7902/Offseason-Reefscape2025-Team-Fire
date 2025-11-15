@@ -1,0 +1,21 @@
+# SwereCommands.txt - swerve command factories
+# (yes its misspelled in the actual code lol)
+
+## requirements:
+- provide factory methods for swerve commands
+- keep code clean
+
+## pseudocode:
+
+SwereCommands class:
+
+StrafeLeft():
+  return new StrafeLeftCommand
+
+StrafeRight():
+  return new StrafeRightCommand
+
+## notes:
+- static factory pattern
+- makes code more readable
+- typo in class name but whatever

@@ -1,0 +1,45 @@
+# OuttakeCommand.txt - end effector outtake command
+
+## requirements:
+- spit out game piece
+- support custom speeds
+- clear hasCoral flag when done
+
+## pseudocode:
+
+OuttakeCommand extends Command:
+
+fields:
+  - outtakeSpeed
+
+constructor():
+  set default outtake speed
+  require end effector subsystem
+
+constructor(speed):
+  set custom outtake speed
+  require end effector subsystem
+
+initialize():
+  set motor to outtake speed
+  // negative speed = reverse
+
+execute():
+  // just runs
+
+end():
+  stop motor
+  
+  if beam break not triggered:
+    clear hasCoral flag
+    // piece must be gone
+
+isFinished():
+  return false
+  // runs until interrupted
+
+## notes:
+- runs in reverse to spit out
+- custom speed for processor (slower)
+- clears flag if piece detected gone
+- typically used with .withTimeout() or .until()

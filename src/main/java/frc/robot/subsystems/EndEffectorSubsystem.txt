@@ -1,0 +1,74 @@
+# EndEffectorSubsystem.txt - the end grabby/spinny bit
+
+## requirements:
+- control motor for intake/outtake
+- detect coral with beam break
+- detect algae by current spike (stall detection)
+- track what game piece we have
+- prevent running when already have piece
+
+## pseudocode:
+
+EndEffectorSubsystem extends SubsystemBase:
+
+fields:
+  - motor (TalonFX)
+  - motorConfig
+  - hasAlgae, hasCoral (boolean flags)
+  - coralBeamBreak (digital input)
+  - algaeDebouncer (filter out noise)
+
+constructor:
+  create motor
+  create motor config
+  
+  create beam break sensor
+  
+  configure motor:
+    - enable current limits (stator and supply)
+    - set brake mode
+    - apply config
+  
+  create debouncer with 0.05s delay
+  initialize flags to false
+
+hasAlgae():
+  return hasAlgae flag
+
+hasCoral():
+  return hasCoral flag
+
+setHasCoral(value):
+  update hasCoral flag
+
+isCoralBeamBreakBroken():
+  return inverted beam break value
+
+stop():
+  stop motor
+
+setSpeed(speed):
+  set motor speed
+
+getSupplyCurrent():
+  return motor's supply current
+
+periodic():
+  update dashboard with flags, sensors, current, velocity
+  
+  algae detection:
+    use debouncer on current reading
+    if current between low and high thresholds:
+      algae probably stuck in mechanism
+      set hasAlgae to true
+  
+  coral detection:
+    if beam break triggered and don't have coral:
+      set hasCoral to true
+
+## notes:
+- algae detection uses current spike when it stalls
+- debouncer prevents false positives
+- coral uses beam break sensor
+- tracking what we have prevents running unnecessarily
+- current limits important to not burn motor

@@ -1,0 +1,102 @@
+# ElevatorSubsystem.txt - the up/down mechanism
+
+## requirements:
+- control elevator height
+- use motion magic for smooth movement
+- enforce safety limits
+- provide position enums for easy control
+- integrate with arm for combined state tracking
+- simulate for testing
+
+## pseudocode:
+
+ElevatorSubsystem extends SubsystemBase:
+
+enums:
+  ElevatorPosition: ZERO, REST, CORAL_L1-L4, PROCESSOR, ALGAE_HIGH/LOW, BARGE, MIDDLE, UNKNOWN
+
+fields:
+  - leaderMotor, followerMotor (TalonFX)
+  - motorConfig
+  - voltageRequest, motionMagicRequest
+  - elevatorSim (for simulation)
+  - mechanism2d (for visualization)
+  - elevatorSetPointMeters
+  - sysIdRoutine (for characterization)
+
+constructor:
+  if simulation:
+    put mechanism on dashboard
+  
+  if tuning mode:
+    put PID values on dashboard for live tuning
+  
+  configure motors:
+    - set inversion
+    - set brake mode
+    - configure PID gains (slot 0)
+    - set feedforward values (S, V, A, G)
+    - set gravity type to elevator
+    - configure motion magic (velocity, accel)
+    - set current limits
+    - follower follows leader with inversion
+  
+  apply config to both motors
+  set update frequencies
+  
+  initialize to current position
+
+setElevatorPositionEnum(position):
+  switch on position enum:
+    map to corresponding height in meters
+  call setElevatorPositionMeters()
+
+setElevatorPositionMeters(meters):
+  clamp to min/max limits
+  // safety check commented out - was causing auto issues
+  update setpoint
+  convert to rotations
+  send motion magic request
+
+getElevatorPositionMeters():
+  read motor position in rotations
+  convert to meters
+  add offset if not simulation
+
+getElevatorPositionScale():
+  return position as 0-1 scale
+
+getElevatorPositionEnum():
+  check current height against all predefined positions
+  return matching enum or UNKNOWN
+  // DEPRECATED - inaccurate for shared heights
+
+getElevatorArmPositionEnum():
+  check both elevator height AND arm angle
+  return matching combined state
+  // this is the accurate one to use
+
+periodic():
+  if at zero threshold:
+    just set voltage to 0
+  else:
+    use motion magic control
+  
+  if tuning mode:
+    read PID values from dashboard
+    if changed:
+      reapply motor config
+  
+  update dashboard with position, setpoint, enum, current, errors
+
+simulationPeriodic():
+  update elevator sim with motor voltage
+  step simulation
+  feed position back to motor sim
+
+## notes:
+- motion magic makes it smooth
+- the combined elevator+arm enum is important
+- safety limits might need adjustment
+- zero threshold prevents oscillation at bottom
+- tuning mode is helpful during testing
