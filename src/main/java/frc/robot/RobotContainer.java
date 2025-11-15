@@ -237,22 +237,19 @@ public class RobotContainer {
                 new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1));
 
         m_operatorController.b().onTrue(
-                Commands.sequence(
-                        // 
-                        Commands.deadline(
-                                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3),
-                                new IntakeCommand(IntakeMode.CORAL)
-                        ),
-                        Commands.waitSeconds(10),
-                        new IntakeCoralCommand().withTimeout(5),
-                        new OuttakeCommand().withTimeout(5),
-                        new IntakeCommand(IntakeMode.ALGAE),
-                        new MoveElevatorArmCommand(null),
-                        Commands.waitSeconds(5),
-                        new OuttakeCommand().withTimeout(5),
-                        Commands.waitSeconds(10)
-                )
-        );
+                if(EndEffectorSubsystem.hasCoral){
+                        CommandScheduler(
+                                MoveElevatorArmCommand(ElevatorPosition.CORAL_L4),
+                                OuttakeCoralCommand(),
+                                MoveElevatorArmCommand(ElevatorPosition.REST)
+                        );
+                } else {
+                        CommandScheduler(
+                                MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW),
+                                IntakeEffector(IntakeMode.ALGAE),
+                                MoveElevatorArmCommand(ElevatorPosition.REST)
+                        );
+                });
         // m_operatorController.povDown().onTrue(
         // new ConditionalCommand(
         // Commands.none(),

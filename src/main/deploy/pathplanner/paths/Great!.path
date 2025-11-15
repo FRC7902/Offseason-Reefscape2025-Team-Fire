@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.735143442622951,
-        "y": 3.3117315573770485
+        "x": 5.9,
+        "y": 4.188569078947368
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.730122950819673,
-        "y": -0.38048155737704814
+        "x": 7.620394736842105,
+        "y": 2.071792763157895
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.774,
-        "y": 1.1899077868852452
+        "x": 1.135361842105263,
+        "y": 1.2539473684210531
       },
       "prevControl": {
-        "x": 2.697571626484808,
-        "y": 1.8694118258424814
+        "x": 1.400303019818759,
+        "y": 1.2651658893965252
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,14 +31,7 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "coraloutakeoff",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
     "maxAcceleration": 2.75,
@@ -49,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -127.23483398157464
+    "rotation": -126.52885536698514
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.19748604606426
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
