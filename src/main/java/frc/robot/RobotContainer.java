@@ -17,12 +17,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.*;
+import frc.robot.commands.funnel_indexer.intake_coral;
+import frc.robot.commands.funnel_indexer.outake_coral;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.End_effector_subsystem;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 
 /**
@@ -38,6 +41,7 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     public final static ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
     public final static ArmSubsystem m_armSubsystem = new ArmSubsystem();
+    public final static End_effector_subsystem m_endEffectorSubsystem = new End_effector_subsystem();
 
     public final static SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem(
             new File(Filesystem.getDeployDirectory(), "swerve"));
@@ -142,15 +146,15 @@ public class RobotContainer {
         m_swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
 
         // === Intake/Outtake controls ===
-        m_driverController.rightTrigger().whileTrue(
-                m_selectOuttakeCommand
-                        .until(() -> !m_driverController.rightTrigger()
-                                .getAsBoolean())
-        );
-        m_driverController.leftTrigger().whileTrue(
-                selectIntakeCommand
-                        .until(() -> !m_driverController.leftTrigger()
-                                .getAsBoolean()));
+        // m_driverController.rightTrigger().whileTrue(
+        //         m_selectOuttakeCommand
+        //                 .until(() -> !m_driverController.rightTrigger()
+        //                         .getAsBoolean())
+        // );
+        // m_driverController.leftTrigger().whileTrue(
+        //         selectIntakeCommand
+        //                 .until(() -> !m_driverController.leftTrigger()
+        //                         .getAsBoolean()));
         // ===============================
 
         // Strafe controls
@@ -161,18 +165,18 @@ public class RobotContainer {
         m_driverController.back().onTrue(new InstantCommand(m_swerveSubsystem::toggleFastDriveRampRateMode));
 
         // === Elevator Setpoints ===
-        m_operatorController.y().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4)
+        m_driverController.leftTrigger().whileTrue(
+                new intake_coral()
         );
-        m_operatorController.b().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3)
+        m_driverController.rightTrigger().whileTrue(
+                new outake_coral()
         );
-        m_operatorController.x().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2)
-        );
-        m_operatorController.a().onTrue(
+        // m_operatorController.b().onTrue(
+        //         new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3)
+        // );s
+        /*m_operatorController.Front().onTrue(
                 new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1)
-        );
+        );*/
         m_operatorController.back().onTrue(
                 new MoveElevatorArmCommand(ElevatorPosition.MIDDLE)
         );
