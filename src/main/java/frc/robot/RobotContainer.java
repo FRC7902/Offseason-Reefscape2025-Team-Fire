@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.end_effector.IntakeCommand.IntakeMode;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 import frc.robot.subsystems.ArmSubsystem;
@@ -41,7 +40,6 @@ import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
-    public final static FunnelSubsystem m_funnelIndexerSubsystem = new FunnelSubsystem();
     public final static EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
     public final static ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
     public final static ArmSubsystem m_armSubsystem = new ArmSubsystem();
@@ -115,41 +113,41 @@ public class RobotContainer {
                     0));
     Command driveFieldOrientedDirectAngleSim = m_swerveSubsystem.driveFieldOriented(driveDirectAngleSim);
 
-    private Command coralHandoffCommand() {
-        return new ConditionalCommand(
-                new SequentialCommandGroup(
-                        // Move elevator to pickup position
-                        new ParallelCommandGroup(
-                                new MoveElevatorArmCommand(ElevatorPosition.ZERO),
-                                FunnelCommands.IntakeCoral()
-                                        .until(m_funnelIndexerSubsystem::getHasCoral)
-                        ),
-                        new WaitCommand(0.1),
-                        // If no coral in funnel yet, run pass through cmd to shoot coral directly into end effector
-                        // If coral already in funnel, skip this step
-                        // new ConditionalCommand(
-                        //         new InstantCommand(),
-                        //         FunnelCommands.PassThroughCoral(),
-                        //         m_funnelIndexerSubsystem::getHasCoral
-                        // ),
-                        // Intake coral until funnel no longer detects it (shallow beam break)
-                        new ParallelCommandGroup(
-                                EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
-                                FunnelCommands.OuttakeCoral()
-                        ).until(
-                                () -> !m_funnelIndexerSubsystem.getHasCoral()
-                        ),
-                        // Run end effector intake, funnel intake, and move elevator + arm to level 1 simultaneously
-                        new ParallelCommandGroup(
-                                EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
-                                FunnelCommands.OuttakeCoral(),
-                                new MoveElevatorArmCommand(ElevatorPosition.REST)
-                        )
-                ),
-                new InstantCommand(),
-                // Only run handoff if we don't already have coral and algae
-                () -> !m_endEffectorSubsystem.hasAlgae());
-    }
+//     private Command coralHandoffCommand() {
+//         return new ConditionalCommand(
+//                 new SequentialCommandGroup(
+//                         // Move elevator to pickup position
+//                         new ParallelCommandGroup(
+//                                 new MoveElevatorArmCommand(ElevatorPosition.ZERO),
+//                                 FunnelCommands.IntakeCoral()
+//                                         .until(m_funnelIndexerSubsystem::getHasCoral)
+//                         ),
+//                         new WaitCommand(0.1),
+//                         // If no coral in funnel yet, run pass through cmd to shoot coral directly into end effector
+//                         // If coral already in funnel, skip this step
+//                         // new ConditionalCommand(
+//                         //         new InstantCommand(),
+//                         //         FunnelCommands.PassThroughCoral(),
+//                         //         m_funnelIndexerSubsystem::getHasCoral
+//                         // ),
+//                         // Intake coral until funnel no longer detects it (shallow beam break)
+//                         new ParallelCommandGroup(
+//                                 EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
+//                                 FunnelCommands.OuttakeCoral()
+//                         ).until(
+//                                 () -> !m_funnelIndexerSubsystem.getHasCoral()
+//                         ),
+//                         // Run end effector intake, funnel intake, and move elevator + arm to level 1 simultaneously
+//                         new ParallelCommandGroup(
+//                                 EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
+//                                 FunnelCommands.OuttakeCoral(),
+//                                 new MoveElevatorArmCommand(ElevatorPosition.REST)
+//                         )
+//                 ),
+//                 new InstantCommand(),
+//                 // Only run handoff if we don't already have coral and algae
+//                 () -> !m_endEffectorSubsystem.hasAlgae());
+//     }
 
     private ElevatorPosition select() {
         return m_elevatorSubsystem.getElevatorArmPositionEnum();
@@ -158,17 +156,17 @@ public class RobotContainer {
     private final Command selectIntakeCommand = new SelectCommand<>(
             Map.ofEntries(
                     Map.entry(ElevatorPosition.ALGAE_LOW, EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE)),
-                    Map.entry(ElevatorPosition.ALGAE_HIGH, EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE)),
-                    Map.entry(ElevatorPosition.ZERO, coralHandoffCommand()),
-                    Map.entry(ElevatorPosition.REST, coralHandoffCommand()),
-                    Map.entry(ElevatorPosition.CORAL_L1, coralHandoffCommand()),
-                    Map.entry(ElevatorPosition.CORAL_L2, coralHandoffCommand()),
-                    Map.entry(ElevatorPosition.CORAL_L3, coralHandoffCommand()),
-                    Map.entry(ElevatorPosition.CORAL_L4, coralHandoffCommand()),
-                    Map.entry(ElevatorPosition.BARGE, coralHandoffCommand()),
-                    Map.entry(ElevatorPosition.PROCESSOR, coralHandoffCommand()),
-                    Map.entry(ElevatorPosition.MIDDLE, coralHandoffCommand()),
-                    Map.entry(ElevatorPosition.UNKNOWN, coralHandoffCommand())
+                    Map.entry(ElevatorPosition.ALGAE_HIGH, EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE))
+                //     Map.entry(ElevatorPosition.ZERO, coralHandoffCommand()),
+                //     Map.entry(ElevatorPosition.REST, coralHandoffCommand()),
+                //     Map.entry(ElevatorPosition.CORAL_L1, coralHandoffCommand()),
+                //     Map.entry(ElevatorPosition.CORAL_L2, coralHandoffCommand()),
+                //     Map.entry(ElevatorPosition.CORAL_L3, coralHandoffCommand()),
+                //     Map.entry(ElevatorPosition.CORAL_L4, coralHandoffCommand()),
+                //     Map.entry(ElevatorPosition.BARGE, coralHandoffCommand()),
+                //     Map.entry(ElevatorPosition.PROCESSOR, coralHandoffCommand()),
+                //     Map.entry(ElevatorPosition.MIDDLE, coralHandoffCommand()),
+                //     Map.entry(ElevatorPosition.UNKNOWN, coralHandoffCommand())
             ),
             this::select);
 
@@ -198,14 +196,6 @@ public class RobotContainer {
     private void configureBindings() {
 
         m_swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
-
-        m_funnelIndexerSubsystem.setDefaultCommand(
-                new ConditionalCommand(
-                        new InstantCommand(),
-                        FunnelCommands.IntakeCoral(),
-                        m_endEffectorSubsystem::hasCoral
-                )
-        );
 
         m_endEffectorSubsystem.setDefaultCommand(EndEffectorCommands.HoldCoralCommand());
 
@@ -305,7 +295,7 @@ public class RobotContainer {
                 ElevatorPosition.PROCESSOR));
 
         new EventTrigger("EE_OUTTAKE").onTrue(EndEffectorCommands.OuttakeEffector());
-        new EventTrigger("CRL_HANDOFF").onTrue(coralHandoffCommand());
+//        new EventTrigger("CRL_HANDOFF").onTrue(coralHandoffCommand());
         new EventTrigger("EE_ALG_INTAKE").onTrue(EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE));
 
         new EventTrigger("AA_LEFT_OUTTAKE").onTrue(
