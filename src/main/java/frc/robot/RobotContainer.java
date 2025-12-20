@@ -50,9 +50,9 @@ public class RobotContainer {
             new File(Filesystem.getDeployDirectory(), "swerve"));
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
-    private final static CommandPS5Controller m_driverController = new CommandPS5Controller(
+    private final static CommandXboxController m_driverController = new CommandXboxController(
             OperatorConstants.DRIVER_CONTROLLER_PORT);
-    private final static CommandPS5Controller m_operatorController = new CommandPS5Controller(
+    private final static CommandXboxController m_operatorController = new CommandXboxController(
             OperatorConstants.OPERATOR_CONTROLLER_PORT);
 
     private final SendableChooser<Command> autoChooser;
@@ -210,27 +210,27 @@ public class RobotContainer {
         m_endEffectorSubsystem.setDefaultCommand(EndEffectorCommands.HoldCoralCommand());
 
         // === Auto Align Controls ===
-        m_driverController.L1().whileTrue(
+        m_driverController.leftBumper().whileTrue(
                 new ConditionalCommand(
                         AutoAlignCommands.AutoAlignLeft(), 
                         AutoAlignCommands.AutoAlignCenter(), 
                         m_endEffectorSubsystem :: hasCoral)
         );
-        m_driverController.R1().whileTrue(
+        m_driverController.rightBumper().whileTrue(
                 new ConditionalCommand(
                         AutoAlignCommands.AutoAlignRight(),
                         AutoAlignCommands.AutoAlignCenter(), 
                         m_endEffectorSubsystem :: hasCoral)
                 );
         // === Intake/Outtake controls ===
-        m_driverController.R2().whileTrue(
+        m_driverController.rightTrigger().whileTrue(
                 m_selectOuttakeCommand
-                        .until(() -> !m_driverController.R2()
+                        .until(() -> !m_driverController.rightTrigger()
                                 .getAsBoolean())
         );
-        m_driverController.L2().whileTrue(
+        m_driverController.leftTrigger().whileTrue(
                 selectIntakeCommand
-                        .until(() -> !m_driverController.L2()
+                        .until(() -> !m_driverController.leftTrigger()
                                 .getAsBoolean()));
         // ===============================
 
@@ -238,39 +238,39 @@ public class RobotContainer {
         m_driverController.povLeft().whileTrue(SwereCommands.StrafeLeft());
         m_driverController.povRight().whileTrue(SwereCommands.StrafeRight());
 
-        m_driverController.options().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
-        m_driverController.create().onTrue(new InstantCommand(m_swerveSubsystem::toggleFastDriveRampRateMode));
+        m_driverController.start().onTrue(new InstantCommand(m_swerveSubsystem::zeroGyro));
+        m_driverController.back().onTrue(new InstantCommand(m_swerveSubsystem::toggleFastDriveRampRateMode));
 
         // === Elevator Setpoints ===
-        m_operatorController.triangle().onTrue(
+        m_operatorController.y().onTrue(
                 new ConditionalCommand(
                         new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4),
                         new InstantCommand(),
                         m_endEffectorSubsystem::hasCoral
                 )
         );
-        m_operatorController.circle().onTrue(
+        m_operatorController.b().onTrue(
                 new ConditionalCommand(
                         new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3),
                         new InstantCommand(),
                         m_endEffectorSubsystem::hasCoral
                 )
         );
-        m_operatorController.square().onTrue(
+        m_operatorController.x().onTrue(
                 new ConditionalCommand(
                         new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2),
                         new InstantCommand(),
                         m_endEffectorSubsystem::hasCoral
                 )
         );
-        m_operatorController.cross().onTrue(
+        m_operatorController.a().onTrue(
                 new ConditionalCommand(
                         new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1),
                         new InstantCommand(),
                         m_endEffectorSubsystem::hasCoral
                 )
         );
-        m_operatorController.create().onTrue(
+        m_operatorController.back().onTrue(
                 new MoveElevatorArmCommand(ElevatorPosition.MIDDLE)
         );
         m_operatorController.povUp().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
@@ -279,7 +279,7 @@ public class RobotContainer {
         m_operatorController.povRight().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_LOW));
         // ==========================
 
-        m_operatorController.options().whileTrue(m_swerveSubsystem.centerModulesCommand());
+        m_operatorController.start().whileTrue(m_swerveSubsystem.centerModulesCommand());
     }
 
     private void configurePathPlanner() {
