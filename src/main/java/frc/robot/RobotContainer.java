@@ -55,8 +55,6 @@ public class RobotContainer {
     private final static CommandXboxController m_operatorController = new CommandXboxController(
             OperatorConstants.OPERATOR_CONTROLLER_PORT);
 
-    private final SendableChooser<Command> autoChooser;
-
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -64,9 +62,6 @@ public class RobotContainer {
         // Configure the trigger bindings
         configureBindings();
         configurePathPlanner();
-
-        autoChooser = AutoBuilder.buildAutoChooser("DEFAULT");
-        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     public static SwerveInputStream driveAngularVelocity = SwerveInputStream
@@ -315,15 +310,5 @@ public class RobotContainer {
                         ));
 
         new EventTrigger("AUTO_ALIGN_CENTER").onTrue(AutoAlignCommands.AutoAlignCenter());
-    }
-
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
-        return autoChooser.getSelected();
-
     }
 }

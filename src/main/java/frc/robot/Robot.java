@@ -5,9 +5,18 @@
 
 package frc.robot;
 
+import choreo.auto.AutoChooser;
+import choreo.auto.AutoFactory;
+import choreo.auto.AutoRoutine;
+import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import frc.robot.commands.MoveElevatorArmCommand;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 
 /**
  * The methods in this class are called automatically corresponding to each
@@ -18,6 +27,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
+    private final AutoFactory autoFactory;
+    private final AutoChooser autoChooser;
 
     private final RobotContainer m_robotContainer;
 
@@ -31,6 +42,46 @@ public class Robot extends TimedRobot {
         // and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
+
+        autoFactory = new AutoFactory(
+                RobotContainer.m_swerveSubsystem::getPose, // A function that returns the current robot pose
+                RobotContainer.m_swerveSubsystem::resetOdometry, // A function that resets the current robot pose to the
+                                                                 // provided Pose2d
+                RobotContainer.m_swerveSubsystem::followTrajectory, // The drive subsystem trajectory follower
+                true, // If alliance flipping should be enabled
+                RobotContainer.m_swerveSubsystem // The drive subsystem
+        );
+
+        // Create the auto chooser
+        autoChooser = new AutoChooser();
+
+        // Add options to the chooser
+        autoChooser.addRoutine("Test Routine", this::testAuto);
+        // autoChooser.addCmd("Example Auto Command", this::exampleAutoCommand);
+
+        // Put the auto chooser on the dashboard
+        SmartDashboard.putData("autoChooser", autoChooser);
+
+        // Schedule the selected auto during the autonomous period
+        RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
+
+    }
+
+    public AutoRoutine testAuto() {
+        AutoRoutine routine = autoFactory.newRoutine("testAuto");
+
+        // Load the routine's trajectories
+        AutoTrajectory startToM1 = routine.trajectory("startToM1");
+        AutoTrajectory M1toM2 = routine.trajectory("M1toM2");
+
+        routine.active().onTrue(
+                Commands.sequence(
+                        startToM1.resetOdometry(),
+                        startToM1.cmd(),
+                        // new MoveElevatorArmCommand(ElevatorPosition.REST),
+                        M1toM2.cmd()));
+
+        return routine;
     }
 
     /**
@@ -73,12 +124,6 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         // m_robotContainer.setMotorBrake(true);
-        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-        // schedule the autonomous command (example)
-        if (m_autonomousCommand != null) {
-            m_autonomousCommand.schedule();
-        }
     }
 
     /**
