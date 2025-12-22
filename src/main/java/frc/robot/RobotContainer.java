@@ -10,6 +10,10 @@ import java.util.Map;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.events.EventTrigger;
 
+import choreo.auto.AutoChooser;
+import choreo.auto.AutoFactory;
+import choreo.auto.AutoRoutine;
+import choreo.auto.AutoTrajectory;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -20,6 +24,7 @@ import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.end_effector.IntakeCommand.IntakeMode;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -55,6 +60,9 @@ public class RobotContainer {
     private final static CommandXboxController m_operatorController = new CommandXboxController(
             OperatorConstants.OPERATOR_CONTROLLER_PORT);
 
+    private final AutoChooser autoChooser;
+    public static AutoFactory autoFactory;
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -62,6 +70,10 @@ public class RobotContainer {
         // Configure the trigger bindings
         configureBindings();
         configurePathPlanner();
+
+        // Create the auto chooser
+        autoChooser = new AutoChooser();
+        configureChoreo();
     }
 
     public static SwerveInputStream driveAngularVelocity = SwerveInputStream
@@ -81,8 +93,8 @@ public class RobotContainer {
     Command driveRobotOrientedAngularVelocity = m_swerveSubsystem.driveFieldOriented(driveRobotOriented);
 
     SwerveInputStream driveAngularVelocitySim = SwerveInputStream.of(m_swerveSubsystem.getSwerveDrive(),
-                    () -> -m_driverController.getLeftY(),
-                    () -> -m_driverController.getLeftX())
+            () -> -m_driverController.getLeftY(),
+            () -> -m_driverController.getLeftX())
             .withControllerRotationAxis(() -> m_driverController.getRawAxis(
                     2))
             .deadband(OperatorConstants.DEADBAND)
@@ -91,12 +103,12 @@ public class RobotContainer {
     // Derive the heading axis with math!
     SwerveInputStream driveDirectAngleSim = driveAngularVelocitySim.copy()
             .withControllerHeadingAxis(() -> Math.sin(
-                            m_driverController.getRawAxis(
-                                    2) *
-                                    Math.PI)
-                            *
-                            (Math.PI *
-                                    2),
+                    m_driverController.getRawAxis(
+                            2) *
+                            Math.PI)
+                    *
+                    (Math.PI *
+                            2),
                     () -> Math.cos(
                             m_driverController.getRawAxis(
                                     2) *
@@ -117,30 +129,28 @@ public class RobotContainer {
                         new ParallelCommandGroup(
                                 new MoveElevatorArmCommand(ElevatorPosition.ZERO),
                                 FunnelCommands.IntakeCoral()
-                                        .until(m_funnelIndexerSubsystem::getHasCoral)
-                        ),
+                                        .until(m_funnelIndexerSubsystem::getHasCoral)),
                         new WaitCommand(0.1),
-                        // If no coral in funnel yet, run pass through cmd to shoot coral directly into end effector
+                        // If no coral in funnel yet, run pass through cmd to shoot coral
+                        // directly into end effector
                         // If coral already in funnel, skip this step
                         // new ConditionalCommand(
-                        //         new InstantCommand(),
-                        //         FunnelCommands.PassThroughCoral(),
-                        //         m_funnelIndexerSubsystem::getHasCoral
+                        // new InstantCommand(),
+                        // FunnelCommands.PassThroughCoral(),
+                        // m_funnelIndexerSubsystem::getHasCoral
                         // ),
                         // Intake coral until funnel no longer detects it (shallow beam break)
                         new ParallelCommandGroup(
                                 EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
-                                FunnelCommands.OuttakeCoral()
-                        ).until(
-                                () -> !m_funnelIndexerSubsystem.getHasCoral()
-                        ),
-                        // Run end effector intake, funnel intake, and move elevator + arm to level 1 simultaneously
+                                FunnelCommands.OuttakeCoral()).until(
+                                        () -> !m_funnelIndexerSubsystem
+                                                .getHasCoral()),
+                        // Run end effector intake, funnel intake, and move elevator + arm to
+                        // level 1 simultaneously
                         new ParallelCommandGroup(
                                 EndEffectorCommands.IntakeEffector(IntakeMode.CORAL),
                                 FunnelCommands.OuttakeCoral(),
-                                new MoveElevatorArmCommand(ElevatorPosition.REST)
-                        )
-                ),
+                                new MoveElevatorArmCommand(ElevatorPosition.REST))),
                 new InstantCommand(),
                 // Only run handoff if we don't already have coral and algae
                 () -> !m_endEffectorSubsystem.hasAlgae());
@@ -152,8 +162,10 @@ public class RobotContainer {
 
     private final Command selectIntakeCommand = new SelectCommand<>(
             Map.ofEntries(
-                    Map.entry(ElevatorPosition.ALGAE_LOW, EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE)),
-                    Map.entry(ElevatorPosition.ALGAE_HIGH, EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE)),
+                    Map.entry(ElevatorPosition.ALGAE_LOW,
+                            EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE)),
+                    Map.entry(ElevatorPosition.ALGAE_HIGH,
+                            EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE)),
                     Map.entry(ElevatorPosition.ZERO, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.REST, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.CORAL_L1, coralHandoffCommand()),
@@ -163,8 +175,7 @@ public class RobotContainer {
                     Map.entry(ElevatorPosition.BARGE, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.PROCESSOR, coralHandoffCommand()),
                     Map.entry(ElevatorPosition.MIDDLE, coralHandoffCommand()),
-                    Map.entry(ElevatorPosition.UNKNOWN, coralHandoffCommand())
-            ),
+                    Map.entry(ElevatorPosition.UNKNOWN, coralHandoffCommand())),
             this::select);
 
     private final Command m_selectOuttakeCommand = new SelectCommand<>(Map.ofEntries(
@@ -173,7 +184,9 @@ public class RobotContainer {
             Map.entry(ElevatorPosition.CORAL_L3, EndEffectorCommands.OuttakeEffector()),
             Map.entry(ElevatorPosition.CORAL_L4, EndEffectorCommands.OuttakeEffector()),
             Map.entry(ElevatorPosition.BARGE, EndEffectorCommands.OuttakeEffector()),
-            Map.entry(ElevatorPosition.PROCESSOR, EndEffectorCommands.OuttakeEffector(EndEffectorConstants.ALGAE_PROCESSOR_OUTTAKE_SPEED))),
+            Map.entry(ElevatorPosition.PROCESSOR,
+                    EndEffectorCommands.OuttakeEffector(
+                            EndEffectorConstants.ALGAE_PROCESSOR_OUTTAKE_SPEED))),
             this::select);
 
     /**
@@ -198,31 +211,26 @@ public class RobotContainer {
                 new ConditionalCommand(
                         new InstantCommand(),
                         FunnelCommands.IntakeCoral(),
-                        m_endEffectorSubsystem::hasCoral
-                )
-        );
+                        m_endEffectorSubsystem::hasCoral));
 
         m_endEffectorSubsystem.setDefaultCommand(EndEffectorCommands.HoldCoralCommand());
 
         // === Auto Align Controls ===
         m_driverController.leftBumper().whileTrue(
                 new ConditionalCommand(
-                        AutoAlignCommands.AutoAlignLeft(), 
-                        AutoAlignCommands.AutoAlignCenter(), 
-                        m_endEffectorSubsystem :: hasCoral)
-        );
+                        AutoAlignCommands.AutoAlignLeft(),
+                        AutoAlignCommands.AutoAlignCenter(),
+                        m_endEffectorSubsystem::hasCoral));
         m_driverController.rightBumper().whileTrue(
                 new ConditionalCommand(
                         AutoAlignCommands.AutoAlignRight(),
-                        AutoAlignCommands.AutoAlignCenter(), 
-                        m_endEffectorSubsystem :: hasCoral)
-                );
+                        AutoAlignCommands.AutoAlignCenter(),
+                        m_endEffectorSubsystem::hasCoral));
         // === Intake/Outtake controls ===
         m_driverController.rightTrigger().whileTrue(
                 m_selectOuttakeCommand
                         .until(() -> !m_driverController.rightTrigger()
-                                .getAsBoolean())
-        );
+                                .getAsBoolean()));
         m_driverController.leftTrigger().whileTrue(
                 selectIntakeCommand
                         .until(() -> !m_driverController.leftTrigger()
@@ -241,33 +249,24 @@ public class RobotContainer {
                 new ConditionalCommand(
                         new MoveElevatorArmCommand(ElevatorPosition.CORAL_L4),
                         new InstantCommand(),
-                        m_endEffectorSubsystem::hasCoral
-                )
-        );
+                        m_endEffectorSubsystem::hasCoral));
         m_operatorController.b().onTrue(
                 new ConditionalCommand(
                         new MoveElevatorArmCommand(ElevatorPosition.CORAL_L3),
                         new InstantCommand(),
-                        m_endEffectorSubsystem::hasCoral
-                )
-        );
+                        m_endEffectorSubsystem::hasCoral));
         m_operatorController.x().onTrue(
                 new ConditionalCommand(
                         new MoveElevatorArmCommand(ElevatorPosition.CORAL_L2),
                         new InstantCommand(),
-                        m_endEffectorSubsystem::hasCoral
-                )
-        );
+                        m_endEffectorSubsystem::hasCoral));
         m_operatorController.a().onTrue(
                 new ConditionalCommand(
                         new MoveElevatorArmCommand(ElevatorPosition.CORAL_L1),
                         new InstantCommand(),
-                        m_endEffectorSubsystem::hasCoral
-                )
-        );
+                        m_endEffectorSubsystem::hasCoral));
         m_operatorController.back().onTrue(
-                new MoveElevatorArmCommand(ElevatorPosition.MIDDLE)
-        );
+                new MoveElevatorArmCommand(ElevatorPosition.MIDDLE));
         m_operatorController.povUp().onTrue(new MoveElevatorArmCommand(ElevatorPosition.BARGE));
         m_operatorController.povDown().onTrue(new MoveElevatorArmCommand(ElevatorPosition.PROCESSOR));
         m_operatorController.povLeft().onTrue(new MoveElevatorArmCommand(ElevatorPosition.ALGAE_HIGH));
@@ -306,9 +305,52 @@ public class RobotContainer {
         new EventTrigger("AA_LEFT_OUTTAKE").onTrue(
                 new SequentialCommandGroup(
                         AutoAlignCommands.AutoAlignLeft().withTimeout(5),
-                        EndEffectorCommands.OuttakeEffector().withTimeout(4)
-                        ));
+                        EndEffectorCommands.OuttakeEffector().withTimeout(4)));
 
         new EventTrigger("AUTO_ALIGN_CENTER").onTrue(AutoAlignCommands.AutoAlignCenter());
+    }
+
+    private void configureChoreo() {
+        // Add options to the chooser
+        autoChooser.addRoutine("Test Routine", this::testAuto);
+        // autoChooser.addCmd("Example Auto Command", this::exampleAutoCommand);
+
+        // Put the auto chooser on the dashboard
+        SmartDashboard.putData("autoChooser", autoChooser);
+
+        // Schedule the selected auto during the autonomous period
+        RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
+
+        autoFactory = new AutoFactory(
+                m_swerveSubsystem::getPose, // A function that returns the current robot pose
+                m_swerveSubsystem::resetOdometry, // A function that resets the current robot pose to
+                                                  // the provided Pose2d
+                m_swerveSubsystem::followTrajectory, // The drive subsystem trajectory follower
+                true, // If alliance flipping should be enabled
+                m_swerveSubsystem // The drive subsystem
+        );
+    }
+
+    public AutoRoutine testAuto() {
+        AutoRoutine routine = autoFactory.newRoutine("testAuto");
+
+        // Load the routine's trajectories
+        AutoTrajectory startToM1 = routine.trajectory("startToM1");
+        AutoTrajectory M1toM2 = routine.trajectory("M1toM2");
+
+        routine.active().onTrue(
+                Commands.sequence(
+                        Commands.print("Routine starting!"),
+                        Commands.print("Resetting odometry"),
+                        startToM1.resetOdometry(),
+                        Commands.print("Moving to M1"),
+                        startToM1.cmd(),
+                        // new MoveElevatorArmCommand(ElevatorPosition.REST),
+                        Commands.print("Moving to M2"),
+                        M1toM2.cmd())
+
+        );
+
+        return routine;
     }
 }
