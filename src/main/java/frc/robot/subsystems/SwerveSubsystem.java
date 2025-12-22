@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.Meter;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -17,6 +18,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -41,13 +43,19 @@ import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
+import choreo.trajectory.SwerveSample;
 
+import choreo.*;
 public class SwerveSubsystem extends SubsystemBase {
 
-    /* Swerve drive object */
-    private final SwerveDrive swerveDrive;
+	private final PIDController xController = new PIDController(10.0, 0.0, 0.0);
+	private final PIDController yController = new PIDController(10.0, 0.0, 0.0);
+	private final PIDController headingController = new PIDController(7.5, 0.0, 0.0);
+	private final Optional<choreo.trajectory.Trajectory<SwerveSample>> trajectory = Choreo.loadTrajectory("myTrajectory");
+	/* Swerve drive object */
+	private final SwerveDrive swerveDrive;
 
-    private boolean m_fastDriveRampRateMode = false;
+	private boolean m_fastDriveRampRateMode = false;
 
     /**
      * Creates a new SwerveSubsystem.
@@ -187,7 +195,20 @@ public class SwerveSubsystem extends SubsystemBase {
         return SwerveDriveTest.generateSysIdCommand(SwerveDriveTest.setDriveSysIdRoutine(
                 new Config(), this, swerveDrive, 12, true), 3.0, 5.0, 3.0);
     }
+		public void followTrajectory(SwerveSample sample) {
+			// Get the current pose of the robot
+			Pose2d pose = getPose();
 
+			// Generate the next speeds for the robot
+			ChassisSpeeds speeds = new ChassisSpeeds(
+					sample.vx + xController.calculate(pose.getX(), sample.x),
+					sample.vy + yController.calculate(pose.getY(), sample.y),
+					sample.omega + headingController.calculate(pose.getRotation().getRadians(), sample.heading)
+			);
+
+			// Apply the generated speedsTrajectory<SwerveSample>
+			driveFieldOriented(speeds);
+		}
     /**
      * Command to characterize the robot angle motors using SysId
      *

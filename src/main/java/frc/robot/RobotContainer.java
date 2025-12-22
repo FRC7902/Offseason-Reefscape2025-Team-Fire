@@ -7,6 +7,7 @@ package frc.robot;
 import java.io.File;
 import java.util.Map;
 
+import choreo.auto.*;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.events.EventTrigger;
 
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.*;
@@ -55,7 +57,9 @@ public class RobotContainer {
     private final static CommandXboxController m_operatorController = new CommandXboxController(
             OperatorConstants.OPERATOR_CONTROLLER_PORT);
 
-    private final SendableChooser<Command> autoChooser;
+			private static AutoFactory autoFactory;
+			private final AutoChooser autoChooser;
+//    private final SendableChooser<Command> autoChooser;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -64,10 +68,33 @@ public class RobotContainer {
         // Configure the trigger bindings
         configureBindings();
         configurePathPlanner();
+				setUpChoreo();
 
-        autoChooser = AutoBuilder.buildAutoChooser("DEFAULT");
+//        autoChooser = AutoBuilder.buildAutoChooser("DEFAULT");
+			autoChooser = new  AutoChooser();
+			autoChooser.addRoutine("routine", this::followRoutineTest);
         SmartDashboard.putData("Auto Chooser", autoChooser);
+			RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
     }
+	private AutoRoutine followRoutineTest(){
+		AutoRoutine routine = autoFactory.newRoutine("move");
+		AutoTrajectory traj = routine.trajectory("test");
+		routine.active().onTrue(
+				Commands.sequence(
+						traj.resetOdometry(),
+						traj.cmd()
+				)
+		);
+		AutoTrajectory traj2 = routine.trajectory("abc");
+		traj.done().onTrue(
+				Commands.sequence(
+						Commands.waitSeconds(2),
+						traj2.resetOdometry(),
+						traj2.cmd()
+				)
+		);
+		return routine;
+	}
 
     public static SwerveInputStream driveAngularVelocity = SwerveInputStream
             .of(m_swerveSubsystem.getSwerveDrive(), () -> m_driverController.getLeftY() * -1,
@@ -317,13 +344,23 @@ public class RobotContainer {
         new EventTrigger("AUTO_ALIGN_CENTER").onTrue(AutoAlignCommands.AutoAlignCenter());
     }
 
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
-        return autoChooser.getSelected();
-
-    }
+	private void setUpChoreo(){
+		autoFactory = new AutoFactory(
+				m_swerveSubsystem::getPose, // A function that returns the current robot pose
+				m_swerveSubsystem::resetOdometry, // A function that resets the current robot pose to the provided Pose2d
+				m_swerveSubsystem::followTrajectory, // The drive subsystem trajectory follower
+				true, // If alliance flipping should be enabled
+				m_swerveSubsystem // The drive subsystem
+		);
+		autoFactory.bind("Intake", EndEffectorCommands.IntakeEffector(IntakeMode.ALGAE));
+	}
+//    /**
+//     * Use this to pass the autonomous command to the main {@link Robot} class.
+//     *
+//     * @return the command to run in autonomous
+//     */
+//    public Command getAutonomousCommand() {
+//        return autoChooser.getSelected();
+//
+//    }
 }
