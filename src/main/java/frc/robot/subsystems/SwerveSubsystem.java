@@ -100,7 +100,7 @@ public class SwerveSubsystem extends SubsystemBase {
         RobotContainer.driveAngularVelocity.scaleTranslation(
                 // Scale between MIN_TRANSLATION_SPEED_SCALE and 1.0
                 Math.max(
-                        scale,
+                        Math.pow(scale, 0.20), // root-scaling to allow faster movement at lower elev height, but drastically slower near max
                         SwerveConstants.MIN_TRANSLATION_SPEED_SCALE
                 )
         );
