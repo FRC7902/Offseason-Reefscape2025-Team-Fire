@@ -6,17 +6,24 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Meter;
 
+import java.awt.image.SampleModel;
 import java.io.File;
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
+import choreo.Choreo;
+import choreo.auto.AutoFactory;
+import choreo.trajectory.SwerveSample;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -27,6 +34,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants.PathPlanner;
@@ -41,13 +49,18 @@ import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
+//import choreo.trajectory.Trajectory;
 
 public class SwerveSubsystem extends SubsystemBase {
-
+	private final PIDController xController = new PIDController(10.0, 0.0, 0.0);
+	private final PIDController yController = new PIDController(10.0, 0.0, 0.0);
+	private final PIDController headingController = new PIDController(7.5, 0.0, 0.0);
+	private final Optional<choreo.trajectory.Trajectory<SwerveSample>> trajectory = Choreo.loadTrajectory("myTrajectory");
     /* Swerve drive object */
     private final SwerveDrive swerveDrive;
 
     private boolean m_fastDriveRampRateMode = false;
+
 
     /**
      * Creates a new SwerveSubsystem.
@@ -87,6 +100,7 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.swerveController.setMaximumChassisAngularVelocity(20);
 
         setupPathPlanner();
+				headingController.enableContinuousInput(-Math.PI, Math.PI);
     }
 
     private void scaleSwerveInput() {
@@ -116,69 +130,69 @@ public class SwerveSubsystem extends SubsystemBase {
 
 
     public void setupPathPlanner() {
-        // Load the RobotConfig from the GUI settings. You should probably
-        // store this in your Constants file
-        RobotConfig config;
-        try {
-            config = RobotConfig.fromGUISettings();
+			// Load the RobotConfig from the GUI settings. You should probably
+			// store this in your Constants file
+			RobotConfig config;
+			try {
+				config = RobotConfig.fromGUISettings();
 
-            final boolean enableFeedforward = true;
-            // Configure AutoBuilder last
-            AutoBuilder.configure(this::getPose,
-                    // Robot pose supplier
-                    this::resetOdometry,
-                    // Method to reset odometry (will be called if your auto has a starting pose)
-                    this::getRobotVelocity,
-                    // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                    (speedsRobotRelative, moduleFeedForwards) -> {
-                        if (enableFeedforward) {
-                            swerveDrive.drive(speedsRobotRelative,
-                                    swerveDrive.kinematics
-                                            .toSwerveModuleStates(speedsRobotRelative),
-                                    moduleFeedForwards.linearForces());
-                        } else {
-                            swerveDrive.setChassisSpeeds(speedsRobotRelative);
-                        }
-                    },
-                    // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also
-                    // optionally outputs individual module feedforwards
-                    new PPHolonomicDriveController(
-                            // PPHolonomicController is the built in path following controller for
-                            // holonomic drive trains
-                            new PIDConstants(PathPlanner.kPDrive, PathPlanner.kIDrive,
-                                    PathPlanner.kDDrive),
-                            // Translation PID constants
-                            new PIDConstants(PathPlanner.kPAngle, PathPlanner.kIAngle,
-                                    PathPlanner.kDAngle)
-                            // Rotation PID constants
-                    ), config,
-                    // The robot configuration
-                    () -> {
-                        // Boolean supplier that controls when the path will be mirrored for the red
-                        // alliance
-                        // This will flip the path being followed to the red side of the field.
-                        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+				final boolean enableFeedforward = true;
+				// Configure AutoBuilder last
+				AutoBuilder.configure(this::getPose,
+						// Robot pose supplier
+						this::resetOdometry,
+						// Method to reset odometry (will be called if your auto has a starting pose)
+						this::getRobotVelocity,
+						// ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+						(speedsRobotRelative, moduleFeedForwards) -> {
+							if (enableFeedforward) {
+								swerveDrive.drive(speedsRobotRelative,
+										swerveDrive.kinematics
+												.toSwerveModuleStates(speedsRobotRelative),
+										moduleFeedForwards.linearForces());
+							} else {
+								swerveDrive.setChassisSpeeds(speedsRobotRelative);
+							}
+						},
+						// Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also
+						// optionally outputs individual module feedforwards
+						new PPHolonomicDriveController(
+								// PPHolonomicController is the built in path following controller for
+								// holonomic drive trains
+								new PIDConstants(PathPlanner.kPDrive, PathPlanner.kIDrive,
+										PathPlanner.kDDrive),
+								// Translation PID constants
+								new PIDConstants(PathPlanner.kPAngle, PathPlanner.kIAngle,
+										PathPlanner.kDAngle)
+								// Rotation PID constants
+						), config,
+						// The robot configuration
+						() -> {
+							// Boolean supplier that controls when the path will be mirrored for the red
+							// alliance
+							// This will flip the path being followed to the red side of the field.
+							// THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-                        var alliance = DriverStation.getAlliance();
-                        if (alliance.isPresent()) {
-                            return alliance.get() == DriverStation.Alliance.Red;
-                        }
-                        return false;
-                    }, this
-                    // Reference to this subsystem to set requirements
-            );
+							var alliance = DriverStation.getAlliance();
+							if (alliance.isPresent()) {
+								return alliance.get() == DriverStation.Alliance.Red;
+							}
+							return false;
+						}, this
+						// Reference to this subsystem to set requirements
+				);
 
-        } catch (Exception e) {
-            // Handle exception as needed
-            e.printStackTrace();
-        }
+			} catch (Exception e) {
+				// Handle exception as needed
+				e.printStackTrace();
+			}
 
-        // Preload PathPlanner Path finding
-        // IF USING CUSTOM PATHFINDER ADD BEFORE THIS LINE
-        PathfindingCommand.warmupCommand().schedule();
-    }
+			// Preload PathPlanner Path finding
+			// IF USING CUSTOM PATHFINDER ADD BEFORE THIS LINE
+			PathfindingCommand.warmupCommand().schedule();
+		}
 
-    /**
+	/**
      * Command to characterize the robot drive motors using SysId
      *
      * @return SysId Drive Command
@@ -187,7 +201,20 @@ public class SwerveSubsystem extends SubsystemBase {
         return SwerveDriveTest.generateSysIdCommand(SwerveDriveTest.setDriveSysIdRoutine(
                 new Config(), this, swerveDrive, 12, true), 3.0, 5.0, 3.0);
     }
+	public void followTrajectory(SwerveSample sample) {
+		// Get the current pose of the robot
+		Pose2d pose = getPose();
 
+		// Generate the next speeds for the robot
+		ChassisSpeeds speeds = new ChassisSpeeds(
+				sample.vx + xController.calculate(pose.getX(), sample.x),
+				sample.vy + yController.calculate(pose.getY(), sample.y),
+				sample.omega + headingController.calculate(pose.getRotation().getRadians(), sample.heading)
+		);
+
+		// Apply the generated speedsTrajectory<SwerveSample>
+		driveFieldOriented(speeds);
+	}
     /**
      * Command to characterize the robot angle motors using SysId
      *
@@ -368,24 +395,29 @@ public class SwerveSubsystem extends SubsystemBase {
     public Pose2d getPose() {
         return swerveDrive.getPose();
     }
-
+		private ChassisSpeeds m_ChassisSpeeds = new  ChassisSpeeds(0, 0, 0);
     /**
      * Set chassis speeds with closed-loop velocity control.
      *
      * @param chassisSpeeds Chassis Speeds to set.
      */
     public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
+				this.m_ChassisSpeeds = chassisSpeeds;
         swerveDrive.setChassisSpeeds(chassisSpeeds);
     }
 
+		public ChassisSpeeds getChassisSpeeds() {
+//			System.out.println("m_chassisSpeeds: " + m_ChassisSpeeds);
+			return m_ChassisSpeeds;
+		}
     /**
      * Post the trajectory to the field.
      *
      * @param trajectory The trajectory to post.
      */
     public void postTrajectory(Trajectory trajectory) {
-        swerveDrive.postTrajectory(trajectory);
-    }
+			swerveDrive.postTrajectory(trajectory);
+		}
 
     /**
      * Resets the gyro angle to zero and resets odometry to the same position, but
@@ -431,6 +463,7 @@ public class SwerveSubsystem extends SubsystemBase {
      *
      * @param brake True to set motors to brake mode, false for coast.
      */
+
     public void setMotorBrake(boolean brake) {
         swerveDrive.setMotorIdleMode(brake);
     }
